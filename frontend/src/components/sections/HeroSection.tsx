@@ -4,6 +4,7 @@ import {Button} from '@/components/ui/button'
 import {ArrowRight} from 'lucide-react'
 import {useEffect, useRef, useState} from 'react'
 import Link from "next/link";
+import {SITE_CONFIG} from "@/lib/constants";
 
 export function HeroSection() {
     const [offset, setOffset] = useState(0)
@@ -44,13 +45,13 @@ export function HeroSection() {
             <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/80 via-black/50 to-transparent"/>
 
             {/* Content */}
-            <div className="container-custom relative z-20 pt-20">
+            <div className="container-custom relative z-20">
                 <div className="max-w-2xl space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
                     <div
                         className="inline-flex px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-sm text-sm font-medium mb-4">
-            <span className="flex items-center gap-2">
-              Новинки 2026
-            </span>
+                        <span className="flex items-center gap-2">
+                          Новинки 2026
+                        </span>
                     </div>
 
                     <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
@@ -64,11 +65,13 @@ export function HeroSection() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                        <Button variant="ghost" size="lg" className="text-zinc-300">
-                            Зв'язатися з Нами
-                        </Button>
+                        <a href={`tel:${SITE_CONFIG.contact.phone}`}>
+                            <Button variant="ghost" size="lg" className="text-zinc-300">
+                                Зв'язатися з Нами
+                            </Button>
+                        </a>
                         <Link href={'/catalog'}>
-                            <Button size="lg">
+                            <Button size="lg" className="text-c-white">
                                 Переглянути каталог
                                 <ArrowRight className="ml-2 h-5 w-5"/>
                             </Button>

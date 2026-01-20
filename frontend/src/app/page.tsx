@@ -30,7 +30,7 @@ export default function HomePage() {
 
     if (brandsLoading || carsLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="flex items-center justify-center py-20">
                 <LoadingSpinner />
             </div>
         )
@@ -38,7 +38,7 @@ export default function HomePage() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="flex items-center justify-center py-20">
                 <ErrorMessage message="Не вдалося завантажити автомобілі. Будь ласка, спробуйте пізніше." />
             </div>
         )

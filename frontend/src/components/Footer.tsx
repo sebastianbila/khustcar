@@ -1,11 +1,11 @@
+import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants'
+import { MapPin, Phone } from 'lucide-react'
 import Link from 'next/link'
-import {Phone, Mail, MapPin} from 'lucide-react'
-import {SITE_CONFIG, NAV_LINKS} from '@/lib/constants'
 import { SocialIcon } from 'react-social-icons'
 
 export function Footer() {
     return (
-        <footer className="bg-zinc-800 text-gray-300">
+        <footer className="bg-c-footer text-c-text">
             <div className="container-custom py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Company Info */}
@@ -39,10 +39,10 @@ export function Footer() {
 
                     {/* Contact Info */}
                     <div>
-                        <h3 className="text-white font-semibold mb-4">Зв'яжіться з Нами</h3>
+                        <h3 className="text-с-text font-semibold mb-4">Зв'яжіться з Нами</h3>
                         <ul className="space-y-3">
                             <li className="flex items-start gap-3">
-                                <Phone className="h-5 w-5 text-secondary mt-0.5 flex-shrink-0"/>
+                                <Phone className="h-5 w-5 text-secondary mt-0.5 shrink-0" />
                                 <a
                                     href={`tel:${SITE_CONFIG.contact.phone}`}
                                     className="text-sm hover:text-primary transition-colors"
@@ -51,7 +51,7 @@ export function Footer() {
                                 </a>
                             </li>
                             <li className="flex items-start gap-3">
-                                <MapPin className="h-5 w-5 text-secondary mt-0.5 flex-shrink-0"/>
+                                <MapPin className="h-5 w-5 text-secondary mt-0.5 shrink-0" />
                                 <span className="text-sm">{SITE_CONFIG.contact.address}</span>
                             </li>
                         </ul>
@@ -59,7 +59,7 @@ export function Footer() {
 
                     {/* Social Media */}
                     <div>
-                        <h3 className="text-white font-semibold mb-4">Слідкуйте за Нами</h3>
+                        <h3 className="text-с-text font-semibold mb-4">Слідкуйте за Нами</h3>
                         <div className="flex gap-3">
                             <SocialIcon
                                 url={SITE_CONFIG.social.telegram}
@@ -83,7 +83,7 @@ export function Footer() {
             </div>
 
             {/* Copyright */}
-            <div className="border-t border-zinc-700">
+            <div className="border-t border-c-footer-border">
                 <div className="container-custom py-6">
                     <p className="text-sm text-center">
                         © {new Date().getFullYear()} {SITE_CONFIG.name}. Всі права захищені.

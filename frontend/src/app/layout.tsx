@@ -1,11 +1,9 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "../globals.css";
 import { Providers } from "./providers";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Car Management System - Your Trusted Automotive Partner",
@@ -18,14 +16,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>
+    <html lang="en">
+      <body>
         <Providers>
-          <Header />
-          <main>
-            {children}
-          </main>
-          <Footer />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            <div className="flex flex-col w-full">
+              <Header />
+              <main className="flex-grow w-full">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

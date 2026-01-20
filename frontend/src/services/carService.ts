@@ -35,13 +35,43 @@ export async function getCars(filters?: CarFilters): Promise<Car[]> {
     params.maxPrice = filters.maxPrice
   }
 
+  if (filters?.minMileage) {
+    query += ' && mileage >= $minMileage'
+    params.minMileage = filters.minMileage
+  }
+
+  if (filters?.maxMileage) {
+    query += ' && mileage <= $maxMileage'
+    params.maxMileage = filters.maxMileage
+  }
+
+  if (filters?.fuelType) {
+    query += ' && fuelType == $fuelType'
+    params.fuelType = filters.fuelType
+  }
+
+  if (filters?.transmission) {
+    query += ' && transmission == $transmission'
+    params.transmission = filters.transmission
+  }
+
+  if (filters?.color) {
+    query += ' && color == $color'
+    params.color = filters.color
+  }
+
+  if (filters?.inStock !== undefined) {
+    query += ' && inStock == $inStock'
+    params.inStock = filters.inStock
+  }
+
   query += '] | order(brand asc, model asc)'
 
   return client.fetch(query, params)
 }
 
 export async function getCarById(id: string): Promise<Car> {
-  const query = '*[_type == "car" && _id == $id][0]'
+  const query = '*[_type == "car" && _id == $id][0] { ..., "videoUrl": video.asset->url }'
   return client.fetch(query, { id })
 }
 
@@ -49,4 +79,10 @@ export async function getBrands(): Promise<string[]> {
   const query = '*[_type == "car"] | order(brand asc).brand'
   const brands = await client.fetch<string[]>(query)
   return [...new Set(brands)]
+}
+
+export async function getColors(): Promise<string[]> {
+  const query = '*[_type == "car" && defined(color)] | order(color asc).color'
+  const colors = await client.fetch<string[]>(query)
+  return [...new Set(colors)]
 }
