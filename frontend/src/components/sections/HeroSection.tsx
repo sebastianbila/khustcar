@@ -27,7 +27,7 @@ export function HeroSection() {
     return (
         <section
             ref={sectionRef}
-            className="relative h-[85vh] min-h-[600px] flex items-center overflow-hidden"
+            className="relative h-[90vh] md:h-[85vh] min-h-[600px] flex items-center overflow-hidden"
         >
             {/* Parallax Background */}
             <div

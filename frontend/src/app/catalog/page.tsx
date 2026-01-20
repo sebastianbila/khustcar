@@ -9,6 +9,15 @@ import {Card, CardContent} from '@/components/ui/card'
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from '@/components/ui/sheet'
 import {NativeSelect, NativeSelectOption} from '@/components/ui/native-select'
 import {Label} from '@/components/ui/label'
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination'
 import {getBrands, getCars, getColors} from '@/services/carService'
 import type {CarFilters} from '@/types/car'
 import {useQuery} from '@tanstack/react-query'
@@ -18,10 +27,13 @@ import {Suspense, useEffect, useState, useCallback, useMemo} from 'react'
 
 type SortOption = 'price-asc' | 'price-desc' | 'year-asc' | 'year-desc' | 'mileage-asc' | 'mileage-desc' | ''
 
+const ITEMS_PER_PAGE = 12
+
 function CatalogContent() {
     const searchParams = useSearchParams()
     const [showFilters, setShowFilters] = useState(false)
     const [sortBy, setSortBy] = useState<SortOption>('')
+    const [currentPage, setCurrentPage] = useState(1)
 
     const [filters, setFilters] = useState<CarFilters>({
         search: searchParams.get('search') || undefined,
@@ -175,6 +187,16 @@ function CatalogContent() {
         }
     }, [showFilters])
 
+    // Reset to page 1 when filters or sort changes
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [filters, sortBy])
+
+    // Scroll to top when page changes
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [currentPage])
+
     // Sort cars based on selected option
     const sortedCars = useMemo(() => {
         if (!sortBy || cars.length === 0) return cars
@@ -197,6 +219,42 @@ function CatalogContent() {
                 return sorted
         }
     }, [cars, sortBy])
+
+    // Pagination calculations
+    const totalPages = Math.ceil(sortedCars.length / ITEMS_PER_PAGE)
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    const paginatedCars = sortedCars.slice(startIndex, endIndex)
+
+    // Generate page numbers for pagination
+    const getPageNumbers = () => {
+        const pages: (number | 'ellipsis')[] = []
+        const showEllipsis = totalPages > 7
+
+        if (!showEllipsis) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i)
+            }
+        } else {
+            if (currentPage <= 3) {
+                for (let i = 1; i <= 4; i++) pages.push(i)
+                pages.push('ellipsis')
+                pages.push(totalPages)
+            } else if (currentPage >= totalPages - 2) {
+                pages.push(1)
+                pages.push('ellipsis')
+                for (let i = totalPages - 3; i <= totalPages; i++) pages.push(i)
+            } else {
+                pages.push(1)
+                pages.push('ellipsis')
+                for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i)
+                pages.push('ellipsis')
+                pages.push(totalPages)
+            }
+        }
+
+        return pages
+    }
 
     if (brandsLoading) {
         return (
@@ -329,9 +387,16 @@ function CatalogContent() {
                         {/* Results Header */}
                         <div className="mb-6">
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                <h2 className="text-2xl font-bold text-gray-900">
-                                    {carsLoading ? 'Завантаження...' : `Знайдено ${cars.length} автомобілів`}
-                                </h2>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-900">
+                                        {carsLoading ? 'Завантаження...' : `Знайдено ${sortedCars.length} автомобілів`}
+                                    </h2>
+                                    {!carsLoading && sortedCars.length > 0 && totalPages > 1 && (
+                                        <p className="text-sm text-gray-600 mt-1">
+                                            Показано {startIndex + 1}-{Math.min(endIndex, sortedCars.length)} з {sortedCars.length}
+                                        </p>
+                                    )}
+                                </div>
                                 {/* Desktop Sorting */}
                                 <div className="hidden md:flex items-center gap-2">
                                     <Label htmlFor="sort-by" className="text-gray-800 whitespace-nowrap">Сортувати:</Label>
@@ -464,11 +529,52 @@ function CatalogContent() {
 
                         {/* Cars Grid */}
                         {!carsLoading && !error && sortedCars.length > 0 && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                {sortedCars.map((car) => (
-                                    <CarCard key={car._id} car={car}/>
-                                ))}
-                            </div>
+                            <>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                    {paginatedCars.map((car) => (
+                                        <CarCard key={car._id} car={car}/>
+                                    ))}
+                                </div>
+
+                                {/* Pagination */}
+                                {totalPages > 1 && (
+                                    <div className="mt-12">
+                                        <Pagination>
+                                            <PaginationContent>
+                                                <PaginationItem>
+                                                    <PaginationPrevious
+                                                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                                        className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                                                    />
+                                                </PaginationItem>
+
+                                                {getPageNumbers().map((page, index) => (
+                                                    <PaginationItem key={index}>
+                                                        {page === 'ellipsis' ? (
+                                                            <PaginationEllipsis/>
+                                                        ) : (
+                                                            <PaginationLink
+                                                                onClick={() => setCurrentPage(page)}
+                                                                isActive={currentPage === page}
+                                                                className="cursor-pointer"
+                                                            >
+                                                                {page}
+                                                            </PaginationLink>
+                                                        )}
+                                                    </PaginationItem>
+                                                ))}
+
+                                                <PaginationItem>
+                                                    <PaginationNext
+                                                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                                        className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                                                    />
+                                                </PaginationItem>
+                                            </PaginationContent>
+                                        </Pagination>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

@@ -102,7 +102,7 @@ export function Header() {
                                             <Menu className="h-6 w-6"/>
                                         </Button>
                                     </SheetTrigger>
-                                    <SheetContent side="right" className="bg-c-bg w-[300px] sm:w-[400px]">
+                                    <SheetContent side="right" className="bg-c-bg w-10/12 sm:w-[400px]">
                                         <nav className="flex flex-col gap-4 mt-8">
                                             {NAV_LINKS.map((link) => (
                                                 <Link
