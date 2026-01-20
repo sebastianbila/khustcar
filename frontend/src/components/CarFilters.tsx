@@ -36,7 +36,7 @@ interface CarFiltersProps {
     setLocalInStock: (value: string) => void
     hasActiveFilters: boolean
     onResetFilters: () => void
-    hideTitle?: booleam
+    hideTitle?: boolean
 }
 
 export function CarFilters({
