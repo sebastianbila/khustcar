@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import { ErrorMessage } from '@/components/ErrorMessage'
-import { LoadingSpinner } from '@/components/LoadingSpinner'
-import { Button } from '@/components/ui/button'
-import { SITE_CONFIG } from '@/lib/constants'
-import { urlFor } from '@/lib/sanity'
-import { getCarById } from '@/services/carService'
-import { PortableText } from '@portabletext/react'
-import { useQuery } from '@tanstack/react-query'
+import { ErrorMessage } from "@/components/ErrorMessage";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { Button } from "@/components/ui/button";
+import { SITE_CONFIG } from "@/lib/constants";
+import { urlFor } from "@/lib/sanity";
+import { getCarById } from "@/services/carService";
+import { PortableText } from "@portabletext/react";
+import { useQuery } from "@tanstack/react-query";
 import {
     ArrowLeft,
     Calendar,
@@ -21,66 +21,70 @@ import {
     Palette,
     Settings,
     Share2,
-    Wrench
-} from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { use, useMemo, useState } from 'react'
-import Lightbox from 'yet-another-react-lightbox'
-import Slideshow from 'yet-another-react-lightbox/plugins/slideshow'
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails'
-import 'yet-another-react-lightbox/plugins/thumbnails.css'
-import 'yet-another-react-lightbox/styles.css'
+    Wrench,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { use, useMemo, useState } from "react";
+import Lightbox from "yet-another-react-lightbox";
+import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import "yet-another-react-lightbox/styles.css";
 
 interface CarDetailPageProps {
-    params: Promise<{ id: string }>
+    params: Promise<{ id: string }>;
 }
 
 export default function CarDetailPage({ params }: CarDetailPageProps) {
-    const { id } = use(params)
-    const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-    const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+    const { id } = use(params);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-    const { data: car, isLoading, error } = useQuery({
-        queryKey: ['car', id],
+    const {
+        data: car,
+        isLoading,
+        error,
+    } = useQuery({
+        queryKey: ["car", id],
         queryFn: () => getCarById(id),
-    })
+    });
 
     // Unified media array
     const media = useMemo(() => {
-        const items = []
+        const items = [];
         if (car?.videoUrl) {
             items.push({
-                type: 'video',
+                type: "video",
                 src: `${car.videoUrl}#t=0.001`,
-                poster: undefined
-            })
+                poster: undefined,
+            });
         }
         if (car?.images) {
-            car.images.forEach(img => {
-                items.push({ type: 'image', ...img })
-            })
+            car.images.forEach((img) => {
+                items.push({ type: "image", ...img });
+            });
         }
-        return items
-    }, [car])
+        return items;
+    }, [car]);
 
     // Prepare slides for lightbox
     const slides = useMemo(() => {
         return media
-            .filter((item) => item.type === 'image')
+            .filter((item) => item.type === "image")
             .map((item) => ({
-                type: 'image' as const,
+                type: "image" as const,
                 src: urlFor(item).width(1920).height(1080).url(),
                 alt: `${car?.brand} ${car?.model}`,
-            }))
-    }, [media, car])
+            }));
+    }, [media, car]);
 
     if (isLoading) {
         return (
             <div className="flex items-center justify-center py-20 min-h-screen">
                 <LoadingSpinner />
             </div>
-        )
+        );
     }
 
     if (error || !car) {
@@ -88,18 +92,20 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
             <div className="flex items-center justify-center py-20 min-h-screen">
                 <ErrorMessage message="Could not load car details. Please try again later." />
             </div>
-        )
+        );
     }
 
     const nextImage = (e: React.MouseEvent) => {
-        e.stopPropagation()
-        setSelectedImageIndex((prev: number) => (prev + 1) % media.length)
-    }
+        e.stopPropagation();
+        setSelectedImageIndex((prev: number) => (prev + 1) % media.length);
+    };
 
     const prevImage = (e: React.MouseEvent) => {
-        e.stopPropagation()
-        setSelectedImageIndex((prev: number) => (prev - 1 + media.length) % media.length)
-    }
+        e.stopPropagation();
+        setSelectedImageIndex(
+            (prev: number) => (prev - 1 + media.length) % media.length,
+        );
+    };
 
     return (
         <div className="bg-gray-50 min-h-screen pb-12">
@@ -118,30 +124,44 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
             <div className="container-custom py-8">
                 <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
-
                     {/* Left Column - Content */}
                     <div className="lg:col-span-2 space-y-8">
-
                         {/* Image Gallery */}
                         <div className="bg-white rounded-2xl shadow-sm">
                             <div className="relative aspect-16/10 bg-gray-100 rounded-xl overflow-hidden group">
                                 {media.length > 0 ? (
                                     <>
-                                        {media[selectedImageIndex].type === 'video' ? (
+                                        {media[selectedImageIndex].type ===
+                                        "video" ? (
                                             <video
-                                                src={media[selectedImageIndex].src}
+                                                src={
+                                                    media[selectedImageIndex]
+                                                        .src
+                                                }
                                                 controls
                                                 className="w-full h-full object-contain"
-                                                poster={media[selectedImageIndex].poster}
+                                                poster={
+                                                    media[selectedImageIndex]
+                                                        .poster
+                                                }
                                                 playsInline
                                             />
                                         ) : (
                                             <button
                                                 className="w-full h-full relative"
-                                                onClick={() => setIsLightboxOpen(true)}
+                                                onClick={() =>
+                                                    setIsLightboxOpen(true)
+                                                }
                                             >
                                                 <Image
-                                                    src={urlFor(media[selectedImageIndex]).width(1200).height(800).url()}
+                                                    src={urlFor(
+                                                        media[
+                                                            selectedImageIndex
+                                                        ],
+                                                    )
+                                                        .width(1200)
+                                                        .height(800)
+                                                        .url()}
                                                     alt={`${car.brand} ${car.model}`}
                                                     fill
                                                     className="object-cover"
@@ -181,19 +201,27 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                     {media.map((item, idx) => (
                                         <button
                                             key={idx}
-                                            onClick={() => setSelectedImageIndex(idx)}
-                                            className={`relative aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 ${idx === selectedImageIndex
-                                                ? 'ring-2 ring-gray-900 ring-offset-2 opacity-100'
-                                                : 'opacity-60 hover:opacity-100'
-                                                }`}
+                                            onClick={() =>
+                                                setSelectedImageIndex(idx)
+                                            }
+                                            className={`relative aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 ${
+                                                idx === selectedImageIndex
+                                                    ? "ring-2 ring-gray-900 ring-offset-2 opacity-100"
+                                                    : "opacity-60 hover:opacity-100"
+                                            }`}
                                         >
-                                            {item.type === 'video' ? (
+                                            {item.type === "video" ? (
                                                 <div className="w-full h-full bg-black flex items-center justify-center">
-                                                    <span className="text-white text-xs">Video</span>
+                                                    <span className="text-white text-xs">
+                                                        Video
+                                                    </span>
                                                 </div>
                                             ) : (
                                                 <Image
-                                                    src={urlFor(item).width(200).height(150).url()}
+                                                    src={urlFor(item)
+                                                        .width(200)
+                                                        .height(150)
+                                                        .url()}
                                                     alt="Thumbnail"
                                                     fill
                                                     className="object-cover"
@@ -207,29 +235,74 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                         {/* Specifications Card */}
                         <div className="bg-white rounded-2xl p-8 shadow-sm">
-                            <h3 className="text-xl font-bold text-gray-900 mb-8">Specifications</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-8">
+                                Specifications
+                            </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
-                                <SpecItem icon={Calendar} label="Year" value={car.year} />
-                                <SpecItem icon={Gauge} label="Mileage" value={`${car.mileage.toLocaleString()} miles`} />
-                                <SpecItem icon={Wrench} label="Engine" value={car.engineSize} />
-                                <SpecItem icon={Settings} label="Transmission" value={car.transmission === 'automatic' ? '8-Speed Automatic' : 'Manual'} />
-                                <SpecItem icon={Fuel} label="Fuel Type" value={car.fuelType === 'petrol' ? 'Premium Gasoline' : car.fuelType === 'diesel' ? 'Diesel' : 'Electric'} />
-                                <SpecItem icon={Palette} label="Exterior Color" value={car.color || 'N/A'} />
-                                <SpecItem icon={Car} label="Drivetrain" value="All-Wheel Drive" />
-                                <SpecItem icon={FileText} label="VIN" value="WBSJF0C50NCE12345" />
+                                <SpecItem
+                                    icon={Calendar}
+                                    label="Year"
+                                    value={car.year}
+                                />
+                                <SpecItem
+                                    icon={Gauge}
+                                    label="Mileage"
+                                    value={`${car.mileage.toLocaleString()} miles`}
+                                />
+                                <SpecItem
+                                    icon={Wrench}
+                                    label="Engine"
+                                    value={car.engineSize}
+                                />
+                                <SpecItem
+                                    icon={Settings}
+                                    label="Transmission"
+                                    value={
+                                        car.transmission === "automatic"
+                                            ? "8-Speed Automatic"
+                                            : "Manual"
+                                    }
+                                />
+                                <SpecItem
+                                    icon={Fuel}
+                                    label="Fuel Type"
+                                    value={
+                                        car.fuelType === "petrol"
+                                            ? "Premium Gasoline"
+                                            : car.fuelType === "diesel"
+                                              ? "Diesel"
+                                              : "Electric"
+                                    }
+                                />
+                                <SpecItem
+                                    icon={Palette}
+                                    label="Exterior Color"
+                                    value={car.color || "N/A"}
+                                />
+                                <SpecItem
+                                    icon={Car}
+                                    label="Drivetrain"
+                                    value="All-Wheel Drive"
+                                />
+                                <SpecItem
+                                    icon={FileText}
+                                    label="VIN"
+                                    value="WBSJF0C50NCE12345"
+                                />
                             </div>
                         </div>
 
                         {/* Description */}
                         {car.description && (
                             <div className="bg-white rounded-2xl p-6 shadow-sm">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4">Description</h3>
+                                <h3 className="text-lg font-bold text-gray-900 mb-4">
+                                    Description
+                                </h3>
                                 <div className="prose prose-gray max-w-none text-gray-600">
                                     <PortableText value={car.description} />
                                 </div>
                             </div>
                         )}
-
                     </div>
 
                     {/* Right Column - Sidebar */}
@@ -239,50 +312,86 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
                                     {car.brand} {car.model}
                                 </h1>
-                                <p className="text-gray-500 font-medium">{car.year} Model</p>
+                                <p className="text-gray-500 font-medium">
+                                    {car.year} Model
+                                </p>
                             </div>
 
                             <div className="mb-8">
                                 <div className="flex items-baseline gap-2 mb-1">
                                     <span className="text-4xl font-bold text-gray-900">
-                                        ${(car.discountPrice || car.price).toLocaleString()}
+                                        $
+                                        {(
+                                            car.discountPrice || car.price
+                                        ).toLocaleString()}
                                     </span>
                                 </div>
                                 <div className="flex items-center text-sm text-gray-500 gap-1">
-                                    <span className="text-gray-400">Est. ${(Math.round((car.discountPrice || car.price) / 60)).toLocaleString()}/mo with financing</span>
+                                    <span className="text-gray-400">
+                                        Est. $
+                                        {Math.round(
+                                            (car.discountPrice || car.price) /
+                                                60,
+                                        ).toLocaleString()}
+                                        /mo with financing
+                                    </span>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-y-3 gap-x-8 text-sm border-t border-b border-gray-100 py-4 mb-6">
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500">Condition</span>
-                                    <span className="font-semibold text-gray-900">Pre-Owned</span>
+                                    <span className="text-gray-500">
+                                        Condition
+                                    </span>
+                                    <span className="font-semibold text-gray-900">
+                                        Pre-Owned
+                                    </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500">Warranty</span>
-                                    <span className="font-semibold text-gray-900">1 Year</span>
+                                    <span className="text-gray-500">
+                                        Warranty
+                                    </span>
+                                    <span className="font-semibold text-gray-900">
+                                        1 Year
+                                    </span>
                                 </div>
                                 <div className="flex justify-between col-span-2">
-                                    <span className="text-gray-500">Location</span>
-                                    <span className="font-semibold text-gray-900 text-right">Khust, Ukraine</span>
+                                    <span className="text-gray-500">
+                                        Location
+                                    </span>
+                                    <span className="font-semibold text-gray-900 text-right">
+                                        Khust, Ukraine
+                                    </span>
                                 </div>
                             </div>
 
                             <div className="space-y-3">
-                                <a href={`tel:${SITE_CONFIG.contact.phone}`} className="block w-full">
+                                <a
+                                    href={`tel:${SITE_CONFIG.contact.phone}`}
+                                    className="block w-full"
+                                >
                                     <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white h-12 text-base">
                                         Contact Dealer
                                     </Button>
                                 </a>
-                                <Button variant="outline" className="w-full h-12 text-base border-gray-300 text-gray-700 hover:bg-gray-50">
+                                <Button
+                                    variant="outline"
+                                    className="w-full h-12 text-base border-gray-300 text-gray-700 hover:bg-gray-50"
+                                >
                                     Schedule Test Drive
                                 </Button>
                                 <div className="grid grid-cols-2 gap-3 pt-2">
-                                    <Button variant="ghost" className="w-full border border-gray-200 text-gray-600">
+                                    <Button
+                                        variant="ghost"
+                                        className="w-full border border-gray-200 text-gray-600"
+                                    >
                                         <Heart className="h-4 w-4 mr-2" />
                                         Save
                                     </Button>
-                                    <Button variant="ghost" className="w-full border border-gray-200 text-gray-600">
+                                    <Button
+                                        variant="ghost"
+                                        className="w-full border border-gray-200 text-gray-600"
+                                    >
                                         <Share2 className="h-4 w-4 mr-2" />
                                         Share
                                     </Button>
@@ -290,7 +399,6 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -298,15 +406,25 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                 open={isLightboxOpen}
                 close={() => setIsLightboxOpen(false)}
                 slides={slides}
-                index={selectedImageIndex - (media[0]?.type === 'video' ? 1 : 0)}
+                index={
+                    selectedImageIndex - (media[0]?.type === "video" ? 1 : 0)
+                }
                 plugins={[Slideshow, Thumbnails]}
-                thumbnails={{ position: 'bottom', width: 120, height: 80 }}
+                thumbnails={{ position: "bottom", width: 120, height: 80 }}
             />
         </div>
-    )
+    );
 }
 
-function SpecItem({ icon: Icon, label, value }: { icon: any, label: string, value: string | number }) {
+function SpecItem({
+    icon: Icon,
+    label,
+    value,
+}: {
+    icon: any;
+    label: string;
+    value: string | number;
+}) {
     return (
         <div className="flex items-center gap-4">
             <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-100 text-slate-700">
@@ -314,8 +432,10 @@ function SpecItem({ icon: Icon, label, value }: { icon: any, label: string, valu
             </div>
             <div>
                 <p className="text-sm text-gray-500 mb-1">{label}</p>
-                <p className="text-base font-bold text-gray-900 leading-none">{value}</p>
+                <p className="text-base font-bold text-gray-900 leading-none">
+                    {value}
+                </p>
             </div>
         </div>
-    )
+    );
 }

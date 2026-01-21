@@ -15,6 +15,11 @@ export async function getCars(filters?: CarFilters): Promise<Car[]> {
     params.brand = filters.brand
   }
 
+  if (filters?.model) {
+    query += ' && model == $model'
+    params.model = filters.model
+  }
+
   if (filters?.minYear) {
     query += ' && year >= $minYear'
     params.minYear = filters.minYear
@@ -85,4 +90,18 @@ export async function getColors(): Promise<string[]> {
   const query = '*[_type == "car" && defined(color)] | order(color asc).color'
   const colors = await client.fetch<string[]>(query)
   return [...new Set(colors)]
+}
+
+export async function getModels(brand?: string): Promise<string[]> {
+  let query = '*[_type == "car"'
+  const params: Record<string, any> = {}
+
+  if (brand) {
+    query += ' && brand == $brand'
+    params.brand = brand
+  }
+
+  query += '] | order(model asc).model'
+  const models = await client.fetch<string[]>(query, params)
+  return [...new Set(models)]
 }

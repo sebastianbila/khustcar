@@ -28,6 +28,7 @@ export interface Car {
 export interface CarFilters {
   search?: string
   brand?: string
+  model?: string
   minYear?: number
   maxYear?: number
   minPrice?: number

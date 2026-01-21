@@ -5,14 +5,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme static {
+@theme {
     /* static colors, not depend on the theme */
     --color-c-white: var(--color-zinc-50);
 
     /* colors */
     --color-background: var(--color-zinc-50);
+    --color-background-muted: color-mix(
+        in oklch,
+        var(--color-zinc-200) 40%,
+        transparent
+    );
+
     --color-foreground: var(--color-zinc-800);
 
+    --color-text-light: var(--color-zinc-500);
     --color-text: var(--color-zinc-800);
     --color-text-inverse: var(--color-zinc-50);
 
@@ -22,6 +29,11 @@
     --color-footer-border: var(--color-zinc-200);
 
     --color-border: var(--color-zinc-200);
+    --color-car-filters-bg: color-mix(
+        in oklch,
+        var(--color-zinc-200) 40%,
+        transparent
+    );
 }
 
 @layer base {
