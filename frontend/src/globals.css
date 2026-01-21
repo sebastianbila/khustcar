@@ -45,5 +45,24 @@
 
 /* Utilities */
 .container-custom {
-    @apply container mx-auto px-6 lg:px-8;
+    @apply xl:container mx-auto px-6 md:px-8;
+}
+
+/* Lightbox Customization */
+:root {
+    --yarl__thumbnails_thumbnail_background: transparent;
+    --yarl__thumbnails_thumbnail_active_border_color: #94a3b8;
+    --yarl__thumbnails_thumbnail_border_color: #e2e8f0;
+}
+
+.yarl__thumbnails_thumbnail {
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    padding: 2px !important;
+}
+
+.yarl__thumbnails_thumbnail_active {
+    border-color: var(
+        --yarl__thumbnails_thumbnail_active_border_color
+    ) !important;
 }

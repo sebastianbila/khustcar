@@ -126,7 +126,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
             </div>
 
             {/* Main Layout Grid */}
-            <div className="max-w-[1440px] mx-auto p-5">
+            <div className="max-w-360 mx-auto p-5">
                 <div className="flex flex-col xl:grid xl:grid-cols-3 xl:gap-x-8 xl:px-8 items-start">
 
                     {/* 1. Image Gallery - Full width on mobile, 2/3 on desktop */}
@@ -142,7 +142,9 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                                 className="w-full h-full object-contain"
                                                 poster={media[selectedImageIndex].poster}
                                                 playsInline
-                                            />
+                                            >
+                                                <track kind="captions" />
+                                            </video>
                                         ) : (
                                             <button
                                                 className="w-full h-full relative cursor-zoom-in"
@@ -192,12 +194,12 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 <div className="flex gap-3 py-3 xl:p-4 overflow-x-auto no-scrollbar xl:grid xl:grid-cols-6 xl:overflow-visible">
                                     {media.map((item, idx) => (
                                         <button
-                                            key={idx}
+                                            key={(item as any).asset?._ref || (item as any).src || idx}
                                             onClick={() => setSelectedImageIndex(idx)}
                                             className={`relative shrink-0 w-20 xl:w-auto aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 border-2 ${
                                                 idx === selectedImageIndex
-                                                    ? "border-zinc-800 opacity-100"
-                                                    : "border-transparent opacity-60 hover:opacity-100"
+                                                    ? "border-gray-400 opacity-100"
+                                                    : "border-gray-100 opacity-60 hover:opacity-100"
                                             }`}
                                         >
                                             {item.type === "video" ? (
@@ -297,11 +299,11 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                     icon={Car}
                                     label="Привід"
                                     value={
-                                        car.drivetrain === "fwd"
-                                            ? "Передній"
-                                            : car.drivetrain === "rwd"
-                                              ? "Задній"
-                                              : "Повний"
+                                        (() => {
+                                            if (car.drivetrain === "fwd") return "Передній";
+                                            if (car.drivetrain === "rwd") return "Задній";
+                                            return "Повний";
+                                        })()
                                     }
                                 />
                                 <SpecItem icon={FileText} label="VIN" value="WBSJF0C50NCE12345" />
@@ -331,7 +333,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                 slides={slides}
                 index={selectedImageIndex - (media[0]?.type === "video" ? 1 : 0)}
                 plugins={[Slideshow, Thumbnails]}
-                thumbnails={{ position: "bottom", width: 120, height: 80 }}
+                thumbnails={{ position: "bottom", width: 120, height: 80, borderColor: '#262626' }}
             />
         </div>
     );

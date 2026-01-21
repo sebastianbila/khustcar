@@ -15,7 +15,7 @@ export function CatalogPreviewSection({ cars }: CatalogPreviewSectionProps) {
     const previewCars = cars.slice(0, 4);
 
     return (
-        <section id="catalog" className="py-20 bg-white">
+        <section id="catalog" className="py-20 bg-background">
             <div className="container-custom">
                 {/* Header */}
                 <div className="text-center mb-12">
