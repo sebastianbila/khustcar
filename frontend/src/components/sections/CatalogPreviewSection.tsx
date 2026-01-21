@@ -2,20 +2,22 @@
 
 import { CarPreviewCard } from "@/components/CarPreviewCard";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import type { Car } from "@/types/car";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 interface CatalogPreviewSectionProps {
     cars: Car[];
+    className?: string;
 }
 
-export function CatalogPreviewSection({ cars }: CatalogPreviewSectionProps) {
+export function CatalogPreviewSection({ cars, className }: CatalogPreviewSectionProps) {
     // Show only first 4 cars in preview
     const previewCars = cars.slice(0, 4);
 
     return (
-        <section id="catalog" className="py-20 bg-background">
+        <section id="catalog" className={cn("py-20 bg-background", className)}>
             <div className="container-custom">
                 {/* Header */}
                 <div className="text-center mb-12">

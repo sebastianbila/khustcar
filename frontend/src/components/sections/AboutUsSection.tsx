@@ -1,8 +1,13 @@
-import Image from 'next/image'
+import { cn } from "@/lib/utils";
+import Image from 'next/image';
 
-export function AboutUsSection() {
+interface AboutUsSectionProps {
+    className?: string;
+}
+
+export function AboutUsSection({ className }: AboutUsSectionProps) {
   return (
-    <section className="py-16 bg-background" id="about">
+    <section className={cn("py-16 bg-background", className)} id="about">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Column: Text Content */}

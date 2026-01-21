@@ -18,7 +18,6 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 import {
     getBrands,
     getCars,
@@ -309,6 +308,10 @@ function CatalogContent() {
         (v) => v !== undefined,
     );
 
+    const activeFiltersCount = Object.values(filters).filter(
+        (v) => v !== undefined,
+    ).length;
+
     // Reset to page 1 when filters or sort changes
     useEffect(() => {
         setCurrentPage(1);
@@ -493,9 +496,14 @@ function CatalogContent() {
                     <div className="container-custom">
                         <Sheet open={isFiltersSheetOpen} onOpenChange={setIsFiltersSheetOpen}>
                             <SheetTrigger asChild>
-                                <Button variant="outline" className={cn("gap-2 duration-500 transition-all", hasActiveFilters && "border-2 border-sky-500")}>
+                                <Button variant="outline" className="relative gap-2 duration-500 transition-all">
                                     <SlidersHorizontal className="h-4 w-4" />
                                     Фільтри
+                                    {activeFiltersCount > 0 && (
+                                        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-rose-700 text-xs font-medium text-white shadow-sm ring-2 ring-white">
+                                            {activeFiltersCount}
+                                        </span>
+                                    )}
                                 </Button>
                             </SheetTrigger>
                             <SheetContent

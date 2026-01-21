@@ -38,3 +38,7 @@ export const getDrivetrainLabel = (drivetrain: string) => {
           return drivetrain;
   }
 };
+
+export const getSectionBg = (index: number) => {
+    return index % 2 === 0 ? "bg-background" : "bg-background-muted";
+};

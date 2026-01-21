@@ -1,8 +1,13 @@
 import { ContactUsView } from '@/components/ContactUsView';
+import { cn } from "@/lib/utils";
 
-export function ContactUsSection() {
+interface ContactUsSectionProps {
+    className?: string;
+}
+
+export function ContactUsSection({ className }: ContactUsSectionProps) {
     return (
-        <section id="contact" className="py-16 bg-background">
+        <section id="contact" className={cn("py-16 bg-background", className)}>
             <div className="container-custom">
                 <ContactUsView />
             </div>

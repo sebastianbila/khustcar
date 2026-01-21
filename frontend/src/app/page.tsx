@@ -8,6 +8,7 @@ import { ContactUsSection } from "@/components/sections/ContactUsSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { NewCarsSlider } from "@/components/sections/NewCarsSlider";
 import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
+import { getSectionBg } from "@/lib/utils";
 import { getCars, getFeaturedCars } from "@/services/carService";
 import { useQuery } from "@tanstack/react-query";
 
@@ -42,32 +43,33 @@ export default function HomePage() {
         );
     }
 
-    // Get newest cars (last 6 cars added)
-    const newestCars = [...cars].slice(0, 6);
-
     return (
         <div>
-            {/* 1. Header - Already in layout */}
-
-            {/* 2. Hero / Main Banner */}
+            {/* Hero / Main Banner */}
             <HeroSection />
 
-            {/* 3. New Cars Slider */}
-            {featuredCars?.length > 0 && <NewCarsSlider cars={featuredCars} />}
+            {/* New Cars Slider */}
+            {featuredCars?.length > 0 && (
+                <NewCarsSlider
+                    cars={featuredCars}
+                    className={getSectionBg(0)}
+                />
+            )}
 
-            {/* 4. Catalog Preview */}
-            <CatalogPreviewSection cars={cars} />
+            {/* Catalog Preview */}
+            <CatalogPreviewSection
+                cars={cars}
+                className={getSectionBg(1)}
+            />
 
-            {/* 6. Why Choose Us / Advantages */}
-            <WhyChooseUsSection />
+            {/* Why Choose Us / Advantages */}
+            <WhyChooseUsSection className={getSectionBg(2)} />
 
-            {/* 5. About Us */}
-            <AboutUsSection />
+            {/* About Us */}
+            <AboutUsSection className={getSectionBg(3)} />
 
-            {/* 7. Contact Us */}
-            <ContactUsSection />
-
-            {/* 9. Footer - Already in layout */}
+            {/* Contact Us */}
+            <ContactUsSection className={getSectionBg(4)} />
         </div>
     );
 }

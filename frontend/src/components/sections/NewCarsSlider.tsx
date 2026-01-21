@@ -6,9 +6,10 @@ import type { Car } from "@/types/car";
 
 interface NewCarsSliderProps {
     cars: Car[];
+    className?: string;
 }
 
-export function NewCarsSlider({ cars }: NewCarsSliderProps) {
+export function NewCarsSlider({ cars, className }: NewCarsSliderProps) {
     if (cars?.length === 0) return null;
 
     // Show only first 4 cars for the homepage arrival section, or all if preferred.
@@ -26,7 +27,7 @@ export function NewCarsSlider({ cars }: NewCarsSliderProps) {
     const lgColsClass = lgColsMap[count] || "lg:grid-cols-4";
 
     return (
-        <section className="py-16 bg-white">
+        <section className={cn("py-16 bg-background", className)}>
             <div className="container-custom">
                 {/* Header */}
                 <div className="mb-12 text-center">
