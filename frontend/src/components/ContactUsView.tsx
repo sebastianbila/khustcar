@@ -94,7 +94,7 @@ export function ContactUsView() {
       </div>
 
       {/* Map */}
-      <div className="h-[400px] lg:h-full min-h-[400px] rounded-2xl overflow-hidden shadow-lg border border-border">
+      <div className="h-100 lg:h-full min-h-100 rounded-2xl overflow-hidden shadow-lg border border-border">
         <iframe
           src={SITE_CONFIG.map.embedUrl}
           width="100%"

@@ -5,7 +5,7 @@ interface ContactUsSectionProps {
     className?: string;
 }
 
-export function ContactUsSection({ className }: ContactUsSectionProps) {
+export function ContactUsSection({ className }: Readonly<ContactUsSectionProps>) {
     return (
         <section id="contact" className={cn("py-16 bg-background", className)}>
             <div className="container-custom">

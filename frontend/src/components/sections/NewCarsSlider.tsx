@@ -9,7 +9,7 @@ interface NewCarsSliderProps {
     className?: string;
 }
 
-export function NewCarsSlider({ cars, className }: NewCarsSliderProps) {
+export function NewCarsSlider({ cars, className }: Readonly<NewCarsSliderProps>) {
     if (cars?.length === 0) return null;
 
     // Show only first 4 cars for the homepage arrival section, or all if preferred.

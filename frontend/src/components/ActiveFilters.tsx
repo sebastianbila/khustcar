@@ -2,71 +2,46 @@
 
 import { Badge } from "@/components/ui/badge";
 import { getDrivetrainLabel, getFuelTypeLabel, getTransmissionLabel } from "@/lib/utils";
+import { useFiltersStore } from "@/stores/filtersStore";
 import { X } from "lucide-react";
 
-interface ActiveFiltersProps {
-    localSearch: string;
-    setLocalSearch: (value: string) => void;
-    localBrand: string;
-    setLocalBrand: (value: string) => void;
-    localModel: string;
-    setLocalModel: (value: string) => void;
-    localMinYear: string;
-    setLocalMinYear: (value: string) => void;
-    localMaxYear: string;
-    setLocalMaxYear: (value: string) => void;
-    localMinPrice: string;
-    setLocalMinPrice: (value: string) => void;
-    localMaxPrice: string;
-    setLocalMaxPrice: (value: string) => void;
-    localMinMileage: string;
-    setLocalMinMileage: (value: string) => void;
-    localMaxMileage: string;
-    setLocalMaxMileage: (value: string) => void;
-    localFuelType: string;
-    setLocalFuelType: (value: string) => void;
-    localTransmission: string;
-    setLocalTransmission: (value: string) => void;
-    localDrivetrain: string;
-    setLocalDrivetrain: (value: string) => void;
-    localColor: string;
-    setLocalColor: (value: string) => void;
-    localInStock: string;
-    setLocalInStock: (value: string) => void;
-    hasActiveFilters: boolean;
-}
+export function ActiveFilters() {
+    const {
+        filters,
+        localSearch,
+        setLocalSearch,
+        localBrand,
+        setLocalBrand,
+        localModel,
+        setLocalModel,
+        localMinYear,
+        setLocalMinYear,
+        localMaxYear,
+        setLocalMaxYear,
+        localMinPrice,
+        setLocalMinPrice,
+        localMaxPrice,
+        setLocalMaxPrice,
+        localMinMileage,
+        setLocalMinMileage,
+        localMaxMileage,
+        setLocalMaxMileage,
+        localFuelType,
+        setLocalFuelType,
+        localTransmission,
+        setLocalTransmission,
+        localDrivetrain,
+        setLocalDrivetrain,
+        localColor,
+        setLocalColor,
+        localInStock,
+        setLocalInStock,
+    } = useFiltersStore();
 
-export function ActiveFilters({
-    localSearch,
-    setLocalSearch,
-    localBrand,
-    setLocalBrand,
-    localModel,
-    setLocalModel,
-    localMinYear,
-    setLocalMinYear,
-    localMaxYear,
-    setLocalMaxYear,
-    localMinPrice,
-    setLocalMinPrice,
-    localMaxPrice,
-    setLocalMaxPrice,
-    localMinMileage,
-    setLocalMinMileage,
-    localMaxMileage,
-    setLocalMaxMileage,
-    localFuelType,
-    setLocalFuelType,
-    localTransmission,
-    setLocalTransmission,
-    localDrivetrain,
-    setLocalDrivetrain,
-    localColor,
-    setLocalColor,
-    localInStock,
-    setLocalInStock,
-    hasActiveFilters,
-}: ActiveFiltersProps) {
+    const hasActiveFilters = Object.values(filters).some(
+        (v) => v !== undefined,
+    );
+
     if (!hasActiveFilters) return null;
 
     return (

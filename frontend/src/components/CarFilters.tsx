@@ -7,41 +7,13 @@ import {
     NativeSelect,
     NativeSelectOption,
 } from "@/components/ui/native-select";
+import { useFiltersStore } from "@/stores/filtersStore";
 import { Search, X } from "lucide-react";
 
 interface CarFiltersProps {
     brands: string[];
-    colors: string[];
-    localSearch: string;
-    setLocalSearch: (value: string) => void;
-    localBrand: string;
-    setLocalBrand: (value: string) => void;
     models: string[];
-    localModel: string;
-    setLocalModel: (value: string) => void;
-    localMinYear: string;
-    setLocalMinYear: (value: string) => void;
-    localMaxYear: string;
-    setLocalMaxYear: (value: string) => void;
-    localMinPrice: string;
-    setLocalMinPrice: (value: string) => void;
-    localMaxPrice: string;
-    setLocalMaxPrice: (value: string) => void;
-    localMinMileage: string;
-    setLocalMinMileage: (value: string) => void;
-    localMaxMileage: string;
-    setLocalMaxMileage: (value: string) => void;
-    localFuelType: string;
-    setLocalFuelType: (value: string) => void;
-    localTransmission: string;
-    setLocalTransmission: (value: string) => void;
-    localDrivetrain: string;
-    setLocalDrivetrain: (value: string) => void;
-    localColor: string;
-    setLocalColor: (value: string) => void;
-    localInStock: string;
-    setLocalInStock: (value: string) => void;
-    hasActiveFilters: boolean;
+    colors: string[];
     onResetFilters: () => void;
     onApply?: () => void;
     hideTitle?: boolean;
@@ -49,41 +21,48 @@ interface CarFiltersProps {
 
 export function CarFilters({
     brands,
+    models,
     colors,
-    localSearch,
-    setLocalSearch,
-    localBrand,
-    setLocalBrand,
-    localMinYear,
-    setLocalMinYear,
-    localMaxYear,
-    setLocalMaxYear,
-    localMinPrice,
-    setLocalMinPrice,
-    localMaxPrice,
-    setLocalMaxPrice,
-    localMinMileage,
-    setLocalMinMileage,
-    localMaxMileage,
-    setLocalMaxMileage,
-    localFuelType,
-    setLocalFuelType,
-    localTransmission,
-    setLocalTransmission,
-    localDrivetrain,
-    setLocalDrivetrain,
-    localColor,
-    setLocalColor,
-    localInStock,
-    setLocalInStock,
-    hasActiveFilters,
     onResetFilters,
     onApply,
     hideTitle,
-    models,
-    localModel,
-    setLocalModel,
 }: Readonly<CarFiltersProps>) {
+    const {
+        filters,
+        localSearch,
+        setLocalSearch,
+        localBrand,
+        setLocalBrand,
+        localModel,
+        setLocalModel,
+        localMinYear,
+        setLocalMinYear,
+        localMaxYear,
+        setLocalMaxYear,
+        localMinPrice,
+        setLocalMinPrice,
+        localMaxPrice,
+        setLocalMaxPrice,
+        localMinMileage,
+        setLocalMinMileage,
+        localMaxMileage,
+        setLocalMaxMileage,
+        localFuelType,
+        setLocalFuelType,
+        localTransmission,
+        setLocalTransmission,
+        localDrivetrain,
+        setLocalDrivetrain,
+        localColor,
+        setLocalColor,
+        localInStock,
+        setLocalInStock,
+    } = useFiltersStore();
+
+    const hasActiveFilters = Object.values(filters).some(
+        (v) => v !== undefined,
+    );
+
     return (
         <>
             <div className="flex items-center justify-between mb-4">
@@ -129,7 +108,12 @@ export function CarFilters({
                     <NativeSelect
                         id="filter-brand"
                         value={localBrand}
-                        onChange={(e) => setLocalBrand(e.target.value)}
+                        onChange={(e) => {
+                            setLocalBrand(e.target.value);
+                            if (e.target.value !== localBrand) {
+                                setLocalModel("");
+                            }
+                        }}
                     >
                         <NativeSelectOption value="">
                             Всі Марки

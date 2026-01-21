@@ -5,7 +5,7 @@ interface AboutUsSectionProps {
     className?: string;
 }
 
-export function AboutUsSection({ className }: AboutUsSectionProps) {
+export function AboutUsSection({ className }: Readonly<AboutUsSectionProps>) {
   return (
     <section className={cn("py-16 bg-background", className)} id="about">
       <div className="container-custom">
@@ -70,7 +70,7 @@ export function AboutUsSection({ className }: AboutUsSectionProps) {
           </div>
 
           {/* Right Column: Image */}
-          <div className="relative h-[400px] lg:h-[600px] w-full rounded-2xl overflow-hidden shadow-xl">
+          <div className="relative h-100 lg:h-150 w-full rounded-2xl overflow-hidden shadow-2xl">
             <Image
               src="/images/about-audi-front.png"
               alt="Audi RS7 в автосалоні"

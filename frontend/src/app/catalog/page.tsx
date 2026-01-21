@@ -24,11 +24,12 @@ import {
     getColors,
     getModels,
 } from "@/services/carService";
+import { useFiltersStore } from "@/stores/filtersStore";
 import type { CarFilters } from "@/types/car";
 import { useQuery } from "@tanstack/react-query";
 import { SlidersHorizontal } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 
 type SortOption =
     | "price-asc"
@@ -45,78 +46,28 @@ function CatalogContent() {
     const searchParams = useSearchParams();
     const [sortBy, setSortBy] = useState<SortOption>("");
     const [currentPage, setCurrentPage] = useState(1);
-
-    const [filters, setFilters] = useState<CarFilters>({
-        search: searchParams.get("search") || undefined,
-        brand: searchParams.get("brand") || undefined,
-        model: searchParams.get("model") || undefined,
-        minYear: searchParams.get("minYear")
-            ? parseInt(searchParams.get("minYear")!)
-            : undefined,
-        maxYear: searchParams.get("maxYear")
-            ? parseInt(searchParams.get("maxYear")!)
-            : undefined,
-        minPrice: searchParams.get("minPrice")
-            ? parseInt(searchParams.get("minPrice")!)
-            : undefined,
-        maxPrice: searchParams.get("maxPrice")
-            ? parseInt(searchParams.get("maxPrice")!)
-            : undefined,
-        minMileage: searchParams.get("minMileage")
-            ? parseInt(searchParams.get("minMileage")!)
-            : undefined,
-        maxMileage: searchParams.get("maxMileage")
-            ? parseInt(searchParams.get("maxMileage")!)
-            : undefined,
-        fuelType: (searchParams.get("fuelType") as any) || undefined,
-        transmission: (searchParams.get("transmission") as any) || undefined,
-        drivetrain: (searchParams.get("drivetrain") as any) || undefined,
-        color: searchParams.get("color") || undefined,
-        inStock:
-            searchParams.get("inStock") === "true"
-                ? true
-                : searchParams.get("inStock") === "false"
-                  ? false
-                  : undefined,
-    });
-
-    const [localSearch, setLocalSearch] = useState(filters.search || "");
-    const [localBrand, setLocalBrand] = useState(filters.brand || "");
-    const [localModel, setLocalModel] = useState(filters.model || "");
-    const [localMinYear, setLocalMinYear] = useState(
-        filters.minYear?.toString() || "",
-    );
-    const [localMaxYear, setLocalMaxYear] = useState(
-        filters.maxYear?.toString() || "",
-    );
-    const [localMinPrice, setLocalMinPrice] = useState(
-        filters.minPrice?.toString() || "",
-    );
-    const [localMaxPrice, setLocalMaxPrice] = useState(
-        filters.maxPrice?.toString() || "",
-    );
-    const [localMinMileage, setLocalMinMileage] = useState(
-        filters.minMileage?.toString() || "",
-    );
-    const [localMaxMileage, setLocalMaxMileage] = useState(
-        filters.maxMileage?.toString() || "",
-    );
-    const [localFuelType, setLocalFuelType] = useState(filters.fuelType || "");
-    const [localTransmission, setLocalTransmission] = useState(
-        filters.transmission || "",
-    );
-    const [localDrivetrain, setLocalDrivetrain] = useState(
-        filters.drivetrain || "",
-    );
-    const [localColor, setLocalColor] = useState(filters.color || "");
-    const [localInStock, setLocalInStock] = useState<string>(
-        filters.inStock === true
-            ? "true"
-            : filters.inStock === false
-              ? "false"
-              : "",
-    );
     const [isFiltersSheetOpen, setIsFiltersSheetOpen] = useState(false);
+
+    const {
+        filters,
+        localSearch,
+        localBrand,
+        localModel,
+        localMinYear,
+        localMaxYear,
+        localMinPrice,
+        localMaxPrice,
+        localMinMileage,
+        localMaxMileage,
+        localFuelType,
+        localTransmission,
+        localDrivetrain,
+        localColor,
+        localInStock,
+        resetFilters,
+        updateFilters,
+        initializeFromParams
+    } = useFiltersStore();
 
     const { data: brands = [], isLoading: brandsLoading } = useQuery({
         queryKey: ["brands"],
@@ -143,98 +94,8 @@ function CatalogContent() {
     });
 
     useEffect(() => {
-        const params: CarFilters = {
-            search: searchParams.get("search") || undefined,
-            brand: searchParams.get("brand") || undefined,
-            model: searchParams.get("model") || undefined,
-            minYear: searchParams.get("minYear")
-                ? parseInt(searchParams.get("minYear")!)
-                : undefined,
-            maxYear: searchParams.get("maxYear")
-                ? parseInt(searchParams.get("maxYear")!)
-                : undefined,
-            minPrice: searchParams.get("minPrice")
-                ? parseInt(searchParams.get("minPrice")!)
-                : undefined,
-            maxPrice: searchParams.get("maxPrice")
-                ? parseInt(searchParams.get("maxPrice")!)
-                : undefined,
-            minMileage: searchParams.get("minMileage")
-                ? parseInt(searchParams.get("minMileage")!)
-                : undefined,
-            maxMileage: searchParams.get("maxMileage")
-                ? parseInt(searchParams.get("maxMileage")!)
-                : undefined,
-            fuelType: (searchParams.get("fuelType") as any) || undefined,
-            transmission:
-                (searchParams.get("transmission") as any) || undefined,
-            drivetrain: (searchParams.get("drivetrain") as any) || undefined,
-            color: searchParams.get("color") || undefined,
-            inStock:
-                searchParams.get("inStock") === "true"
-                    ? true
-                    : searchParams.get("inStock") === "false"
-                      ? false
-                      : undefined,
-        };
-        setFilters(params);
-        setLocalSearch(params.search || "");
-        setLocalBrand(params.brand || "");
-        setLocalModel(params.model || "");
-        setLocalMinYear(params.minYear?.toString() || "");
-        setLocalMaxYear(params.maxYear?.toString() || "");
-        setLocalMinPrice(params.minPrice?.toString() || "");
-        setLocalMaxPrice(params.maxPrice?.toString() || "");
-        setLocalMinMileage(params.minMileage?.toString() || "");
-        setLocalMaxMileage(params.maxMileage?.toString() || "");
-        setLocalFuelType(params.fuelType || "");
-        setLocalTransmission(params.transmission || "");
-        setLocalDrivetrain(params.drivetrain || "");
-        setLocalColor(params.color || "");
-        setLocalInStock(
-            params.inStock === true
-                ? "true"
-                : params.inStock === false
-                  ? "false"
-                  : "",
-        );
-    }, [searchParams]);
-
-    const updateFilters = useCallback((newFilters: CarFilters) => {
-        const params = new URLSearchParams();
-        if (newFilters.search) params.set("search", newFilters.search);
-        if (newFilters.brand) params.set("brand", newFilters.brand);
-        if (newFilters.model) params.set("model", newFilters.model);
-        if (newFilters.minYear)
-            params.set("minYear", newFilters.minYear.toString());
-        if (newFilters.maxYear)
-            params.set("maxYear", newFilters.maxYear.toString());
-        if (newFilters.minPrice)
-            params.set("minPrice", newFilters.minPrice.toString());
-        if (newFilters.maxPrice)
-            params.set("maxPrice", newFilters.maxPrice.toString());
-        if (newFilters.minMileage)
-            params.set("minMileage", newFilters.minMileage.toString());
-        if (newFilters.maxMileage)
-            params.set("maxMileage", newFilters.maxMileage.toString());
-        if (newFilters.fuelType) params.set("fuelType", newFilters.fuelType);
-        if (newFilters.transmission)
-            params.set("transmission", newFilters.transmission);
-        if (newFilters.drivetrain)
-            params.set("drivetrain", newFilters.drivetrain);
-        if (newFilters.color) params.set("color", newFilters.color);
-        if (newFilters.inStock !== undefined)
-            params.set("inStock", newFilters.inStock.toString());
-
-        const queryString = params.toString();
-        window.history.pushState(
-            null,
-            "",
-            queryString ? `/catalog?${queryString}` : "/catalog",
-        );
-
-        setFilters(newFilters);
-    }, []);
+        initializeFromParams(new URLSearchParams(searchParams.toString()));
+    }, [searchParams, initializeFromParams]);
 
     // Debounce timer for text inputs
     useEffect(() => {
@@ -280,28 +141,14 @@ function CatalogContent() {
         localMaxMileage,
         localFuelType,
         localTransmission,
+        localDrivetrain,
         localColor,
         localInStock,
         updateFilters,
     ]);
 
     const handleResetFilters = () => {
-        setLocalSearch("");
-        setLocalBrand("");
-        setLocalModel("");
-        setLocalMinYear("");
-        setLocalMaxYear("");
-        setLocalMinPrice("");
-        setLocalMaxPrice("");
-        setLocalMinMileage("");
-        setLocalMaxMileage("");
-        setLocalFuelType("");
-        setLocalTransmission("");
-        setLocalDrivetrain("");
-        setLocalColor("");
-        setLocalInStock("");
-        setFilters({});
-        window.history.pushState(null, "", "/catalog");
+        resetFilters();
     };
 
     const hasActiveFilters = Object.values(filters).some(
@@ -358,40 +205,6 @@ function CatalogContent() {
                 brands={brands}
                 models={models}
                 colors={colors}
-                localSearch={localSearch}
-                setLocalSearch={setLocalSearch}
-                localBrand={localBrand}
-                setLocalBrand={(value) => {
-                    setLocalBrand(value);
-                    if (value !== localBrand) {
-                        setLocalModel("");
-                    }
-                }}
-                localModel={localModel}
-                setLocalModel={setLocalModel}
-                localMinYear={localMinYear}
-                setLocalMinYear={setLocalMinYear}
-                localMaxYear={localMaxYear}
-                setLocalMaxYear={setLocalMaxYear}
-                localMinPrice={localMinPrice}
-                setLocalMinPrice={setLocalMinPrice}
-                localMaxPrice={localMaxPrice}
-                setLocalMaxPrice={setLocalMaxPrice}
-                localMinMileage={localMinMileage}
-                setLocalMinMileage={setLocalMinMileage}
-                localMaxMileage={localMaxMileage}
-                setLocalMaxMileage={setLocalMaxMileage}
-                localFuelType={localFuelType}
-                setLocalFuelType={setLocalFuelType}
-                localTransmission={localTransmission}
-                setLocalTransmission={setLocalTransmission}
-                localDrivetrain={localDrivetrain}
-                setLocalDrivetrain={setLocalDrivetrain}
-                localColor={localColor}
-                setLocalColor={setLocalColor}
-                localInStock={localInStock}
-                setLocalInStock={setLocalInStock}
-                hasActiveFilters={hasActiveFilters}
                 onResetFilters={handleResetFilters}
                 onApply={() => setIsFiltersSheetOpen(false)}
                 hideTitle
@@ -401,21 +214,6 @@ function CatalogContent() {
             brands,
             models,
             colors,
-            localSearch,
-            localBrand,
-            localModel,
-            localMinYear,
-            localMaxYear,
-            localMinPrice,
-            localMaxPrice,
-            localMinMileage,
-            localMaxMileage,
-            localFuelType,
-            localTransmission,
-            localDrivetrain,
-            localColor,
-            localInStock,
-            hasActiveFilters,
             handleResetFilters,
             setIsFiltersSheetOpen,
         ],
@@ -423,60 +221,9 @@ function CatalogContent() {
 
     const activeFiltersContent = useMemo(
         () => (
-            <ActiveFilters
-                localSearch={localSearch}
-                setLocalSearch={setLocalSearch}
-                localBrand={localBrand}
-                setLocalBrand={(value) => {
-                    setLocalBrand(value);
-                    if (value !== localBrand) {
-                        setLocalModel("");
-                    }
-                }}
-                localModel={localModel}
-                setLocalModel={setLocalModel}
-                localMinYear={localMinYear}
-                setLocalMinYear={setLocalMinYear}
-                localMaxYear={localMaxYear}
-                setLocalMaxYear={setLocalMaxYear}
-                localMinPrice={localMinPrice}
-                setLocalMinPrice={setLocalMinPrice}
-                localMaxPrice={localMaxPrice}
-                setLocalMaxPrice={setLocalMaxPrice}
-                localMinMileage={localMinMileage}
-                setLocalMinMileage={setLocalMinMileage}
-                localMaxMileage={localMaxMileage}
-                setLocalMaxMileage={setLocalMaxMileage}
-                localFuelType={localFuelType}
-                setLocalFuelType={setLocalFuelType}
-                localTransmission={localTransmission}
-                setLocalTransmission={setLocalTransmission}
-                localDrivetrain={localDrivetrain}
-                setLocalDrivetrain={setLocalDrivetrain}
-                localColor={localColor}
-                setLocalColor={setLocalColor}
-                localInStock={localInStock}
-                setLocalInStock={setLocalInStock}
-                hasActiveFilters={hasActiveFilters}
-            />
+            <ActiveFilters />
         ),
-        [
-            localSearch,
-            localBrand,
-            localModel,
-            localMinYear,
-            localMaxYear,
-            localMinPrice,
-            localMaxPrice,
-            localMinMileage,
-            localMaxMileage,
-            localFuelType,
-            localTransmission,
-            localDrivetrain,
-            localColor,
-            localInStock,
-            hasActiveFilters,
-        ],
+        [],
     );
 
     if (brandsLoading) {
