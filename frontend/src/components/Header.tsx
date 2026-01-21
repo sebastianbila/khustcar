@@ -56,7 +56,7 @@ export function Header() {
                                 {/* Phone */}
                                 <a
                                     href={`tel:${SITE_CONFIG.contact.phone}`}
-                                    className="hidden items-center gap-3 text-slate-700 transition-colors hover:text-slate-900 md:flex"
+                                    className="hidden items-center gap-3 text-slate-700 transition-colors hover:text-slate-900 sm:flex"
                                 >
                                     <Phone className="size-5" />
                                     <span className="text-[15px] font-semibold">
