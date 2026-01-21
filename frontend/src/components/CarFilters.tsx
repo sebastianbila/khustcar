@@ -43,6 +43,7 @@ interface CarFiltersProps {
     setLocalInStock: (value: string) => void;
     hasActiveFilters: boolean;
     onResetFilters: () => void;
+    onApply?: () => void;
     hideTitle?: boolean;
 }
 
@@ -77,6 +78,7 @@ export function CarFilters({
     setLocalInStock,
     hasActiveFilters,
     onResetFilters,
+    onApply,
     hideTitle,
     models,
     localModel,
@@ -335,6 +337,14 @@ export function CarFilters({
                     </div>
                 </div>
             </div>
+
+            {onApply && (
+                <div className="mt-8 md:hidden">
+                    <Button onClick={onApply} className="w-full py-6">
+                        Застосувати фільтри
+                    </Button>
+                </div>
+            )}
         </>
     );
 }

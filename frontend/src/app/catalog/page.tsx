@@ -10,6 +10,13 @@ import {
     NativeSelectOption,
 } from "@/components/ui/native-select";
 import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
+import {
     getBrands,
     getCars,
     getColors,
@@ -17,6 +24,7 @@ import {
 } from "@/services/carService";
 import type { CarFilters } from "@/types/car";
 import { useQuery } from "@tanstack/react-query";
+import { SlidersHorizontal } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 
@@ -33,7 +41,6 @@ const ITEMS_PER_PAGE = 8;
 
 function CatalogContent() {
     const searchParams = useSearchParams();
-    const [showFilters, setShowFilters] = useState(false);
     const [sortBy, setSortBy] = useState<SortOption>("");
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -107,6 +114,7 @@ function CatalogContent() {
               ? "false"
               : "",
     );
+    const [isFiltersSheetOpen, setFiltersSheetOpen] = useState(false);
 
     const { data: brands = [], isLoading: brandsLoading } = useQuery({
         queryKey: ["brands"],
@@ -298,18 +306,6 @@ function CatalogContent() {
         (v) => v !== undefined,
     );
 
-    // Lock body scroll when sheet is open
-    useEffect(() => {
-        if (showFilters) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-        return () => {
-            document.body.style.overflow = "";
-        };
-    }, [showFilters]);
-
     // Reset to page 1 when filters or sort changes
     useEffect(() => {
         setCurrentPage(1);
@@ -350,6 +346,75 @@ function CatalogContent() {
         return sortedCars.slice(start, start + ITEMS_PER_PAGE);
     }, [sortedCars, currentPage]);
 
+    const filtersContent = useMemo(
+        () => (
+            <CarFiltersComponent
+                brands={brands}
+                models={models}
+                colors={colors}
+                localSearch={localSearch}
+                setLocalSearch={setLocalSearch}
+                localBrand={localBrand}
+                setLocalBrand={(value) => {
+                    setLocalBrand(value);
+                    if (value !== localBrand) {
+                        setLocalModel("");
+                    }
+                }}
+                localModel={localModel}
+                setLocalModel={setLocalModel}
+                localMinYear={localMinYear}
+                setLocalMinYear={setLocalMinYear}
+                localMaxYear={localMaxYear}
+                setLocalMaxYear={setLocalMaxYear}
+                localMinPrice={localMinPrice}
+                setLocalMinPrice={setLocalMinPrice}
+                localMaxPrice={localMaxPrice}
+                setLocalMaxPrice={setLocalMaxPrice}
+                localMinMileage={localMinMileage}
+                setLocalMinMileage={setLocalMinMileage}
+                localMaxMileage={localMaxMileage}
+                setLocalMaxMileage={setLocalMaxMileage}
+                localFuelType={localFuelType}
+                setLocalFuelType={setLocalFuelType}
+                localTransmission={localTransmission}
+                setLocalTransmission={setLocalTransmission}
+                localDrivetrain={localDrivetrain}
+                setLocalDrivetrain={setLocalDrivetrain}
+                localColor={localColor}
+                setLocalColor={setLocalColor}
+                localInStock={localInStock}
+                setLocalInStock={setLocalInStock}
+                hasActiveFilters={hasActiveFilters}
+                onResetFilters={handleResetFilters}
+                onApply={() => setFiltersSheetOpen(false)}
+                hideTitle
+            />
+        ),
+        [
+            brands,
+            models,
+            colors,
+            localSearch,
+            localBrand,
+            localModel,
+            localMinYear,
+            localMaxYear,
+            localMinPrice,
+            localMaxPrice,
+            localMinMileage,
+            localMaxMileage,
+            localFuelType,
+            localTransmission,
+            localDrivetrain,
+            localColor,
+            localInStock,
+            hasActiveFilters,
+            handleResetFilters,
+            setFiltersSheetOpen,
+        ],
+    );
+
     if (brandsLoading) {
         return (
             <div className="flex items-center justify-center py-20">
@@ -362,50 +427,40 @@ function CatalogContent() {
         <div>
             {/* Filters and Results */}
             <section className="bg-gray-50">
-                <div className="bg-background-muted py-8 border-b border-b-border">
+                {/* Mobile Filters Button */}
+                <div className="md:hidden py-4 border-b border-b-border">
                     <div className="container-custom">
-                        <CarFiltersComponent
-                            brands={brands}
-                            models={models}
-                            colors={colors}
-                            localSearch={localSearch}
-                            setLocalSearch={setLocalSearch}
-                            localBrand={localBrand}
-                            setLocalBrand={(value) => {
-                                setLocalBrand(value);
-                                // Reset model when brand changes
-                                if (value !== localBrand) {
-                                    setLocalModel("");
-                                }
-                            }}
-                            localModel={localModel}
-                            setLocalModel={setLocalModel}
-                            localMinYear={localMinYear}
-                            setLocalMinYear={setLocalMinYear}
-                            localMaxYear={localMaxYear}
-                            setLocalMaxYear={setLocalMaxYear}
-                            localMinPrice={localMinPrice}
-                            setLocalMinPrice={setLocalMinPrice}
-                            localMaxPrice={localMaxPrice}
-                            setLocalMaxPrice={setLocalMaxPrice}
-                            localMinMileage={localMinMileage}
-                            setLocalMinMileage={setLocalMinMileage}
-                            localMaxMileage={localMaxMileage}
-                            setLocalMaxMileage={setLocalMaxMileage}
-                            localFuelType={localFuelType}
-                            setLocalFuelType={setLocalFuelType}
-                            localTransmission={localTransmission}
-                            setLocalTransmission={setLocalTransmission}
-                            localDrivetrain={localDrivetrain}
-                            setLocalDrivetrain={setLocalDrivetrain}
-                            localColor={localColor}
-                            setLocalColor={setLocalColor}
-                            localInStock={localInStock}
-                            setLocalInStock={setLocalInStock}
-                            hasActiveFilters={hasActiveFilters}
-                            onResetFilters={handleResetFilters}
-                            hideTitle
-                        />
+                        <Sheet open={isFiltersSheetOpen} onOpenChange={setFiltersSheetOpen}>
+                            <SheetTrigger asChild>
+                                <Button variant="outline" className="gap-2">
+                                    <SlidersHorizontal className="h-4 w-4" />
+                                    Фільтри
+                                    {hasActiveFilters && (
+                                        <span className="ml-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                            •
+                                        </span>
+                                    )}
+                                </Button>
+                            </SheetTrigger>
+                            <SheetContent
+                                side="left"
+                                className="w-full sm:w-96"
+                            >
+                                <SheetHeader>
+                                    <SheetTitle>Фільтри</SheetTitle>
+                                </SheetHeader>
+                                <div className="mt-6 pb-20">
+                                    {filtersContent}
+                                </div>
+                            </SheetContent>
+                        </Sheet>
+                    </div>
+                </div>
+
+                {/* Desktop Filters */}
+                <div className="hidden md:block bg-background-muted py-8 border-b border-b-border">
+                    <div className="container-custom">
+                        {filtersContent}
                     </div>
                 </div>
                 <div className="py-8 border-b border-b-border">
