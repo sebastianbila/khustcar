@@ -6,7 +6,12 @@ import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/lib/constants";
 import { urlFor } from "@/lib/sanity";
-import { cn, formatMileage, getFuelTypeLabel, getTransmissionLabel } from "@/lib/utils";
+import {
+    cn,
+    formatMileage,
+    getFuelTypeLabel,
+    getTransmissionLabel,
+} from "@/lib/utils";
 import { getCarById } from "@/services/carService";
 import { useFavoritesStore } from "@/stores/favoritesStore";
 import { PortableText } from "@portabletext/react";
@@ -200,7 +205,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                             {/* Thumbnails */}
                             {media.length > 1 && (
-                                <div className="flex gap-3 py-3 lg:p-4 overflow-x-auto no-scrollbar lg:grid lg:grid-cols-6 lg:overflow-visible">
+                                <div className="flex gap-3 py-3 overflow-x-auto no-scrollbar">
                                     {media.map((item, idx) => (
                                         <button
                                             key={
@@ -211,7 +216,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                             onClick={() =>
                                                 setSelectedImageIndex(idx)
                                             }
-                                            className={`relative shrink-0 w-20 lg:w-auto aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 border-2 ${
+                                            className={`relative shrink-0 w-25 lg:w-20 aspect-4/3 overflow-hidden transition-all duration-200 border-2 ${
                                                 idx === selectedImageIndex
                                                     ? "border-gray-400 opacity-100"
                                                     : "border-gray-100 opacity-60 hover:opacity-100"
@@ -274,7 +279,9 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500">Стан</span>
                                     <span className="text-gray-900 font-bold">
-                                        {car.condition ? `${car.condition}/10` : "З пробігом"}
+                                        {car.condition
+                                            ? `${car.condition}/10`
+                                            : "З пробігом"}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-start gap-4">
@@ -304,11 +311,19 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                             "w-full h-12 border-zinc-200",
                                             isCarFavorite
                                                 ? "text-rose-500 border-rose-200 hover:bg-rose-50"
-                                                : "text-zinc-600"
+                                                : "text-zinc-600",
                                         )}
                                     >
-                                        <Heart className={cn("h-4 w-4 mr-2", isCarFavorite && "fill-rose-500")} />
-                                        {isCarFavorite ? "В обраному" : "Зберегти"}
+                                        <Heart
+                                            className={cn(
+                                                "h-4 w-4 mr-2",
+                                                isCarFavorite &&
+                                                    "fill-rose-500",
+                                            )}
+                                        />
+                                        {isCarFavorite
+                                            ? "В обраному"
+                                            : "Зберегти"}
                                     </Button>
                                     <Button
                                         variant="outline"
@@ -319,13 +334,20 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                                             if (navigator.share) {
                                                 try {
-                                                    await navigator.share({ title, url });
+                                                    await navigator.share({
+                                                        title,
+                                                        url,
+                                                    });
                                                 } catch (err) {
                                                     // User cancelled or error
                                                 }
                                             } else {
-                                                await navigator.clipboard.writeText(url);
-                                                toast.success("Посилання скопійовано");
+                                                await navigator.clipboard.writeText(
+                                                    url,
+                                                );
+                                                toast.success(
+                                                    "Посилання скопійовано",
+                                                );
                                             }
                                         }}
                                     >
