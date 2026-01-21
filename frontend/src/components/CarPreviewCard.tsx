@@ -2,8 +2,10 @@
 
 import { Badge } from "@/components/ui/badge";
 import { urlFor } from "@/lib/sanity";
-import { getFuelTypeLabel, getTransmissionLabel } from "@/lib/utils";
+import { cn, getFuelTypeLabel, getTransmissionLabel } from "@/lib/utils";
+import { useFavoritesStore } from "@/stores/favoritesStore";
 import type { Car } from "@/types/car";
+import { Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,27 +15,29 @@ interface CarPreviewCardProps {
 }
 
 export function CarPreviewCard({ car, isNew }: CarPreviewCardProps) {
+    const { toggleFavorite, isFavorite } = useFavoritesStore();
+    const isCarFavorite = isFavorite(car._id);
+
     return (
         <div className="bg-background rounded-xl border border-border overflow-hidden hover:shadow-lg transition-shadow duration-300">
             {/* Image */}
-            <Link
-                href={`/cars/${car._id}`}
-                className="relative block aspect-4/3 bg-gray-50 overflow-hidden"
-            >
-                <Image
-                    src={
-                        car.images?.[0]
-                            ? urlFor(car.images[0])
-                                  .ignoreImageParams()
-                                  .width(600)
-                                  .auto("format")
-                                  .url()
-                            : "/placeholder-car.jpg"
-                    }
-                    alt={`${car.brand} ${car.model}`}
-                    fill
-                    className="object-cover"
-                />
+            <div className="relative block aspect-4/3 bg-gray-50 overflow-hidden">
+                <Link href={`/cars/${car._id}`} className="block w-full h-full">
+                    <Image
+                        src={
+                            car.images?.[0]
+                                ? urlFor(car.images[0])
+                                      .ignoreImageParams()
+                                      .width(600)
+                                      .auto("format")
+                                      .url()
+                                : "/placeholder-car.jpg"
+                        }
+                        alt={`${car.brand} ${car.model}`}
+                        fill
+                        className="object-cover"
+                    />
+                </Link>
 
                 {car.inStock && car.discountPrice && (
                     <div className="absolute top-3 left-3 z-10">
@@ -48,7 +52,28 @@ export function CarPreviewCard({ car, isNew }: CarPreviewCardProps) {
                         Новинка
                     </div>
                 )}
-            </Link>
+
+                <button
+                    className={cn(
+                        "absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md z-10 group/heart cursor-pointer transition-colors",
+                        isCarFavorite
+                            ? "text-rose-500"
+                            : "text-gray-400 hover:text-rose-500",
+                        isNew && "top-14"
+                    )}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        toggleFavorite(car._id);
+                    }}
+                >
+                    <Heart
+                        className={cn(
+                            "h-4 w-4 transition-colors duration-300",
+                            isCarFavorite && "fill-rose-500"
+                        )}
+                    />
+                </button>
+            </div>
 
             {/* Content */}
             <div className="p-5">

@@ -11,6 +11,7 @@ import { getCarById } from "@/services/carService";
 import { useFavoritesStore } from "@/stores/favoritesStore";
 import { PortableText } from "@portabletext/react";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
     Calendar,
     Car,
@@ -311,6 +312,21 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                     <Button
                                         variant="outline"
                                         className="w-full h-12 text-zinc-600 border-zinc-200"
+                                        onClick={async () => {
+                                            const url = window.location.href;
+                                            const title = `${car.brand} ${car.model} ${car.year}`;
+
+                                            if (navigator.share) {
+                                                try {
+                                                    await navigator.share({ title, url });
+                                                } catch (err) {
+                                                    // User cancelled or error
+                                                }
+                                            } else {
+                                                await navigator.clipboard.writeText(url);
+                                                toast.success("Посилання скопійовано");
+                                            }
+                                        }}
                                     >
                                         <Share2 className="h-4 w-4 mr-2" />
                                         Поділитись

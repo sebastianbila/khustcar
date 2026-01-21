@@ -80,9 +80,9 @@ export async function getCarById(id: string): Promise<Car> {
   return client.fetch(query, { id })
 }
 
-export async function getFeaturedCars(): Promise<Car | null> {
-  const query = '*[_type == "newCars"][0].cars->'
-  return client.fetch(query)
+export async function getFeaturedCars(): Promise<Car[]> {
+  const query = '*[_id == "newCars"].cars[]->{ ..., "videoUrl": video.asset->url }'
+  return client.fetch(query) ?? []
 }
 
 export async function getBrands(): Promise<string[]> {
