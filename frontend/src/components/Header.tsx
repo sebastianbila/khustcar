@@ -1,14 +1,12 @@
 'use client'
 
-import {ModeToggle} from '@/components/mode-toggle'
-import {SearchOverlay} from '@/components/SearchOverlay'
-import {Button} from '@/components/ui/button'
-import {Sheet, SheetContent, SheetTrigger} from '@/components/ui/sheet'
-import {NAV_LINKS, SITE_CONFIG} from '@/lib/constants'
-import {Menu, Phone, Search} from 'lucide-react'
+import { SearchOverlay } from '@/components/SearchOverlay'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants'
+import { Instagram, Menu, Phone, Search, Send } from 'lucide-react'
 import Link from 'next/link'
-import {useState} from 'react'
-import {SocialIcon} from 'react-social-icons'
+import { useState } from 'react'
 
 export function Header() {
     const [searchOpen, setSearchOpen] = useState(false)
@@ -16,80 +14,71 @@ export function Header() {
 
     return (
         <>
-            <header className="sticky top-0 z-50 w-full bg-header shadow-sm">
-                {/* Main Navigation */}
-                <nav className="relative backdrop-blur-md border-b border-gray-100">
+            <header className="sticky top-0 z-50 w-full bg-header shadow-sm font-medium">
+                <nav className="border-b border-gray-100 bg-background/80 backdrop-blur-md">
                     <div className="container-custom">
-                        <div className="flex h-20 items-center justify-between">
+                        <div className="flex h-20 items-center">
                             {/* Logo */}
-                            <Link href="/" className="flex items-center gap-2 z-10 shrink-0">
+                            <Link href="/" className="flex items-center gap-2 mr-12 shrink-0">
                                 <img
                                     src="/khustcar_logo.png"
                                     alt={SITE_CONFIG.name}
-                                    className="h-9 w-auto object-contain scale-150 relative top-1"
+                                    className="h-10 w-auto object-contain"
                                 />
-                                <span className="ml-3 font-bold text-text">Khust Car</span>
+                                <span className="text-xl font-bold text-slate-800">Khust Car</span>
                             </Link>
 
-                            {/* Desktop Navigation - Centered */}
-                            <div
-                                className="hidden md:flex items-center gap-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                            {/* Desktop Navigation */}
+                            <div className="hidden lg:flex items-center gap-8">
                                 {NAV_LINKS.map((link) => (
                                     <Link
                                         key={link.href}
                                         href={link.href}
-                                        className="group relative text-sm font-medium text-gray-800 hover:text-primary transition-colors py-2"
+                                        className="text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors"
                                     >
                                         {link.label}
-                                        <span
-                                            className="absolute bottom-0 left-0 h-0.5 w-0 bg-primary transition-all duration-300 ease-out group-hover:w-full"></span>
                                     </Link>
                                 ))}
                             </div>
 
                             {/* Right Actions */}
-                            <div className="flex items-center gap-3 z-10">
+                            <div className="ml-auto flex items-center gap-6">
+                                {/* Search */}
+                                <button
+                                    onClick={() => setSearchOpen(true)}
+                                    className="text-slate-500 hover:text-slate-900 transition-colors"
+                                >
+                                    <Search className="h-5 w-5" />
+                                </button>
+
                                 {/* Phone */}
                                 <a
                                     href={`tel:${SITE_CONFIG.contact.phone}`}
-                                    className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
+                                    className="hidden md:flex items-center gap-2 text-slate-700 hover:text-slate-900 transition-colors"
                                 >
-                                    <Phone className="h-4 w-4"/>
-                                    <span className="hidden lg:inline text-sm font-medium">{SITE_CONFIG.contact.phone}</span>
+                                    <Phone className="h-4 w-4" />
+                                    <span className="text-[15px] font-semibold">{SITE_CONFIG.contact.phone}</span>
                                 </a>
 
-
-                                <div className="items-center justify-center gap-3 hidden lg:flex">
-                                    <SocialIcon
-                                        url={SITE_CONFIG.social.telegram}
+                                {/* Social Icons */}
+                                <div className="hidden lg:flex items-center gap-4 border-l border-gray-200 pl-6 ml-2">
+                                    <a
+                                        href={SITE_CONFIG.social.instagram}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{height: 24, width: 24}}
-                                        fgColor="#ffffff"
-                                        bgColor="#151922"
-                                    />
-                                    <SocialIcon
-                                        url={SITE_CONFIG.social.instagram}
+                                        className="text-slate-400 hover:text-[#E4405F] transition-colors"
+                                    >
+                                        <Instagram className="h-5 w-5" />
+                                    </a>
+                                    <a
+                                        href={SITE_CONFIG.social.telegram}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style={{height: 24, width: 24}}
-                                        fgColor="#ffffff"
-                                        bgColor="#151922"
-                                    />
+                                        className="text-slate-400 hover:text-[#0088cc] transition-colors"
+                                    >
+                                        <Send className="h-5 w-5" />
+                                    </a>
                                 </div>
-
-                                {/* Search */}
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => setSearchOpen(true)}
-                                    className="text-gray-700 hover:text-primary hover:bg-transparent"
-                                >
-                                    <Search className="h-5 w-5"/>
-                                </Button>
-
-                                {/* Mode Toggle */}
-                                {/*<ModeToggle />*/}
 
                                 {/* Mobile Menu Button */}
                                 <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -97,9 +86,9 @@ export function Header() {
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="md:hidden text-gray-700 hover:text-primary hover:bg-transparent px-0"
+                                            className="lg:hidden text-slate-700 hover:text-slate-900 px-0 -ml-2"
                                         >
-                                            <Menu className="h-6 w-6"/>
+                                            <Menu className="h-6 w-6" />
                                         </Button>
                                     </SheetTrigger>
                                     <SheetContent side="right" className="bg-background w-10/12 sm:w-[400px]">
@@ -108,32 +97,30 @@ export function Header() {
                                                 <Link
                                                     key={link.href}
                                                     href={link.href}
-                                                    className="text-lg font-medium text-gray-800 hover:text-primary transition-colors py-2"
+                                                    className="text-lg font-medium text-slate-800 hover:text-primary transition-colors py-2"
                                                     onClick={() => setSheetOpen(false)}
                                                 >
                                                     {link.label}
                                                 </Link>
                                             ))}
 
-                                            {/* Social Icons in Sheet */}
-                                            <div
-                                                className="flex items-center justify-center gap-3 mt-8 pt-8 border-t border-gray-200">
-                                                <SocialIcon
-                                                    url={SITE_CONFIG.social.telegram}
+                                            <div className="flex items-center gap-4 mt-8 pt-8 border-t border-gray-100">
+                                                <a
+                                                    href={SITE_CONFIG.social.instagram}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{height: 40, width: 40}}
-                                                    fgColor="#ffffff"
-                                                    bgColor="#151922"
-                                                />
-                                                <SocialIcon
-                                                    url={SITE_CONFIG.social.instagram}
+                                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600"
+                                                >
+                                                    <Instagram className="h-5 w-5" />
+                                                </a>
+                                                <a
+                                                    href={SITE_CONFIG.social.telegram}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{height: 40, width: 40}}
-                                                    fgColor="#ffffff"
-                                                    bgColor="#151922"
-                                                />
+                                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600"
+                                                >
+                                                    <Send className="h-5 w-5" />
+                                                </a>
                                             </div>
                                         </nav>
                                     </SheetContent>
@@ -145,7 +132,7 @@ export function Header() {
             </header>
 
             {/* Search Overlay */}
-            <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)}/>
+            <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
         </>
     )
 }
