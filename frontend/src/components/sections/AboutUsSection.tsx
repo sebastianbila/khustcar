@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
 
-interface AboutUsSectionProps {
+interface AboutUsSectionProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
 }
 
-export function AboutUsSection({ className }: Readonly<AboutUsSectionProps>) {
+export function AboutUsSection({ className, ...props }: Readonly<AboutUsSectionProps>) {
   return (
-    <section className={cn("py-16 bg-background", className)} id="about">
+    <section className={cn("py-16 bg-background", className)} id="about" {...props}>
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Column: Text Content */}

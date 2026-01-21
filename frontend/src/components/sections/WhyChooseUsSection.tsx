@@ -2,11 +2,11 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Award, BadgeDollarSign, ShieldCheck, Truck } from "lucide-react";
 
-interface WhyChooseUsSectionProps {
-    className?: string;
+interface WhyChooseUsSectionProps extends React.HTMLAttributes<HTMLDivElement> {
+    className?: string; // Keep explicit for clarity, though HTMLAttributes covers it
 }
 
-export function WhyChooseUsSection({ className }: WhyChooseUsSectionProps) {
+export function WhyChooseUsSection({ className, ...props }: WhyChooseUsSectionProps) {
     const advantages = [
         {
             icon: Award,
@@ -31,7 +31,7 @@ export function WhyChooseUsSection({ className }: WhyChooseUsSectionProps) {
     ];
 
     return (
-        <section className={cn("py-20 bg-background", className)}>
+        <section className={cn("py-20 bg-background", className)} {...props}>
             <div className="container-custom">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

@@ -7,17 +7,16 @@ import type { Car } from "@/types/car";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-interface CatalogPreviewSectionProps {
+interface CatalogPreviewSectionProps extends React.HTMLAttributes<HTMLDivElement> {
     cars: Car[];
-    className?: string;
 }
 
-export function CatalogPreviewSection({ cars, className }: CatalogPreviewSectionProps) {
+export function CatalogPreviewSection({ cars, className, ...props }: CatalogPreviewSectionProps) {
     // Show only first 4 cars in preview
     const previewCars = cars.slice(0, 4);
 
     return (
-        <section id="catalog" className={cn("py-20 bg-background", className)}>
+        <section id="catalog" className={cn("py-20 bg-background", className)} {...props}>
             <div className="container-custom">
                 {/* Header */}
                 <div className="text-center mb-12">

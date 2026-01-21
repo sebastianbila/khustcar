@@ -4,12 +4,11 @@ import { CarPreviewCard } from "@/components/CarPreviewCard";
 import { cn } from "@/lib/utils";
 import type { Car } from "@/types/car";
 
-interface NewCarsSliderProps {
+interface NewCarsSliderProps extends React.HTMLAttributes<HTMLDivElement> {
     cars: Car[];
-    className?: string;
 }
 
-export function NewCarsSlider({ cars, className }: Readonly<NewCarsSliderProps>) {
+export function NewCarsSlider({ cars, className, ...props }: Readonly<NewCarsSliderProps>) {
     if (cars?.length === 0) return null;
 
     // Show only first 4 cars for the homepage arrival section, or all if preferred.
@@ -27,7 +26,7 @@ export function NewCarsSlider({ cars, className }: Readonly<NewCarsSliderProps>)
     const lgColsClass = lgColsMap[count] || "lg:grid-cols-4";
 
     return (
-        <section className={cn("py-16 bg-background", className)}>
+        <section className={cn("py-16 bg-background", className)} {...props}>
             <div className="container-custom">
                 {/* Header */}
                 <div className="mb-12 text-center">
