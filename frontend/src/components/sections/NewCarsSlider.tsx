@@ -123,7 +123,7 @@ export function NewCarsSlider({ cars }: NewCarsSliderProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 h-12 w-12 rounded-full shadow-lg bg-c-bg hover:bg-primary hover:text-white z-10"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 h-12 w-12 rounded-full shadow-lg bg-background hover:bg-primary hover:text-white z-10"
                 onClick={prevSlide}
               >
                 <ChevronLeft className="h-6 w-6" />
@@ -131,7 +131,7 @@ export function NewCarsSlider({ cars }: NewCarsSliderProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 h-12 w-12 rounded-full shadow-lg bg-c-bg hover:bg-primary hover:text-white z-10"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 h-12 w-12 rounded-full shadow-lg bg-background hover:bg-primary hover:text-white z-10"
                 onClick={nextSlide}
               >
                 <ChevronRight className="h-6 w-6" />

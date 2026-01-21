@@ -5,7 +5,7 @@ import { SocialIcon } from 'react-social-icons'
 
 export function Footer() {
     return (
-        <footer className="bg-c-footer text-c-text">
+        <footer className="bg-footer text-text">
             <div className="container-custom py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Company Info */}
@@ -83,7 +83,7 @@ export function Footer() {
             </div>
 
             {/* Copyright */}
-            <div className="border-t border-c-footer-border">
+            <div className="border-t border-footer-border">
                 <div className="container-custom py-6">
                     <p className="text-sm text-center">
                         © {new Date().getFullYear()} {SITE_CONFIG.name}. Всі права захищені.

@@ -80,9 +80,9 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
     }
 
     return (
-        <div className="bg-c-bg">
+        <div className="bg-background">
             {/* Breadcrumb */}
-            <div className="mt-4">
+            <div className="pt-4">
                 <div className="container-custom">
                     <Link href="/catalog">
                         <Button variant="ghost" className="gap-2 -ml-4">
@@ -94,9 +94,9 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
             </div>
 
             <div className="container-custom py-4">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8">
                     {/* Left Column - Images */}
-                    <div className="lg:col-span-2 space-y-4">
+                    <div className="lg:col-span-2 order-1 lg:order-none">
                         {media.length > 0 ? (
                             <>
                                 <div
@@ -135,7 +135,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 </div>
 
                                 {media.length > 1 && (
-                                    <div className="grid grid-cols-4 gap-3">
+                                    <div className="grid grid-cols-4 gap-3 mt-3">
                                         {media.map((item, idx) => (
                                             <button
                                                 key={idx}
@@ -199,22 +199,10 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 </div>
                             </div>
                         )}
-
-                        {/* Description Card */}
-                        {car.description && car.description.length > 0 && (
-                            <Card>
-                                <CardContent className="p-8">
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Опис</h2>
-                                    <div className="prose prose-gray max-w-none text-gray-800 leading-relaxed">
-                                        <PortableText value={car.description} />
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        )}
                     </div>
 
                     {/* Right Column - Details */}
-                    <div className="space-y-6">
+                    <div className="space-y-6 order-2 lg:order-none">
                         {/* Title & Basic Info */}
                         <div>
                             <div className="flex items-start justify-between gap-4 mb-3">
@@ -256,26 +244,26 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                             <CardContent className="p-6">
                                 <h3 className="text-xl font-bold text-gray-900 mb-4">Характеристики</h3>
                                 <div className="space-y-4">
-                                    <div className="flex justify-between py-3 border-b border-b-c-border">
+                                    <div className="flex justify-between py-3 border-b border-b-border">
                                         <span className="text-gray-700">Марка</span>
                                         <span className="font-semibold text-gray-900">{car.brand}</span>
                                     </div>
-                                    <div className="flex justify-between py-3 border-b border-b-c-border">
+                                    <div className="flex justify-between py-3 border-b border-b-border">
                                         <span className="text-gray-700">Модель</span>
                                         <span className="font-semibold text-gray-900">{car.model}</span>
                                     </div>
-                                    <div className="flex justify-between py-3 border-b border-b-c-border">
+                                    <div className="flex justify-between py-3 border-b border-b-border">
                                         <span className="text-gray-700">Рік</span>
                                         <span className="font-semibold text-gray-900">{car.year}</span>
                                     </div>
-                                    <div className="flex justify-between py-3 border-b border-b-c-border">
+                                    <div className="flex justify-between py-3 border-b border-b-border">
                                         <div className="flex items-center gap-2 text-gray-700">
                                             <Wrench className="h-4 w-4" />
                                             <span>Двигун</span>
                                         </div>
                                         <span className="font-semibold text-gray-900">{car.engineSize}</span>
                                     </div>
-                                    <div className="flex justify-between py-3 border-b border-b-c-border">
+                                    <div className="flex justify-between py-3 border-b border-b-border">
                                         <div className="flex items-center gap-2 text-gray-700">
                                             <Gauge className="h-4 w-4" />
                                             <span>Пробіг</span>
@@ -297,7 +285,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                         {/* Contact Card */}
                         <Card className="bg-white">
                             <CardContent className="p-6">
-                                <h3 className="text-lg font-bold text-c-text mb-4">
+                                <h3 className="text-lg font-bold text-text mb-4">
                                     Зацікавлені в цьому авто?
                                 </h3>
                                 <div className="space-y-3 mb-4">
@@ -317,6 +305,20 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                             </CardContent>
                         </Card>
                     </div>
+
+                    {/* Description Card */}
+                    {car.description && car.description.length > 0 && (
+                        <div className="lg:col-span-2 order-3 lg:order-none">
+                            <Card>
+                                <CardContent className="p-8">
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Опис</h2>
+                                    <div className="prose prose-gray max-w-none text-gray-800 leading-relaxed">
+                                        <PortableText value={car.description} />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@ import { Card, CardContent } from '@/components/ui/card'
 
 export function AboutUsSection() {
   return (
-    <section id="about" className="py-15 bg-c-bg">
+    <section id="about" className="py-15 bg-background">
       <div className="container-custom">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">

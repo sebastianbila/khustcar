@@ -4,7 +4,7 @@ import { Clock, Mail, Phone } from 'lucide-react'
 
 export function ContactUsSection() {
   return (
-    <section id="contact" className="py-15 bg-c-bg">
+    <section id="contact" className="py-15 bg-background">
       <div className="container-custom">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">

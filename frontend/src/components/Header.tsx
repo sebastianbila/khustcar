@@ -16,7 +16,7 @@ export function Header() {
 
     return (
         <>
-            <header className="sticky top-0 z-50 w-full bg-c-header shadow-sm">
+            <header className="sticky top-0 z-50 w-full bg-header shadow-sm">
                 {/* Main Navigation */}
                 <nav className="relative backdrop-blur-md border-b border-gray-100">
                     <div className="container-custom">
@@ -28,7 +28,7 @@ export function Header() {
                                     alt={SITE_CONFIG.name}
                                     className="h-9 w-auto object-contain scale-150 relative top-1"
                                 />
-                                <span className="ml-3 font-bold text-c-text">Khust Car</span>
+                                <span className="ml-3 font-bold text-text">Khust Car</span>
                             </Link>
 
                             {/* Desktop Navigation - Centered */}
@@ -102,7 +102,7 @@ export function Header() {
                                             <Menu className="h-6 w-6"/>
                                         </Button>
                                     </SheetTrigger>
-                                    <SheetContent side="right" className="bg-c-bg w-10/12 sm:w-[400px]">
+                                    <SheetContent side="right" className="bg-background w-10/12 sm:w-[400px]">
                                         <nav className="flex flex-col gap-4 mt-8">
                                             {NAV_LINKS.map((link) => (
                                                 <Link

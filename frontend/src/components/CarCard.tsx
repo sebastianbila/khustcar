@@ -72,7 +72,7 @@ export function CarCard({car}: CarCardProps) {
                     {/*)}*/}
                 </div>
 
-                <div className="flex items-center pt-4 border-t border-t-c-border">
+                <div className="flex items-center pt-4 border-t border-t-border">
                     {car.discountPrice && car.inStock ? (
                         <div className="flex items-center space-x-2">
                             <span className="text-sm text-gray-400 line-through">

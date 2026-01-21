@@ -70,7 +70,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
       {/* Search Container */}
       <div
-        className={`fixed top-0 left-0 right-0 z-[70] bg-c-bg shadow-2xl transition-transform duration-300 ease-out ${isOpen ? 'translate-y-0' : '-translate-y-full'
+        className={`fixed top-0 left-0 right-0 z-[70] bg-background shadow-2xl transition-transform duration-300 ease-out ${isOpen ? 'translate-y-0' : '-translate-y-full'
           }`}
       >
         <div className="container-custom py-6">
