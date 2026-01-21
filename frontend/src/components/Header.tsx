@@ -4,9 +4,10 @@ import { SearchOverlay } from '@/components/SearchOverlay'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants'
-import { Instagram, Menu, Phone, Search, Send } from 'lucide-react'
+import { Menu, Phone, Search } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
+import { FaInstagram, FaTelegramPlane } from 'react-icons/fa'
 
 export function Header() {
     const [searchOpen, setSearchOpen] = useState(false)
@@ -68,7 +69,7 @@ export function Header() {
                                         rel="noopener noreferrer"
                                         className="text-slate-400 hover:text-[#E4405F] transition-colors"
                                     >
-                                        <Instagram className="h-5 w-5" />
+                                        <FaInstagram className="h-5 w-5" />
                                     </a>
                                     <a
                                         href={SITE_CONFIG.social.telegram}
@@ -76,7 +77,7 @@ export function Header() {
                                         rel="noopener noreferrer"
                                         className="text-slate-400 hover:text-[#0088cc] transition-colors"
                                     >
-                                        <Send className="h-5 w-5" />
+                                        <FaTelegramPlane className="h-5 w-5" />
                                     </a>
                                 </div>
 
@@ -111,7 +112,7 @@ export function Header() {
                                                     rel="noopener noreferrer"
                                                     className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600"
                                                 >
-                                                    <Instagram className="h-5 w-5" />
+                                                    <FaInstagram className="h-5 w-5" />
                                                 </a>
                                                 <a
                                                     href={SITE_CONFIG.social.telegram}
@@ -119,7 +120,7 @@ export function Header() {
                                                     rel="noopener noreferrer"
                                                     className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600"
                                                 >
-                                                    <Send className="h-5 w-5" />
+                                                    <FaTelegramPlane className="h-5 w-5" />
                                                 </a>
                                             </div>
                                         </nav>
