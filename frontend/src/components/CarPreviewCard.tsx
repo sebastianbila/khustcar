@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { urlFor } from "@/lib/sanity";
+import { getFuelTypeLabel, getTransmissionLabel } from "@/lib/utils";
 import type { Car } from "@/types/car";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,23 +11,6 @@ interface CarPreviewCardProps {
     car: Car;
     isNew?: boolean;
 }
-
-const getTransmissionLabel = (transmission: string) => {
-    return transmission === "automatic" ? "Автомат" : "Механіка";
-};
-
-const getFuelTypeLabel = (fuelType: string) => {
-    switch (fuelType) {
-        case "diesel":
-            return "Дизель";
-        case "electric":
-            return "Електро";
-        case "hybrid":
-            return "Гібрид";
-        default:
-            return "Бензин";
-    }
-};
 
 export function CarPreviewCard({ car, isNew }: CarPreviewCardProps) {
     return (

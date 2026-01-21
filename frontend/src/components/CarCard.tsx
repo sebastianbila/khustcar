@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { urlFor } from "@/lib/sanity";
-import { cn, formatMileage } from "@/lib/utils";
+import { cn, formatMileage, getTransmissionLabel } from "@/lib/utils";
 import type { Car } from "@/types/car";
 import { ArrowRight, Heart } from "lucide-react";
 import Image from "next/image";
@@ -87,7 +87,7 @@ export function CarCard({ car }: CarCardProps) {
 
                 <div className="text-xs text-gray-500 mb-4 font-medium">
                     {car.brand} {car.model} •{" "}
-                    {car.transmission === "automatic" ? "Автомат" : "Механіка"}{" "}
+                    {getTransmissionLabel(car.transmission)}{" "}
                     • {formatMileage(car.mileage)} км
                 </div>
 

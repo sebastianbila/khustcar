@@ -5,7 +5,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/lib/constants";
 import { urlFor } from "@/lib/sanity";
-import { formatMileage } from "@/lib/utils";
+import { formatMileage, getFuelTypeLabel, getTransmissionLabel } from "@/lib/utils";
 import { getCarById } from "@/services/carService";
 import { PortableText } from "@portabletext/react";
 import { useQuery } from "@tanstack/react-query";
@@ -253,22 +253,12 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 <SpecItem
                                     icon={Settings}
                                     label="Коробка передач"
-                                    value={
-                                        car.transmission === "automatic"
-                                            ? "Автомат"
-                                            : "Механіка"
-                                    }
+                                    value={getTransmissionLabel(car.transmission)}
                                 />
                                 <SpecItem
                                     icon={Fuel}
                                     label="Тип палива"
-                                    value={
-                                        car.fuelType === "petrol"
-                                            ? "Бензин"
-                                            : car.fuelType === "diesel"
-                                              ? "Дизель"
-                                              : "Електро"
-                                    }
+                                    value={getFuelTypeLabel(car.fuelType)}
                                 />
                                 <SpecItem
                                     icon={Palette}
