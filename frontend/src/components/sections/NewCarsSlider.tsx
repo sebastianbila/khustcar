@@ -7,10 +7,8 @@ interface NewCarsSliderProps {
     cars: Car[];
 }
 
-
-
 export function NewCarsSlider({ cars }: NewCarsSliderProps) {
-    if (cars.length === 0) return null;
+    if (cars?.length === 0) return null;
 
     // Show only first 4 cars for the homepage arrival section, or all if preferred.
     // Given it's a "New Arrivals" section, showing a fixed amount makes sense for a grid.
@@ -25,7 +23,8 @@ export function NewCarsSlider({ cars }: NewCarsSliderProps) {
                         Нові Надходження
                     </h2>
                     <p className="text-gray-500 max-w-2xl mx-auto">
-                        Ознайомтесь з нашою колекцією останніх надходжень преміум автомобілів
+                        Ознайомтесь з нашою колекцією останніх надходжень
+                        преміум автомобілів
                     </p>
                 </div>
 

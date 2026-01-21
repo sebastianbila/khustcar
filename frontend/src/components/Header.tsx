@@ -4,7 +4,8 @@ import { SearchOverlay } from "@/components/SearchOverlay";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
-import { Menu, Phone, Search } from "lucide-react";
+import { useFavoritesStore } from "@/stores/favoritesStore";
+import { Heart, Menu, Phone, Search } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
@@ -12,6 +13,7 @@ import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
 export function Header() {
     const [searchOpen, setSearchOpen] = useState(false);
     const [sheetOpen, setSheetOpen] = useState(false);
+    const favoriteCount = useFavoritesStore((state) => state.favoriteIds.length);
 
     return (
         <>
@@ -56,6 +58,19 @@ export function Header() {
                                 >
                                     <Search className="h-5 w-5" />
                                 </button>
+
+                                {/* Favorites */}
+                                <Link
+                                    href="/favorites"
+                                    className="relative text-slate-500 hover:text-rose-500 transition-colors"
+                                >
+                                    <Heart className="h-5 w-5" />
+                                    {favoriteCount > 0 && (
+                                        <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-medium">
+                                            {favoriteCount > 9 ? "9+" : favoriteCount}
+                                        </span>
+                                    )}
+                                </Link>
 
                                 {/* Phone */}
                                 <a
@@ -119,6 +134,21 @@ export function Header() {
                                                     {link.label}
                                                 </Link>
                                             ))}
+
+                                            {/* Favorites */}
+                                            <Link
+                                                href="/favorites"
+                                                className="flex items-center gap-3 text-lg font-medium text-slate-800 hover:text-rose-500 transition-colors py-2"
+                                                onClick={() => setSheetOpen(false)}
+                                            >
+                                                <Heart className="h-5 w-5" />
+                                                Обране
+                                                {favoriteCount > 0 && (
+                                                    <span className="bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full font-medium">
+                                                        {favoriteCount}
+                                                    </span>
+                                                )}
+                                            </Link>
 
                                             {/* Phone */}
                                             <a

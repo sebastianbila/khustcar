@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { urlFor } from "@/lib/sanity";
 import { cn, formatMileage, getTransmissionLabel } from "@/lib/utils";
+import { useFavoritesStore } from "@/stores/favoritesStore";
 import type { Car } from "@/types/car";
 import { ArrowRight, Heart } from "lucide-react";
 import Image from "next/image";
@@ -14,6 +15,9 @@ interface CarCardProps {
 }
 
 export function CarCard({ car }: CarCardProps) {
+    const { toggleFavorite, isFavorite } = useFavoritesStore();
+    const isCarFavorite = isFavorite(car._id);
+
     const imageUrl = car.images?.[0]
         ? urlFor(car.images[0])
               .ignoreImageParams()
@@ -46,13 +50,19 @@ export function CarCard({ car }: CarCardProps) {
 
                 {/* Heart Icon Overlay */}
                 <button
-                    className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:text-rose-500 z-10 group/heart cursor-pointer text-text-light transition-colors"
+                    className={cn(
+                        "absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md z-10 group/heart cursor-pointer transition-colors",
+                        isCarFavorite ? "text-rose-500" : "text-text-light hover:text-rose-500"
+                    )}
                     onClick={(e) => {
                         e.preventDefault();
-                        // Save functionality
+                        toggleFavorite(car._id);
                     }}
                 >
-                    <Heart className="h-4 w-4 group-hover/heart:text-rose-500 duration-500" />
+                    <Heart className={cn(
+                        "h-4 w-4 duration-500",
+                        isCarFavorite ? "fill-rose-500" : "group-hover/heart:text-rose-500"
+                    )} />
                 </button>
 
                 {!car.inStock && (

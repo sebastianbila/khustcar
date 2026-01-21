@@ -5,6 +5,7 @@ import { CarCard } from "@/components/CarCard";
 import { CarFilters as CarFiltersComponent } from "@/components/CarFilters";
 import { CarPagination } from "@/components/CarPagination";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import {
     NativeSelect,
@@ -522,22 +523,19 @@ function CatalogContent() {
                         <div className="mt-6">{activeFiltersContent}</div>
                     </div>
                 </div>
-                <div className="py-8 border-b border-b-border">
-                    <div className="container-custom flex flex-col md:flex-row md:items-end justify-between gap-4 ">
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                                Доступні автомобілі
-                            </h2>
-                            <p className="text-sm text-gray-500 font-medium">
-                                Показано{" "}
-                                <span className="text-gray-900 font-bold">
-                                    {sortedCars.length} результатів
-                                </span>{" "}
-                                для вашого запиту
-                            </p>
-                        </div>
-
-                        <div className="flex items-center gap-3">
+                <PageHeader
+                    title="Доступні автомобілі"
+                    subtitle={
+                        <>
+                            Показано{" "}
+                            <span className="text-gray-900 font-bold">
+                                {sortedCars.length} результатів
+                            </span>{" "}
+                            для вашого запиту
+                        </>
+                    }
+                    actions={
+                        <>
                             <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                                 Сортувати за:
                             </span>
@@ -566,9 +564,9 @@ function CatalogContent() {
                                     Рік: спочатку старі
                                 </NativeSelectOption>
                             </NativeSelect>
-                        </div>
-                    </div>
-                </div>
+                        </>
+                    }
+                />
                 <div className="py-8 container-custom">
                     {/* Empty State */}
                     {!carsLoading && !error && cars.length === 0 && (
