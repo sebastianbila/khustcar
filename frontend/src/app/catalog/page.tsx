@@ -1,5 +1,6 @@
 "use client";
 
+import { ActiveFilters } from "@/components/ActiveFilters";
 import { CarCard } from "@/components/CarCard";
 import { CarFilters as CarFiltersComponent } from "@/components/CarFilters";
 import { CarPagination } from "@/components/CarPagination";
@@ -16,6 +17,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 import {
     getBrands,
     getCars,
@@ -114,7 +116,7 @@ function CatalogContent() {
               ? "false"
               : "",
     );
-    const [isFiltersSheetOpen, setFiltersSheetOpen] = useState(false);
+    const [isFiltersSheetOpen, setIsFiltersSheetOpen] = useState(false);
 
     const { data: brands = [], isLoading: brandsLoading } = useQuery({
         queryKey: ["brands"],
@@ -387,7 +389,7 @@ function CatalogContent() {
                 setLocalInStock={setLocalInStock}
                 hasActiveFilters={hasActiveFilters}
                 onResetFilters={handleResetFilters}
-                onApply={() => setFiltersSheetOpen(false)}
+                onApply={() => setIsFiltersSheetOpen(false)}
                 hideTitle
             />
         ),
@@ -411,7 +413,65 @@ function CatalogContent() {
             localInStock,
             hasActiveFilters,
             handleResetFilters,
-            setFiltersSheetOpen,
+            setIsFiltersSheetOpen,
+        ],
+    );
+
+    const activeFiltersContent = useMemo(
+        () => (
+            <ActiveFilters
+                localSearch={localSearch}
+                setLocalSearch={setLocalSearch}
+                localBrand={localBrand}
+                setLocalBrand={(value) => {
+                    setLocalBrand(value);
+                    if (value !== localBrand) {
+                        setLocalModel("");
+                    }
+                }}
+                localModel={localModel}
+                setLocalModel={setLocalModel}
+                localMinYear={localMinYear}
+                setLocalMinYear={setLocalMinYear}
+                localMaxYear={localMaxYear}
+                setLocalMaxYear={setLocalMaxYear}
+                localMinPrice={localMinPrice}
+                setLocalMinPrice={setLocalMinPrice}
+                localMaxPrice={localMaxPrice}
+                setLocalMaxPrice={setLocalMaxPrice}
+                localMinMileage={localMinMileage}
+                setLocalMinMileage={setLocalMinMileage}
+                localMaxMileage={localMaxMileage}
+                setLocalMaxMileage={setLocalMaxMileage}
+                localFuelType={localFuelType}
+                setLocalFuelType={setLocalFuelType}
+                localTransmission={localTransmission}
+                setLocalTransmission={setLocalTransmission}
+                localDrivetrain={localDrivetrain}
+                setLocalDrivetrain={setLocalDrivetrain}
+                localColor={localColor}
+                setLocalColor={setLocalColor}
+                localInStock={localInStock}
+                setLocalInStock={setLocalInStock}
+                hasActiveFilters={hasActiveFilters}
+            />
+        ),
+        [
+            localSearch,
+            localBrand,
+            localModel,
+            localMinYear,
+            localMaxYear,
+            localMinPrice,
+            localMaxPrice,
+            localMinMileage,
+            localMaxMileage,
+            localFuelType,
+            localTransmission,
+            localDrivetrain,
+            localColor,
+            localInStock,
+            hasActiveFilters,
         ],
     );
 
@@ -430,16 +490,11 @@ function CatalogContent() {
                 {/* Mobile Filters Button */}
                 <div className="md:hidden py-4 border-b border-b-border">
                     <div className="container-custom">
-                        <Sheet open={isFiltersSheetOpen} onOpenChange={setFiltersSheetOpen}>
+                        <Sheet open={isFiltersSheetOpen} onOpenChange={setIsFiltersSheetOpen}>
                             <SheetTrigger asChild>
-                                <Button variant="outline" className="gap-2">
+                                <Button variant="outline" className={cn("gap-2 duration-500 transition-all", hasActiveFilters && "border-2 border-sky-500")}>
                                     <SlidersHorizontal className="h-4 w-4" />
                                     Фільтри
-                                    {hasActiveFilters && (
-                                        <span className="ml-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                            •
-                                        </span>
-                                    )}
                                 </Button>
                             </SheetTrigger>
                             <SheetContent
@@ -454,6 +509,9 @@ function CatalogContent() {
                                 </div>
                             </SheetContent>
                         </Sheet>
+                        <div className="mt-4">
+                            {activeFiltersContent}
+                        </div>
                     </div>
                 </div>
 
@@ -461,6 +519,7 @@ function CatalogContent() {
                 <div className="hidden md:block bg-background-muted py-8 border-b border-b-border">
                     <div className="container-custom">
                         {filtersContent}
+                        <div className="mt-6">{activeFiltersContent}</div>
                     </div>
                 </div>
                 <div className="py-8 border-b border-b-border">
