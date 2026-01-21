@@ -80,7 +80,11 @@ function CatalogContent() {
 
     // Update URL when filters change (debounced via store)
     useEffect(() => {
-        syncURL();
+        const timer = setTimeout(() => {
+            syncURL();
+        }, 500);
+
+        return () => clearTimeout(timer);
     }, [filters, syncURL]);
 
     useEffect(() => {

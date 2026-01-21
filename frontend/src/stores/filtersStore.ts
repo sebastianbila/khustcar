@@ -77,30 +77,27 @@ export const useFiltersStore = create<FiltersState>((set, get) => ({
   },
 
   syncURL: () => {
-      if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-          const { filters } = get();
-          const params = new URLSearchParams();
-          if (filters.search) params.set("search", filters.search);
-          if (filters.brand) params.set("brand", filters.brand);
-          if (filters.model) params.set("model", filters.model);
-          if (filters.minYear) params.set("minYear", filters.minYear.toString());
-          if (filters.maxYear) params.set("maxYear", filters.maxYear.toString());
-          if (filters.minPrice) params.set("minPrice", filters.minPrice.toString());
-          if (filters.maxPrice) params.set("maxPrice", filters.maxPrice.toString());
-          if (filters.minMileage) params.set("minMileage", filters.minMileage.toString());
-          if (filters.maxMileage) params.set("maxMileage", filters.maxMileage.toString());
-          if (filters.fuelType) params.set("fuelType", filters.fuelType);
-          if (filters.transmission) params.set("transmission", filters.transmission);
-          if (filters.drivetrain) params.set("drivetrain", filters.drivetrain);
-          if (filters.color) params.set("color", filters.color);
-          if (filters.inStock !== undefined) params.set("inStock", filters.inStock.toString());
+      const { filters } = get();
+      const params = new URLSearchParams();
+      if (filters.search) params.set("search", filters.search);
+      if (filters.brand) params.set("brand", filters.brand);
+      if (filters.model) params.set("model", filters.model);
+      if (filters.minYear) params.set("minYear", filters.minYear.toString());
+      if (filters.maxYear) params.set("maxYear", filters.maxYear.toString());
+      if (filters.minPrice) params.set("minPrice", filters.minPrice.toString());
+      if (filters.maxPrice) params.set("maxPrice", filters.maxPrice.toString());
+      if (filters.minMileage) params.set("minMileage", filters.minMileage.toString());
+      if (filters.maxMileage) params.set("maxMileage", filters.maxMileage.toString());
+      if (filters.fuelType) params.set("fuelType", filters.fuelType);
+      if (filters.transmission) params.set("transmission", filters.transmission);
+      if (filters.drivetrain) params.set("drivetrain", filters.drivetrain);
+      if (filters.color) params.set("color", filters.color);
+      if (filters.inStock !== undefined) params.set("inStock", filters.inStock.toString());
 
-          const queryString = params.toString();
-          const url = queryString ? `/catalog?${queryString}` : "/catalog";
-          if (typeof window !== 'undefined') {
-              window.history.replaceState(null, "", url);
-          }
-      }, 500);
+      const queryString = params.toString();
+      const url = queryString ? `/catalog?${queryString}` : "/catalog";
+      if (typeof window !== 'undefined') {
+          window.history.replaceState(null, "", url);
+      }
   }
 }));
