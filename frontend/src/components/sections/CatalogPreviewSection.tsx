@@ -22,7 +22,7 @@ export function CatalogPreviewSection({ cars, className }: CatalogPreviewSection
                 {/* Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-                        Досліджуйте Наш Каталог
+                        Наш Каталог Автомобілів
                     </h2>
                     <p className="text-gray-500">
                         Переглядайте нашу обширну колекцію якісних автомобілів

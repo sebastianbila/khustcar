@@ -26,14 +26,14 @@ export function HeroSection() {
     return (
         <section
             ref={sectionRef}
-            className="relative h-[90vh] md:h-[85vh] min-h-[600px] flex items-center overflow-hidden"
+            className="relative h-[90vh] md:h-[85vh] min-h-150 flex items-center overflow-hidden"
         >
             {/* Parallax Background */}
             <div
                 className="absolute inset-0 z-0"
                 style={{
-                    backgroundImage: `url('/images/hero-car-background.png')`,
-                    backgroundPosition: "center",
+                    backgroundImage: `url('/images/hero-car-bg.png')`,
+                    backgroundPosition: "right",
                     backgroundSize: "cover",
                     transform: `translateY(${offset * 0.3}px)`, // Apply parallax translation
                     willChange: "transform",
