@@ -75,7 +75,11 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
             .filter((item) => item.type === "image")
             .map((item) => ({
                 type: "image" as const,
-                src: urlFor(item).width(1920).height(1080).url(),
+                src: urlFor(item)
+                    .ignoreImageParams()
+                    .width(1920)
+                    .auto("format")
+                    .url(),
                 alt: `${car?.brand} ${car?.model}`,
             }));
     }, [media, car]);
@@ -145,7 +149,11 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                                 onClick={() => setIsLightboxOpen(true)}
                                             >
                                                 <Image
-                                                    src={urlFor(media[selectedImageIndex]).width(1200).height(800).url()}
+                                                    src={urlFor(media[selectedImageIndex])
+                                                        .ignoreImageParams()
+                                                        .width(1200)
+                                                        .auto("format")
+                                                        .url()}
                                                     alt={`${car.brand} ${car.model}`}
                                                     fill
                                                     className="object-cover"
@@ -198,7 +206,11 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                                 </div>
                                             ) : (
                                                 <Image
-                                                    src={urlFor(item).width(200).height(150).url()}
+                                                    src={urlFor(item)
+                                                        .ignoreImageParams()
+                                                        .width(400)
+                                                        .auto("format")
+                                                        .url()}
                                                     alt="Мініатюра"
                                                     fill
                                                     className="object-cover"

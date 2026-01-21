@@ -15,7 +15,11 @@ interface CarCardProps {
 
 export function CarCard({ car }: CarCardProps) {
     const imageUrl = car.images?.[0]
-        ? urlFor(car.images[0]).width(500).height(400).url()
+        ? urlFor(car.images[0])
+              .ignoreImageParams()
+              .width(600)
+              .auto("format")
+              .url()
         : "/placeholder-car.jpg";
 
     return (

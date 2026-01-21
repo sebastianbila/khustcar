@@ -23,7 +23,11 @@ export function CarPreviewCard({ car, isNew }: CarPreviewCardProps) {
                 <Image
                     src={
                         car.images?.[0]
-                            ? urlFor(car.images[0]).width(500).height(375).url()
+                            ? urlFor(car.images[0])
+                                  .ignoreImageParams()
+                                  .width(600)
+                                  .auto("format")
+                                  .url()
                             : "/placeholder-car.jpg"
                     }
                     alt={`${car.brand} ${car.model}`}
