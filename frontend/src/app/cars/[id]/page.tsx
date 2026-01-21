@@ -304,58 +304,43 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                     <div className="relative lg:sticky lg:top-24 space-y-6">
                         <div className="bg-white rounded-2xl p-6 shadow-sm">
                             <div className="mb-6">
-                                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                                <h1 className="text-3xl font-bold text-gray-900 mb-1">
                                     {car.brand} {car.model}
                                 </h1>
                                 <p className="text-gray-500 font-medium">
-                                    {car.year} Model
+                                    {car.year}
                                 </p>
                             </div>
 
-                            <div className="mb-8">
-                                <div className="flex items-baseline gap-2 mb-1">
-                                    <span className="text-4xl font-bold text-gray-900">
+                            <div className="mb-4">
+                                <div>
+                                    <div className="text-4xl font-extrabold text-gray-900">
                                         $
                                         {(
                                             car.discountPrice || car.price
                                         ).toLocaleString()}
-                                    </span>
-                                </div>
-                                <div className="flex items-center text-sm text-gray-500 gap-1">
-                                    <span className="text-gray-400">
-                                        Est. $
-                                        {Math.round(
-                                            (car.discountPrice || car.price) /
-                                                60,
-                                        ).toLocaleString()}
-                                        /mo with financing
-                                    </span>
+                                    </div>
+                                    {car.discountPrice && (
+                                        <div className="text-lg text-gray-400 font-medium line-through">
+                                            ${car.price.toLocaleString()}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-y-3 gap-x-8 text-sm border-t border-b border-gray-100 py-4 mb-6">
+                            <div className="flex flex-col gap-y-1.5 gap-x-8 text-sm border-t border-b border-gray-100 py-4 mb-6">
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500">
-                                        Condition
-                                    </span>
+                                    <span className="text-gray-500">Стан</span>
                                     <span className="font-semibold text-gray-900">
                                         Pre-Owned
                                     </span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500">
-                                        Warranty
-                                    </span>
-                                    <span className="font-semibold text-gray-900">
-                                        1 Year
-                                    </span>
-                                </div>
                                 <div className="flex justify-between col-span-2">
                                     <span className="text-gray-500">
-                                        Location
+                                        Адреса
                                     </span>
                                     <span className="font-semibold text-gray-900 text-right">
-                                        Khust, Ukraine
+                                        {SITE_CONFIG.contact.address}
                                     </span>
                                 </div>
                             </div>
@@ -366,29 +351,23 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                     className="block w-full"
                                 >
                                     <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white h-12 text-base">
-                                        Contact Dealer
+                                        Зателефонувати
                                     </Button>
                                 </a>
-                                <Button
-                                    variant="outline"
-                                    className="w-full h-12 text-base border-gray-300 text-gray-700 hover:bg-gray-50"
-                                >
-                                    Schedule Test Drive
-                                </Button>
                                 <div className="grid grid-cols-2 gap-3 pt-2">
                                     <Button
                                         variant="ghost"
                                         className="w-full border border-gray-200 text-gray-600"
                                     >
                                         <Heart className="h-4 w-4 mr-2" />
-                                        Save
+                                        Зберегти
                                     </Button>
                                     <Button
                                         variant="ghost"
                                         className="w-full border border-gray-200 text-gray-600"
                                     >
                                         <Share2 className="h-4 w-4 mr-2" />
-                                        Share
+                                        Поділитись
                                     </Button>
                                 </div>
                             </div>
