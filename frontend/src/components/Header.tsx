@@ -104,7 +104,7 @@ export function Header() {
                                     </SheetTrigger>
                                     <SheetContent
                                         side="right"
-                                        className="bg-background w-10/12 sm:w-[400px]"
+                                        className="w-10/12 sm:w-100"
                                     >
                                         <nav className="flex flex-col gap-4 mt-8">
                                             {NAV_LINKS.map((link) => (
@@ -120,7 +120,19 @@ export function Header() {
                                                 </Link>
                                             ))}
 
-                                            <div className="flex items-center gap-4 mt-8 pt-8 border-t border-gray-100">
+                                            {/* Phone */}
+                                            <a
+                                                href={`tel:${SITE_CONFIG.contact.phone}`}
+                                                className="flex items-center gap-3 text-slate-700 hover:text-slate-900 transition-colors py-2"
+                                            >
+                                                <Phone className="h-5 w-5" />
+                                                <span className="text-lg font-semibold">
+                                                    {SITE_CONFIG.contact.phone}
+                                                </span>
+                                            </a>
+
+                                            {/* Social Icons */}
+                                            <div className="flex items-center gap-4 mt-8 pt-8 border-t border-border">
                                                 <a
                                                     href={
                                                         SITE_CONFIG.social
@@ -128,7 +140,7 @@ export function Header() {
                                                     }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600"
+                                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600 hover:text-[#E4405F] transition-colors"
                                                 >
                                                     <FaInstagram className="h-5 w-5" />
                                                 </a>
@@ -139,7 +151,7 @@ export function Header() {
                                                     }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600"
+                                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600 hover:text-[#0088cc] transition-colors"
                                                 >
                                                     <FaTelegramPlane className="h-5 w-5" />
                                                 </a>
