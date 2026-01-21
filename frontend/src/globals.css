@@ -13,27 +13,20 @@
     --color-background: var(--color-zinc-50);
     --color-background-muted: color-mix(
         in oklch,
-        var(--color-zinc-200) 40%,
+        var(--color-gray-200) 30%,
         transparent
     );
 
     --color-foreground: var(--color-zinc-800);
 
-    --color-text-light: var(--color-zinc-500);
+    --color-text-light: var(--color-zinc-00);
     --color-text: var(--color-zinc-800);
     --color-text-inverse: var(--color-zinc-50);
 
     --color-header: var(--color-zinc-50);
 
-    --color-footer: var(--color-zinc-100);
-    --color-footer-border: var(--color-zinc-200);
-
+    --color-footer: color-mix(in oklch, var(--color-gray-200) 30%, transparent);
     --color-border: var(--color-zinc-200);
-    --color-car-filters-bg: color-mix(
-        in oklch,
-        var(--color-zinc-200) 40%,
-        transparent
-    );
 }
 
 @layer base {
