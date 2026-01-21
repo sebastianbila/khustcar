@@ -1,34 +1,10 @@
-import { SITE_CONFIG } from "@/lib/constants";
+import { ContactUsView } from '@/components/ContactUsView';
 
 export function ContactUsSection() {
     return (
-        <section id="contact" className="py-15 bg-background">
+        <section id="contact" className="py-16 bg-background">
             <div className="container-custom">
-                <div className="text-center mb-8">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                        Де нас шукати?
-                    </h2>
-                    <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-                        Не заблукаєте — ми на карті!
-                    </p>
-                </div>
-
-                <div className="gap-8 border border-border mx-auto items-start">
-                    {/* Right Column: Map */}
-                    <div className="h-full min-h-[400px] lg:min-h-full">
-                        <iframe
-                            src={SITE_CONFIG.map.embedUrl}
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0, minHeight: "400px" }}
-                            allowFullScreen
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                            title="Наше Розташування"
-                            className="w-full h-full"
-                        ></iframe>
-                    </div>
-                </div>
+                <ContactUsView />
             </div>
         </section>
     );

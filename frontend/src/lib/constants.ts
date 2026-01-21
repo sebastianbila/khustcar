@@ -19,5 +19,5 @@ export const NAV_LINKS = [
   { href: '/', label: 'Головна' },
   { href: '/catalog', label: 'Каталог' },
   { href: '/about', label: 'Про Нас' },
-  { href: '/#contact', label: 'Контакти' },
+  { href: '/contact', label: 'Контакти' },
 ]
