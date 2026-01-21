@@ -85,14 +85,14 @@ export function CarCard({ car }: CarCardProps) {
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
                     <div>
-                        <div className="text-xl font-extrabold text-gray-900">
-                            ${(car.discountPrice || car.price).toLocaleString()}
-                        </div>
                         {car.discountPrice && (
-                            <div className="text-[11px] text-gray-400 font-medium line-through">
+                            <div className="text-sm text-gray-400 font-medium line-through">
                                 ${car.price.toLocaleString()}
                             </div>
                         )}
+                        <div className="text-xl font-extrabold text-gray-900">
+                            ${(car.discountPrice || car.price).toLocaleString()}
+                        </div>
                     </div>
 
                     <Link

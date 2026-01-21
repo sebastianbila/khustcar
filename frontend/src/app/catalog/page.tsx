@@ -2,21 +2,13 @@
 
 import { CarCard } from "@/components/CarCard";
 import { CarFilters as CarFiltersComponent } from "@/components/CarFilters";
+import { CarPagination } from "@/components/CarPagination";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
     NativeSelect,
     NativeSelectOption,
 } from "@/components/ui/native-select";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
 import {
     getBrands,
     getCars,
@@ -353,41 +345,10 @@ function CatalogContent() {
 
     // Pagination calculations
     const totalPages = Math.ceil(sortedCars.length / ITEMS_PER_PAGE);
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const paginatedCars = sortedCars.slice(startIndex, endIndex);
-
-    // Generate page numbers for pagination
-    const getPageNumbers = () => {
-        const pages: (number | "ellipsis")[] = [];
-        const showEllipsis = totalPages > 7;
-
-        if (!showEllipsis) {
-            for (let i = 1; i <= totalPages; i++) {
-                pages.push(i);
-            }
-        } else {
-            if (currentPage <= 3) {
-                for (let i = 1; i <= 4; i++) pages.push(i);
-                pages.push("ellipsis");
-                pages.push(totalPages);
-            } else if (currentPage >= totalPages - 2) {
-                pages.push(1);
-                pages.push("ellipsis");
-                for (let i = totalPages - 3; i <= totalPages; i++)
-                    pages.push(i);
-            } else {
-                pages.push(1);
-                pages.push("ellipsis");
-                for (let i = currentPage - 1; i <= currentPage + 1; i++)
-                    pages.push(i);
-                pages.push("ellipsis");
-                pages.push(totalPages);
-            }
-        }
-
-        return pages;
-    };
+    const paginatedCars = useMemo(() => {
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        return sortedCars.slice(start, start + ITEMS_PER_PAGE);
+    }, [sortedCars, currentPage]);
 
     if (brandsLoading) {
         return (
@@ -497,7 +458,7 @@ function CatalogContent() {
                 <div className="py-8 container-custom">
                     {/* Empty State */}
                     {!carsLoading && !error && cars.length === 0 && (
-                        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
+                        <div className="text-center py-20">
                             <div className="text-4xl mb-4">🔍</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">
                                 Автомобілів не знайдено
@@ -511,7 +472,7 @@ function CatalogContent() {
                                     variant="outline"
                                     className="rounded-full px-6"
                                 >
-                                    Clear All Filters
+                                    Очистити фільтри
                                 </Button>
                             )}
                         </div>
@@ -528,71 +489,11 @@ function CatalogContent() {
 
                             <div className="flex flex-col items-center gap-6 pt-4">
                                 {totalPages > 1 && (
-                                    <Pagination>
-                                        <PaginationContent>
-                                            <PaginationItem>
-                                                <PaginationPrevious
-                                                    onClick={() =>
-                                                        setCurrentPage(
-                                                            (prev: number) =>
-                                                                Math.max(
-                                                                    1,
-                                                                    prev - 1,
-                                                                ),
-                                                        )
-                                                    }
-                                                    className={
-                                                        currentPage === 1
-                                                            ? "pointer-events-none opacity-50"
-                                                            : "cursor-pointer"
-                                                    }
-                                                />
-                                            </PaginationItem>
-                                            {getPageNumbers().map(
-                                                (page, index) => (
-                                                    <PaginationItem key={index}>
-                                                        {page === "ellipsis" ? (
-                                                            <PaginationEllipsis />
-                                                        ) : (
-                                                            <PaginationLink
-                                                                onClick={() =>
-                                                                    setCurrentPage(
-                                                                        page,
-                                                                    )
-                                                                }
-                                                                isActive={
-                                                                    currentPage ===
-                                                                    page
-                                                                }
-                                                                className="cursor-pointer"
-                                                            >
-                                                                {page}
-                                                            </PaginationLink>
-                                                        )}
-                                                    </PaginationItem>
-                                                ),
-                                            )}
-                                            <PaginationItem>
-                                                <PaginationNext
-                                                    onClick={() =>
-                                                        setCurrentPage(
-                                                            (prev: number) =>
-                                                                Math.min(
-                                                                    totalPages,
-                                                                    prev + 1,
-                                                                ),
-                                                        )
-                                                    }
-                                                    className={
-                                                        currentPage ===
-                                                        totalPages
-                                                            ? "pointer-events-none opacity-50"
-                                                            : "cursor-pointer"
-                                                    }
-                                                />
-                                            </PaginationItem>
-                                        </PaginationContent>
-                                    </Pagination>
+                                    <CarPagination
+                                        currentPage={currentPage}
+                                        totalPages={totalPages}
+                                        onPageChange={setCurrentPage}
+                                    />
                                 )}
                             </div>
                         </div>
