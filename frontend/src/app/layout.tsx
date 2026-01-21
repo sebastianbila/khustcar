@@ -2,6 +2,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import "../globals.css";
 import { Providers } from "./providers";
 
@@ -32,6 +33,7 @@ export default function RootLayout({
               </main>
               <Footer />
             </div>
+            <Toaster position="bottom-center" richColors />
           </ThemeProvider>
         </Providers>
       </body>

@@ -1,39 +1,38 @@
-'use client'
+"use client";
 
-import { ErrorMessage } from '@/components/ErrorMessage'
-import { LoadingSpinner } from '@/components/LoadingSpinner'
-import { CatalogPreviewSection } from '@/components/sections/CatalogPreviewSection'
-import { ContactUsSection } from '@/components/sections/ContactUsSection'
-import { HeroSection } from '@/components/sections/HeroSection'
-import { WhyChooseUsSection } from '@/components/sections/WhyChooseUsSection'
-import { getBrands, getCars } from '@/services/carService'
-import type { CarFilters as Filters } from '@/types/car'
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { ErrorMessage } from "@/components/ErrorMessage";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { AboutUsSection } from "@/components/sections/AboutUsSection";
+import { CatalogPreviewSection } from "@/components/sections/CatalogPreviewSection";
+import { ContactUsSection } from "@/components/sections/ContactUsSection";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { NewCarsSlider } from "@/components/sections/NewCarsSlider";
+import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
+import { getSectionBg } from "@/lib/utils";
+import { getCars, getFeaturedCars } from "@/services/carService";
+import { useQuery } from "@tanstack/react-query";
 
 export default function HomePage() {
-    const [filters, setFilters] = useState<Filters>({})
-
-    const { data: brands = [], isLoading: brandsLoading } = useQuery({
-        queryKey: ['brands'],
-        queryFn: getBrands,
-    })
-
     const {
         data: cars = [],
         isLoading: carsLoading,
         error,
     } = useQuery({
-        queryKey: ['cars', filters],
-        queryFn: () => getCars(filters),
-    })
+        queryKey: ["cars"],
+        queryFn: () => getCars(),
+    });
 
-    if (brandsLoading || carsLoading) {
+    const { data: featuredCars = [] } = useQuery({
+        queryKey: ["featured-cars"],
+        queryFn: getFeaturedCars,
+    });
+
+    if (carsLoading) {
         return (
             <div className="flex items-center justify-center py-20">
                 <LoadingSpinner />
             </div>
-        )
+        );
     }
 
     if (error) {
@@ -41,39 +40,36 @@ export default function HomePage() {
             <div className="flex items-center justify-center py-20">
                 <ErrorMessage message="Не вдалося завантажити автомобілі. Будь ласка, спробуйте пізніше." />
             </div>
-        )
+        );
     }
-
-    // Get newest cars (last 6 cars added)
-    const newestCars = [...cars].slice(0, 6)
 
     return (
         <div>
-            {/* 1. Header - Already in layout */}
-
-            {/* 2. Hero / Main Banner */}
+            {/* Hero / Main Banner */}
             <HeroSection />
 
-            {/* 3. New Cars Slider */}
-            {/*{newestCars.length > 0 && <NewCarsSlider cars={newestCars} />}*/}
+            {/* New Cars Slider */}
+            {featuredCars?.length > 0 && (
+                <NewCarsSlider
+                    cars={featuredCars}
+                    className={getSectionBg(0)}
+                />
+            )}
 
-            {/* 4. Catalog Preview with Filters */}
+            {/* Catalog Preview */}
             <CatalogPreviewSection
                 cars={cars}
-                brands={brands}
-                onFilterChange={setFilters}
+                className={getSectionBg(1)}
             />
 
-            {/* 6. Why Choose Us / Advantages */}
-            <WhyChooseUsSection />
+            {/* Why Choose Us / Advantages */}
+            <WhyChooseUsSection className={getSectionBg(2)} />
 
-            {/* 5. About Us */}
-            {/* <AboutUsSection/> */}
+            {/* About Us */}
+            <AboutUsSection className={getSectionBg(3)} />
 
-            {/* 7. Contact Us */}
-            <ContactUsSection />
-
-            {/* 9. Footer - Already in layout */}
+            {/* Contact Us */}
+            <ContactUsSection className={getSectionBg(4)} />
         </div>
-    )
+    );
 }

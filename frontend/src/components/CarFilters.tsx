@@ -1,79 +1,44 @@
-'use client'
+"use client";
 
-import {Button} from '@/components/ui/button'
-import {Input} from '@/components/ui/input'
-import {Label} from '@/components/ui/label'
-import {NativeSelect, NativeSelectOption} from '@/components/ui/native-select'
-import type {CarFilters as CarFiltersType} from '@/types/car'
-import {Search, X} from 'lucide-react'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+    NativeSelect,
+    NativeSelectOption,
+} from "@/components/ui/native-select";
+import { useFiltersStore } from "@/stores/filtersStore";
+import { Search, X } from "lucide-react";
 
 interface CarFiltersProps {
-    brands: string[]
-    colors: string[]
-    localSearch: string
-    setLocalSearch: (value: string) => void
-    localBrand: string
-    setLocalBrand: (value: string) => void
-    localMinYear: string
-    setLocalMinYear: (value: string) => void
-    localMaxYear: string
-    setLocalMaxYear: (value: string) => void
-    localMinPrice: string
-    setLocalMinPrice: (value: string) => void
-    localMaxPrice: string
-    setLocalMaxPrice: (value: string) => void
-    localMinMileage: string
-    setLocalMinMileage: (value: string) => void
-    localMaxMileage: string
-    setLocalMaxMileage: (value: string) => void
-    localFuelType: string
-    setLocalFuelType: (value: string) => void
-    localTransmission: string
-    setLocalTransmission: (value: string) => void
-    localColor: string
-    setLocalColor: (value: string) => void
-    localInStock: string
-    setLocalInStock: (value: string) => void
-    hasActiveFilters: boolean
-    onResetFilters: () => void
-    hideTitle?: boolean
+    brands: string[];
+    models: string[];
+    colors: string[];
+    onResetFilters: () => void;
+    onApply?: () => void;
+    hideTitle?: boolean;
 }
 
 export function CarFilters({
-                               brands,
-                               colors,
-                               localSearch,
-                               setLocalSearch,
-                               localBrand,
-                               setLocalBrand,
-                               localMinYear,
-                               setLocalMinYear,
-                               localMaxYear,
-                               setLocalMaxYear,
-                               localMinPrice,
-                               setLocalMinPrice,
-                               localMaxPrice,
-                               setLocalMaxPrice,
-                               localMinMileage,
-                               setLocalMinMileage,
-                               localMaxMileage,
-                               setLocalMaxMileage,
-                               localFuelType,
-                               setLocalFuelType,
-                               localTransmission,
-                               setLocalTransmission,
-                               localColor,
-                               setLocalColor,
-                               localInStock,
-                               setLocalInStock,
-                               hasActiveFilters,
-                               onResetFilters,
-                               hideTitle,
-                           }: CarFiltersProps) {
+    brands,
+    models,
+    colors,
+    onResetFilters,
+    onApply,
+    hideTitle,
+}: Readonly<CarFiltersProps>) {
+    const { filters, setFilter } = useFiltersStore();
+
+    const hasActiveFilters = Object.values(filters).some(
+        (v) => v !== undefined,
+    );
+
     return (
         <>
             <div className="flex items-center justify-between mb-4">
-                {!hideTitle && <h3 className="text-lg font-bold text-gray-900">Фільтри</h3>}
+                {!hideTitle && (
+                    <h3 className="text-lg font-bold text-gray-900">Фільтри</h3>
+                )}
                 {hasActiveFilters && (
                     <Button
                         variant="ghost"
@@ -81,7 +46,7 @@ export function CarFilters({
                         onClick={onResetFilters}
                         className="text-xs cursor-pointer"
                     >
-                        <X className="h-4 w-4 mr-1"/>
+                        <X className="h-4 w-4 mr-1" />
                         Очистити
                     </Button>
                 )}
@@ -90,14 +55,16 @@ export function CarFilters({
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {/* Search */}
                 <div className="flex flex-col space-y-2">
-                    <Label htmlFor="filter-search" className="text-gray-800">Пошук</Label>
+                    <Label htmlFor="filter-search" className="text-gray-800">
+                        Пошук
+                    </Label>
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"/>
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input
                             id="filter-search"
                             placeholder="Марка або модель..."
-                            value={localSearch}
-                            onChange={(e) => setLocalSearch(e.target.value)}
+                            value={filters.search || ""}
+                            onChange={(e) => setFilter("search", e.target.value)}
                             className="pl-10"
                         />
                     </div>
@@ -105,13 +72,22 @@ export function CarFilters({
 
                 {/* Brand */}
                 <div className="flex flex-col space-y-2">
-                    <Label htmlFor="filter-brand" className="text-gray-800">Марка</Label>
+                    <Label htmlFor="filter-brand" className="text-gray-800">
+                        Марка
+                    </Label>
                     <NativeSelect
                         id="filter-brand"
-                        value={localBrand}
-                        onChange={(e) => setLocalBrand(e.target.value)}
+                        value={filters.brand || ""}
+                        onChange={(e) => {
+                            setFilter("brand", e.target.value);
+                            if (e.target.value !== filters.brand) {
+                                setFilter("model", undefined);
+                            }
+                        }}
                     >
-                        <NativeSelectOption value="">Всі Марки</NativeSelectOption>
+                        <NativeSelectOption value="">
+                            Всі Марки
+                        </NativeSelectOption>
                         {brands.map((brand) => (
                             <NativeSelectOption key={brand} value={brand}>
                                 {brand}
@@ -120,44 +96,116 @@ export function CarFilters({
                     </NativeSelect>
                 </div>
 
+                {/* Model */}
+                <div className="flex flex-col space-y-2">
+                    <Label htmlFor="filter-model" className="text-gray-800">
+                        Модель
+                    </Label>
+                    <NativeSelect
+                        id="filter-model"
+                        value={filters.model || ""}
+                        onChange={(e) => setFilter("model", e.target.value)}
+                        disabled={!filters.brand}
+                    >
+                        <NativeSelectOption value="">
+                            Всі Моделі
+                        </NativeSelectOption>
+                        {models.map((model) => (
+                            <NativeSelectOption key={model} value={model}>
+                                {model}
+                            </NativeSelectOption>
+                        ))}
+                    </NativeSelect>
+                </div>
+
                 {/* Fuel Type */}
                 <div className="flex flex-col space-y-2">
-                    <Label htmlFor="filter-fuelType" className="text-gray-800">Тип Палива</Label>
+                    <Label htmlFor="filter-fuelType" className="text-gray-800">
+                        Тип Палива
+                    </Label>
                     <NativeSelect
                         id="filter-fuelType"
-                        value={localFuelType}
-                        onChange={(e) => setLocalFuelType(e.target.value)}
+                        value={filters.fuelType || ""}
+                        onChange={(e) => setFilter("fuelType", e.target.value)}
                     >
-                        <NativeSelectOption value="">Всі Типи</NativeSelectOption>
-                        <NativeSelectOption value="diesel">Дизель</NativeSelectOption>
-                        <NativeSelectOption value="petrol">Бензин</NativeSelectOption>
-                        <NativeSelectOption value="electric">Електро</NativeSelectOption>
+                        <NativeSelectOption value="">
+                            Всі Типи
+                        </NativeSelectOption>
+                        <NativeSelectOption value="diesel">
+                            Дизель
+                        </NativeSelectOption>
+                        <NativeSelectOption value="petrol">
+                            Бензин
+                        </NativeSelectOption>
+                        <NativeSelectOption value="electric">
+                            Електро
+                        </NativeSelectOption>
+                    </NativeSelect>
+                </div>
+
+                {/* Drivetrain */}
+                <div className="flex flex-col space-y-2">
+                    <Label htmlFor="filter-drivetrain" className="text-gray-800">
+                        Привід
+                    </Label>
+                    <NativeSelect
+                        id="filter-drivetrain"
+                        value={filters.drivetrain || ""}
+                        onChange={(e) => setFilter("drivetrain", e.target.value)}
+                    >
+                        <NativeSelectOption value="">
+                            Всі Типи
+                        </NativeSelectOption>
+                        <NativeSelectOption value="fwd">
+                            Передній
+                        </NativeSelectOption>
+                        <NativeSelectOption value="rwd">
+                            Задній
+                        </NativeSelectOption>
+                        <NativeSelectOption value="awd">
+                            Повний
+                        </NativeSelectOption>
                     </NativeSelect>
                 </div>
 
                 {/* Transmission */}
                 <div className="flex flex-col space-y-2">
-                    <Label htmlFor="filter-transmission" className="text-gray-800">Коробка Передач</Label>
+                    <Label
+                        htmlFor="filter-transmission"
+                        className="text-gray-800"
+                    >
+                        Коробка Передач
+                    </Label>
                     <NativeSelect
                         id="filter-transmission"
-                        value={localTransmission}
-                        onChange={(e) => setLocalTransmission(e.target.value)}
+                        value={filters.transmission || ""}
+                        onChange={(e) => setFilter("transmission", e.target.value)}
                     >
-                        <NativeSelectOption value="">Всі Типи</NativeSelectOption>
-                        <NativeSelectOption value="manual">Механічна</NativeSelectOption>
-                        <NativeSelectOption value="automatic">Автоматична</NativeSelectOption>
+                        <NativeSelectOption value="">
+                            Всі Типи
+                        </NativeSelectOption>
+                        <NativeSelectOption value="manual">
+                            Механіка
+                        </NativeSelectOption>
+                        <NativeSelectOption value="automatic">
+                            Автомат
+                        </NativeSelectOption>
                     </NativeSelect>
                 </div>
 
                 {/* Color */}
                 <div className="flex flex-col space-y-2">
-                    <Label htmlFor="filter-color" className="text-gray-800">Колір</Label>
+                    <Label htmlFor="filter-color" className="text-gray-800">
+                        Колір
+                    </Label>
                     <NativeSelect
                         id="filter-color"
-                        value={localColor}
-                        onChange={(e) => setLocalColor(e.target.value)}
+                        value={filters.color || ""}
+                        onChange={(e) => setFilter("color", e.target.value)}
                     >
-                        <NativeSelectOption value="">Всі Кольори</NativeSelectOption>
+                        <NativeSelectOption value="">
+                            Всі Кольори
+                        </NativeSelectOption>
                         {colors.map((color) => (
                             <NativeSelectOption key={color} value={color}>
                                 {color}
@@ -168,15 +216,21 @@ export function CarFilters({
 
                 {/* In Stock */}
                 <div className="flex flex-col space-y-2">
-                    <Label htmlFor="filter-inStock" className="text-gray-800">Наявність</Label>
+                    <Label htmlFor="filter-inStock" className="text-gray-800">
+                        Наявність
+                    </Label>
                     <NativeSelect
                         id="filter-inStock"
-                        value={localInStock}
-                        onChange={(e) => setLocalInStock(e.target.value)}
+                        value={filters.inStock === undefined ? "" : filters.inStock.toString()}
+                        onChange={(e) => setFilter("inStock", e.target.value === "true" ? true : e.target.value === "false" ? false : undefined)}
                     >
                         <NativeSelectOption value="">Всі</NativeSelectOption>
-                        <NativeSelectOption value="true">В Наявності</NativeSelectOption>
-                        <NativeSelectOption value="false">Продано</NativeSelectOption>
+                        <NativeSelectOption value="true">
+                            В Наявності
+                        </NativeSelectOption>
+                        <NativeSelectOption value="false">
+                            Продано
+                        </NativeSelectOption>
                     </NativeSelect>
                 </div>
 
@@ -187,14 +241,14 @@ export function CarFilters({
                         <Input
                             type="number"
                             placeholder="Від"
-                            value={localMinYear}
-                            onChange={(e) => setLocalMinYear(e.target.value)}
+                            value={filters.minYear?.toString() || ""}
+                            onChange={(e) => setFilter("minYear", e.target.value ? Number(e.target.value) : undefined)}
                         />
                         <Input
                             type="number"
                             placeholder="До"
-                            value={localMaxYear}
-                            onChange={(e) => setLocalMaxYear(e.target.value)}
+                            value={filters.maxYear?.toString() || ""}
+                            onChange={(e) => setFilter("maxYear", e.target.value ? Number(e.target.value) : undefined)}
                         />
                     </div>
                 </div>
@@ -206,37 +260,45 @@ export function CarFilters({
                         <Input
                             type="number"
                             placeholder="Мін"
-                            value={localMinPrice}
-                            onChange={(e) => setLocalMinPrice(e.target.value)}
+                            value={filters.minPrice?.toString() || ""}
+                            onChange={(e) => setFilter("minPrice", e.target.value ? Number(e.target.value) : undefined)}
                         />
                         <Input
                             type="number"
                             placeholder="Макс"
-                            value={localMaxPrice}
-                            onChange={(e) => setLocalMaxPrice(e.target.value)}
+                            value={filters.maxPrice?.toString() || ""}
+                            onChange={(e) => setFilter("maxPrice", e.target.value ? Number(e.target.value) : undefined)}
                         />
                     </div>
                 </div>
 
                 {/* Mileage Range */}
                 <div className="flex flex-col space-y-2">
-                    <Label className="text-gray-800">Пробіг (км)</Label>
+                    <Label className="text-gray-800">Пробіг (тис. км)</Label>
                     <div className="grid grid-cols-2 gap-2">
                         <Input
                             type="number"
                             placeholder="Мін"
-                            value={localMinMileage}
-                            onChange={(e) => setLocalMinMileage(e.target.value)}
+                            value={filters.minMileage?.toString() || ""}
+                            onChange={(e) => setFilter("minMileage", e.target.value ? Number(e.target.value) : undefined)}
                         />
                         <Input
                             type="number"
                             placeholder="Макс"
-                            value={localMaxMileage}
-                            onChange={(e) => setLocalMaxMileage(e.target.value)}
+                            value={filters.maxMileage?.toString() || ""}
+                            onChange={(e) => setFilter("maxMileage", e.target.value ? Number(e.target.value) : undefined)}
                         />
                     </div>
                 </div>
             </div>
+
+            {onApply && (
+                <div className="mt-8 md:hidden">
+                    <Button onClick={onApply} className="w-full py-6">
+                        Застосувати фільтри
+                    </Button>
+                </div>
+            )}
         </>
-    )
+    );
 }
