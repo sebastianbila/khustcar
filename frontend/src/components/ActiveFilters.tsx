@@ -6,37 +6,7 @@ import { useFiltersStore } from "@/stores/filtersStore";
 import { X } from "lucide-react";
 
 export function ActiveFilters() {
-    const {
-        filters,
-        localSearch,
-        setLocalSearch,
-        localBrand,
-        setLocalBrand,
-        localModel,
-        setLocalModel,
-        localMinYear,
-        setLocalMinYear,
-        localMaxYear,
-        setLocalMaxYear,
-        localMinPrice,
-        setLocalMinPrice,
-        localMaxPrice,
-        setLocalMaxPrice,
-        localMinMileage,
-        setLocalMinMileage,
-        localMaxMileage,
-        setLocalMaxMileage,
-        localFuelType,
-        setLocalFuelType,
-        localTransmission,
-        setLocalTransmission,
-        localDrivetrain,
-        setLocalDrivetrain,
-        localColor,
-        setLocalColor,
-        localInStock,
-        setLocalInStock,
-    } = useFiltersStore();
+    const { filters, setFilter } = useFiltersStore();
 
     const hasActiveFilters = Object.values(filters).some(
         (v) => v !== undefined,
@@ -46,46 +16,46 @@ export function ActiveFilters() {
 
     return (
         <div className="flex flex-wrap gap-2">
-            {localSearch && (
+            {filters.search && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Пошук: {localSearch}
+                    Пошук: {filters.search}
                     <button
-                        onClick={() => setLocalSearch("")}
+                        onClick={() => setFilter("search", undefined)}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
                 </Badge>
             )}
-            {localBrand && (
+            {filters.brand && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Марка: {localBrand}
+                    Марка: {filters.brand}
                     <button
-                        onClick={() => setLocalBrand("")}
+                        onClick={() => setFilter("brand", undefined)}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
                 </Badge>
             )}
-            {localModel && (
+            {filters.model && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Модель: {localModel}
+                    Модель: {filters.model}
                     <button
-                        onClick={() => setLocalModel("")}
+                        onClick={() => setFilter("model", undefined)}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
                 </Badge>
             )}
-            {(localMinYear || localMaxYear) && (
+            {(filters.minYear || filters.maxYear) && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Рік: {localMinYear || "0"} - {localMaxYear || "2026"}
+                    Рік: {filters.minYear || "0"} - {filters.maxYear || "2026"}
                     <button
                         onClick={() => {
-                            setLocalMinYear("");
-                            setLocalMaxYear("");
+                            setFilter("minYear", undefined);
+                            setFilter("maxYear", undefined);
                         }}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
@@ -93,13 +63,13 @@ export function ActiveFilters() {
                     </button>
                 </Badge>
             )}
-            {(localMinPrice || localMaxPrice) && (
+            {(filters.minPrice || filters.maxPrice) && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Ціна: {localMinPrice || "0"}$ - {localMaxPrice || "∞"}$
+                    Ціна: {filters.minPrice || "0"}$ - {filters.maxPrice || "∞"}$
                     <button
                         onClick={() => {
-                            setLocalMinPrice("");
-                            setLocalMaxPrice("");
+                            setFilter("minPrice", undefined);
+                            setFilter("maxPrice", undefined);
                         }}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
@@ -107,13 +77,13 @@ export function ActiveFilters() {
                     </button>
                 </Badge>
             )}
-            {(localMinMileage || localMaxMileage) && (
+            {(filters.minMileage || filters.maxMileage) && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Пробіг: {localMinMileage || "0"} - {localMaxMileage || "∞"} тис.
+                    Пробіг: {filters.minMileage || "0"} - {filters.maxMileage || "∞"} тис.
                     <button
                         onClick={() => {
-                            setLocalMinMileage("");
-                            setLocalMaxMileage("");
+                            setFilter("minMileage", undefined);
+                            setFilter("maxMileage", undefined);
                         }}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
@@ -121,55 +91,55 @@ export function ActiveFilters() {
                     </button>
                 </Badge>
             )}
-            {localFuelType && (
+            {filters.fuelType && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Паливо: {getFuelTypeLabel(localFuelType)}
+                    Паливо: {getFuelTypeLabel(filters.fuelType)}
                     <button
-                        onClick={() => setLocalFuelType("")}
+                        onClick={() => setFilter("fuelType", undefined)}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
                 </Badge>
             )}
-            {localTransmission && (
+            {filters.transmission && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    КПП: {getTransmissionLabel(localTransmission)}
+                    КПП: {getTransmissionLabel(filters.transmission)}
                     <button
-                        onClick={() => setLocalTransmission("")}
+                        onClick={() => setFilter("transmission", undefined)}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
                 </Badge>
             )}
-            {localDrivetrain && (
+            {filters.drivetrain && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Привід: {getDrivetrainLabel(localDrivetrain)}
+                    Привід: {getDrivetrainLabel(filters.drivetrain)}
                     <button
-                        onClick={() => setLocalDrivetrain("")}
+                        onClick={() => setFilter("drivetrain", undefined)}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
                 </Badge>
             )}
-            {localColor && (
+            {filters.color && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    Колір: {localColor}
+                    Колір: {filters.color}
                     <button
-                        onClick={() => setLocalColor("")}
+                        onClick={() => setFilter("color", undefined)}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
                 </Badge>
             )}
-            {localInStock !== "" && (
+            {filters.inStock !== undefined && (
                 <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
-                    {localInStock === "true" ? "В наявності" : "Продано"}
+                    {filters.inStock ? "В наявності" : "Продано"}
                     <button
-                        onClick={() => setLocalInStock("")}
+                        onClick={() => setFilter("inStock", undefined)}
                         className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />

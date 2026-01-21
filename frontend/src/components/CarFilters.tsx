@@ -27,37 +27,7 @@ export function CarFilters({
     onApply,
     hideTitle,
 }: Readonly<CarFiltersProps>) {
-    const {
-        filters,
-        localSearch,
-        setLocalSearch,
-        localBrand,
-        setLocalBrand,
-        localModel,
-        setLocalModel,
-        localMinYear,
-        setLocalMinYear,
-        localMaxYear,
-        setLocalMaxYear,
-        localMinPrice,
-        setLocalMinPrice,
-        localMaxPrice,
-        setLocalMaxPrice,
-        localMinMileage,
-        setLocalMinMileage,
-        localMaxMileage,
-        setLocalMaxMileage,
-        localFuelType,
-        setLocalFuelType,
-        localTransmission,
-        setLocalTransmission,
-        localDrivetrain,
-        setLocalDrivetrain,
-        localColor,
-        setLocalColor,
-        localInStock,
-        setLocalInStock,
-    } = useFiltersStore();
+    const { filters, setFilter } = useFiltersStore();
 
     const hasActiveFilters = Object.values(filters).some(
         (v) => v !== undefined,
@@ -93,8 +63,8 @@ export function CarFilters({
                         <Input
                             id="filter-search"
                             placeholder="Марка або модель..."
-                            value={localSearch}
-                            onChange={(e) => setLocalSearch(e.target.value)}
+                            value={filters.search || ""}
+                            onChange={(e) => setFilter("search", e.target.value)}
                             className="pl-10"
                         />
                     </div>
@@ -107,11 +77,11 @@ export function CarFilters({
                     </Label>
                     <NativeSelect
                         id="filter-brand"
-                        value={localBrand}
+                        value={filters.brand || ""}
                         onChange={(e) => {
-                            setLocalBrand(e.target.value);
-                            if (e.target.value !== localBrand) {
-                                setLocalModel("");
+                            setFilter("brand", e.target.value);
+                            if (e.target.value !== filters.brand) {
+                                setFilter("model", undefined);
                             }
                         }}
                     >
@@ -133,9 +103,9 @@ export function CarFilters({
                     </Label>
                     <NativeSelect
                         id="filter-model"
-                        value={localModel}
-                        onChange={(e) => setLocalModel(e.target.value)}
-                        disabled={!localBrand}
+                        value={filters.model || ""}
+                        onChange={(e) => setFilter("model", e.target.value)}
+                        disabled={!filters.brand}
                     >
                         <NativeSelectOption value="">
                             Всі Моделі
@@ -155,8 +125,8 @@ export function CarFilters({
                     </Label>
                     <NativeSelect
                         id="filter-fuelType"
-                        value={localFuelType}
-                        onChange={(e) => setLocalFuelType(e.target.value)}
+                        value={filters.fuelType || ""}
+                        onChange={(e) => setFilter("fuelType", e.target.value)}
                     >
                         <NativeSelectOption value="">
                             Всі Типи
@@ -180,8 +150,8 @@ export function CarFilters({
                     </Label>
                     <NativeSelect
                         id="filter-drivetrain"
-                        value={localDrivetrain}
-                        onChange={(e) => setLocalDrivetrain(e.target.value)}
+                        value={filters.drivetrain || ""}
+                        onChange={(e) => setFilter("drivetrain", e.target.value)}
                     >
                         <NativeSelectOption value="">
                             Всі Типи
@@ -208,8 +178,8 @@ export function CarFilters({
                     </Label>
                     <NativeSelect
                         id="filter-transmission"
-                        value={localTransmission}
-                        onChange={(e) => setLocalTransmission(e.target.value)}
+                        value={filters.transmission || ""}
+                        onChange={(e) => setFilter("transmission", e.target.value)}
                     >
                         <NativeSelectOption value="">
                             Всі Типи
@@ -230,8 +200,8 @@ export function CarFilters({
                     </Label>
                     <NativeSelect
                         id="filter-color"
-                        value={localColor}
-                        onChange={(e) => setLocalColor(e.target.value)}
+                        value={filters.color || ""}
+                        onChange={(e) => setFilter("color", e.target.value)}
                     >
                         <NativeSelectOption value="">
                             Всі Кольори
@@ -251,8 +221,8 @@ export function CarFilters({
                     </Label>
                     <NativeSelect
                         id="filter-inStock"
-                        value={localInStock}
-                        onChange={(e) => setLocalInStock(e.target.value)}
+                        value={filters.inStock === undefined ? "" : filters.inStock.toString()}
+                        onChange={(e) => setFilter("inStock", e.target.value === "true" ? true : e.target.value === "false" ? false : undefined)}
                     >
                         <NativeSelectOption value="">Всі</NativeSelectOption>
                         <NativeSelectOption value="true">
@@ -271,14 +241,14 @@ export function CarFilters({
                         <Input
                             type="number"
                             placeholder="Від"
-                            value={localMinYear}
-                            onChange={(e) => setLocalMinYear(e.target.value)}
+                            value={filters.minYear?.toString() || ""}
+                            onChange={(e) => setFilter("minYear", e.target.value ? Number(e.target.value) : undefined)}
                         />
                         <Input
                             type="number"
                             placeholder="До"
-                            value={localMaxYear}
-                            onChange={(e) => setLocalMaxYear(e.target.value)}
+                            value={filters.maxYear?.toString() || ""}
+                            onChange={(e) => setFilter("maxYear", e.target.value ? Number(e.target.value) : undefined)}
                         />
                     </div>
                 </div>
@@ -290,14 +260,14 @@ export function CarFilters({
                         <Input
                             type="number"
                             placeholder="Мін"
-                            value={localMinPrice}
-                            onChange={(e) => setLocalMinPrice(e.target.value)}
+                            value={filters.minPrice?.toString() || ""}
+                            onChange={(e) => setFilter("minPrice", e.target.value ? Number(e.target.value) : undefined)}
                         />
                         <Input
                             type="number"
                             placeholder="Макс"
-                            value={localMaxPrice}
-                            onChange={(e) => setLocalMaxPrice(e.target.value)}
+                            value={filters.maxPrice?.toString() || ""}
+                            onChange={(e) => setFilter("maxPrice", e.target.value ? Number(e.target.value) : undefined)}
                         />
                     </div>
                 </div>
@@ -309,14 +279,14 @@ export function CarFilters({
                         <Input
                             type="number"
                             placeholder="Мін"
-                            value={localMinMileage}
-                            onChange={(e) => setLocalMinMileage(e.target.value)}
+                            value={filters.minMileage?.toString() || ""}
+                            onChange={(e) => setFilter("minMileage", e.target.value ? Number(e.target.value) : undefined)}
                         />
                         <Input
                             type="number"
                             placeholder="Макс"
-                            value={localMaxMileage}
-                            onChange={(e) => setLocalMaxMileage(e.target.value)}
+                            value={filters.maxMileage?.toString() || ""}
+                            onChange={(e) => setFilter("maxMileage", e.target.value ? Number(e.target.value) : undefined)}
                         />
                     </div>
                 </div>

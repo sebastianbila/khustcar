@@ -25,7 +25,6 @@ import {
     getModels,
 } from "@/services/carService";
 import { useFiltersStore } from "@/stores/filtersStore";
-import type { CarFilters } from "@/types/car";
 import { useQuery } from "@tanstack/react-query";
 import { SlidersHorizontal } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -50,23 +49,9 @@ function CatalogContent() {
 
     const {
         filters,
-        localSearch,
-        localBrand,
-        localModel,
-        localMinYear,
-        localMaxYear,
-        localMinPrice,
-        localMaxPrice,
-        localMinMileage,
-        localMaxMileage,
-        localFuelType,
-        localTransmission,
-        localDrivetrain,
-        localColor,
-        localInStock,
         resetFilters,
-        updateFilters,
-        initializeFromParams
+        initializeFromParams,
+        syncURL
     } = useFiltersStore();
 
     const { data: brands = [], isLoading: brandsLoading } = useQuery({
@@ -80,8 +65,8 @@ function CatalogContent() {
     });
 
     const { data: models = [] } = useQuery({
-        queryKey: ["models", localBrand],
-        queryFn: () => getModels(localBrand || undefined),
+        queryKey: ["models", filters.brand],
+        queryFn: () => getModels(filters.brand || undefined),
     });
 
     const {
@@ -93,59 +78,14 @@ function CatalogContent() {
         queryFn: () => getCars(filters),
     });
 
+    // Update URL when filters change (debounced via store)
+    useEffect(() => {
+        syncURL();
+    }, [filters, syncURL]);
+
     useEffect(() => {
         initializeFromParams(new URLSearchParams(searchParams.toString()));
     }, [searchParams, initializeFromParams]);
-
-    // Debounce timer for text inputs
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            const newFilters: CarFilters = {
-                search: localSearch || undefined,
-                brand: localBrand || undefined,
-                model: localModel || undefined,
-                minYear: localMinYear ? parseInt(localMinYear) : undefined,
-                maxYear: localMaxYear ? parseInt(localMaxYear) : undefined,
-                minPrice: localMinPrice ? parseInt(localMinPrice) : undefined,
-                maxPrice: localMaxPrice ? parseInt(localMaxPrice) : undefined,
-                minMileage: localMinMileage
-                    ? parseInt(localMinMileage)
-                    : undefined,
-                maxMileage: localMaxMileage
-                    ? parseInt(localMaxMileage)
-                    : undefined,
-                fuelType: (localFuelType as any) || undefined,
-                transmission: (localTransmission as any) || undefined,
-                drivetrain: (localDrivetrain as any) || undefined,
-                color: localColor || undefined,
-                inStock:
-                    localInStock === "true"
-                        ? true
-                        : localInStock === "false"
-                          ? false
-                          : undefined,
-            };
-            updateFilters(newFilters);
-        }, 500); // 500ms debounce
-
-        return () => clearTimeout(timer);
-    }, [
-        localSearch,
-        localBrand,
-        localModel,
-        localMinYear,
-        localMaxYear,
-        localMinPrice,
-        localMaxPrice,
-        localMinMileage,
-        localMaxMileage,
-        localFuelType,
-        localTransmission,
-        localDrivetrain,
-        localColor,
-        localInStock,
-        updateFilters,
-    ]);
 
     const handleResetFilters = () => {
         resetFilters();
