@@ -1,91 +1,66 @@
-import {Card, CardContent} from '@/components/ui/card'
-import {Award, Car, CheckCircle, CreditCard, Shield, Users} from 'lucide-react'
+import { SITE_CONFIG } from "@/lib/constants";
+import { Award, BadgeDollarSign, ShieldCheck, Truck } from "lucide-react";
 
 export function WhyChooseUsSection() {
     const advantages = [
         {
             icon: Award,
-            title: '7+ Років Досвіду',
-            description: 'Довірена репутація та експертиза в автомобільній індустрії',
+            title: "7+ Років Досвіду",
+            description: "Довірена експертиза в автомобільних продажах та обслуговуванні",
         },
         {
-            icon: Car,
-            title: 'Великий Вибір',
-            description: '100+ автомобілів завжди в наявності',
+            icon: BadgeDollarSign,
+            title: "Гнучке Фінансування",
+            description: "Конкурентні ставки та індивідуальні плани оплати",
         },
         {
-            icon: CreditCard,
-            title: 'Гнучке Фінансування',
-            description: 'Зручні плани оплати та кредитування',
+            icon: ShieldCheck,
+            title: "Сертифіковані Авто",
+            description: "Кожен автомобіль ретельно перевірений та сертифікований",
         },
         {
-            icon: Shield,
-            title: 'Гарантія Якості',
-            description: 'Всі автомобілі перевірені та сертифіковані',
+            icon: Truck,
+            title: "Підтримка Доставки",
+            description: "Зручні варіанти доставки прямо до вашого порогу",
         },
-        {
-            icon: Users,
-            title: 'Професійна Команда',
-            description: 'Досвідчені консультанти завжди готові допомогти',
-        },
-        {
-            icon: CheckCircle,
-            title: 'Прозорість',
-            description: 'Чесні ціни та повна історія кожного автомобіля',
-        },
-    ]
+    ];
 
     return (
-        <section className="relative py-20 overflow-hidden">
-            {/* Background Image & Overlay */}
-            <div
-                className="absolute inset-0 z-0"
-                style={{
-                    backgroundImage: `url('/images/why-choose-us-bg.png')`,
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
-                }}
-            />
-            <div className="absolute inset-0 z-10 bg-black/85"/>
-
-            <div className="container-custom relative z-20">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-                        Чому Обирають <span className="text-zinc-600">Khust Car</span>
+        <section className="py-20 bg-gray-50">
+            <div className="container-custom">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        Чому Обирають {SITE_CONFIG.name}
                     </h2>
-                    <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                        Ми пропонуємо не просто автомобілі, а повний спектр послуг для вашого комфорту та впевненості у
-                        кожному кілометрі.
+                    <p className="text-gray-500 max-w-xl mx-auto">
+                        Відчуйте різницю з нашими преміум послугами
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {advantages.map((advantage, index) => {
-                        const Icon = advantage.icon
+                        const Icon = advantage.icon;
                         return (
-                            <Card
+                            <div
                                 key={index}
-                                className="group border-white/5 bg-white/5 backdrop-blur-sm shadow-xl hover:bg-white/10 transition-all duration-300 hover:-translate-y-1"
+                                className="bg-white rounded-xl border border-gray-100 p-8 text-center hover:shadow-lg transition-shadow duration-300"
                             >
-                                <CardContent className="p-8">
-                                    <div className="flex flex-col items-center text-center">
-                                        <div
-                                            className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/20 text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
-                                            <Icon className="h-8 w-8 text-zinc-400"/>
-                                        </div>
-                                        <h3 className="text-xl font-bold text-white mb-3">
-                                            {advantage.title}
-                                        </h3>
-                                        <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
-                                            {advantage.description}
-                                        </p>
+                                <div className="flex justify-center mb-6">
+                                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                                        <Icon className="h-7 w-7 text-gray-800" />
                                     </div>
-                                </CardContent>
-                            </Card>
-                        )
+                                </div>
+                                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                                    {advantage.title}
+                                </h3>
+                                <p className="text-sm text-gray-500 leading-relaxed">
+                                    {advantage.description}
+                                </p>
+                            </div>
+                        );
                     })}
                 </div>
             </div>
         </section>
-    )
+    );
 }
