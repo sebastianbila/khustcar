@@ -13,7 +13,9 @@ import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
 export function Header() {
     const [searchOpen, setSearchOpen] = useState(false);
     const [sheetOpen, setSheetOpen] = useState(false);
-    const favoriteCount = useFavoritesStore((state) => state.favoriteIds.length);
+    const favoriteCount = useFavoritesStore(
+        (state) => state.favoriteIds.length,
+    );
 
     return (
         <>
@@ -51,55 +53,57 @@ export function Header() {
 
                             {/* Right Actions */}
                             <div className="ml-auto flex items-center gap-6">
-                                {/* Search */}
-                                <button
-                                    onClick={() => setSearchOpen(true)}
-                                    className="text-slate-500 hover:text-slate-900 transition-colors"
-                                >
-                                    <Search className="h-5 w-5" />
-                                </button>
-
-                                {/* Favorites */}
-                                <Link
-                                    href="/favorites"
-                                    className="relative text-slate-500 hover:text-rose-500 transition-colors"
-                                >
-                                    <Heart className="h-5 w-5" />
-                                    {favoriteCount > 0 && (
-                                        <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-medium">
-                                            {favoriteCount > 9 ? "9+" : favoriteCount}
-                                        </span>
-                                    )}
-                                </Link>
-
                                 {/* Phone */}
                                 <a
                                     href={`tel:${SITE_CONFIG.contact.phone}`}
-                                    className="hidden md:flex items-center gap-2 text-slate-700 hover:text-slate-900 transition-colors"
+                                    className="hidden items-center gap-3 text-slate-700 transition-colors hover:text-slate-900 md:flex"
                                 >
-                                    <Phone className="h-4 w-4" />
+                                    <Phone className="size-5" />
                                     <span className="text-[15px] font-semibold">
                                         {SITE_CONFIG.contact.phone}
                                     </span>
                                 </a>
 
+                                {/* Search */}
+                                <button
+                                    onClick={() => setSearchOpen(true)}
+                                    className="flex size-7 items-center justify-center text-slate-500 transition-colors hover:text-slate-900"
+                                >
+                                    <Search className="size-6" />
+                                </button>
+
+                                {/* Favorites */}
+                                <Link
+                                    href="/favorites"
+                                    className="relative flex size-7 items-center justify-center text-slate-500 transition-colors hover:text-rose-500"
+                                >
+                                    <Heart className="size-6" />
+                                    {favoriteCount > 0 && (
+                                        <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-xs font-medium text-white">
+                                            {favoriteCount > 9
+                                                ? "9+"
+                                                : favoriteCount}
+                                        </span>
+                                    )}
+                                </Link>
+
                                 {/* Social Icons */}
-                                <div className="hidden lg:flex items-center gap-4 border-l border-gray-200 pl-6 ml-2">
+                                <div className="hidden items-center gap-4 border-l border-gray-200 pl-6 lg:flex">
                                     <a
                                         href={SITE_CONFIG.social.instagram}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-slate-400 hover:text-[#E4405F] transition-colors"
+                                        className="text-slate-400 size-7 flex items-center justify-center  transition-colors hover:text-[#E4405F]"
                                     >
-                                        <FaInstagram className="h-5 w-5" />
+                                        <FaInstagram className="size-6" />
                                     </a>
                                     <a
                                         href={SITE_CONFIG.social.telegram}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-slate-400 hover:text-[#0088cc] transition-colors"
+                                        className="text-slate-400 size-7 flex items-center justify-center transition-colors hover:text-[#0088cc]"
                                     >
-                                        <FaTelegramPlane className="h-5 w-5" />
+                                        <FaTelegramPlane className="size-6" />
                                     </a>
                                 </div>
 
@@ -111,10 +115,9 @@ export function Header() {
                                     <SheetTrigger asChild>
                                         <Button
                                             variant="ghost"
-                                            size="sm"
-                                            className="lg:hidden text-slate-700 hover:text-slate-900 px-0 -ml-2"
+                                            className="size-7 p-0 text-slate-700 hover:text-slate-900 lg:hidden"
                                         >
-                                            <Menu className="h-6 w-6" />
+                                            <Menu className="size-6!" />
                                         </Button>
                                     </SheetTrigger>
                                     <SheetContent
@@ -139,7 +142,9 @@ export function Header() {
                                             <Link
                                                 href="/favorites"
                                                 className="flex items-center gap-3 text-lg font-medium text-slate-800 hover:text-rose-500 transition-colors py-2"
-                                                onClick={() => setSheetOpen(false)}
+                                                onClick={() =>
+                                                    setSheetOpen(false)
+                                                }
                                             >
                                                 <Heart className="h-5 w-5" />
                                                 Обране
@@ -162,7 +167,7 @@ export function Header() {
                                             </a>
 
                                             {/* Social Icons */}
-                                            <div className="flex items-center gap-4 mt-8 pt-8 border-t border-border">
+                                            <div className="flex items-center gap-1 mt-8 pt-8 border-t border-border">
                                                 <a
                                                     href={
                                                         SITE_CONFIG.social
@@ -170,9 +175,9 @@ export function Header() {
                                                     }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600 hover:text-[#E4405F] transition-colors"
+                                                    className="flex items-center justify-center size-10 rounded-full bg-slate-50 text-slate-600 hover:text-[#E4405F] transition-colors"
                                                 >
-                                                    <FaInstagram className="h-5 w-5" />
+                                                    <FaInstagram className="size-5" />
                                                 </a>
                                                 <a
                                                     href={
@@ -181,9 +186,9 @@ export function Header() {
                                                     }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600 hover:text-[#0088cc] transition-colors"
+                                                    className="flex items-center justify-center size-10 rounded-full bg-slate-50 text-slate-600 hover:text-[#0088cc] transition-colors"
                                                 >
-                                                    <FaTelegramPlane className="h-5 w-5" />
+                                                    <FaTelegramPlane className="size-5" />
                                                 </a>
                                             </div>
                                         </nav>

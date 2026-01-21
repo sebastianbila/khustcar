@@ -2,6 +2,7 @@
 
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { AboutUsSection } from "@/components/sections/AboutUsSection";
 import { CatalogPreviewSection } from "@/components/sections/CatalogPreviewSection";
 import { ContactUsSection } from "@/components/sections/ContactUsSection";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -61,7 +62,7 @@ export default function HomePage() {
             <WhyChooseUsSection />
 
             {/* 5. About Us */}
-            {/* <AboutUsSection/> */}
+            <AboutUsSection />
 
             {/* 7. Contact Us */}
             <ContactUsSection />

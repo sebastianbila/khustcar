@@ -1,53 +1,80 @@
-import { Card, CardContent } from '@/components/ui/card'
+import Image from 'next/image'
 
 export function AboutUsSection() {
   return (
-    <section id="about" className="py-15 bg-background">
+    <section className="py-16 bg-background" id="about">
       <div className="container-custom">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Ваш надійний партнер в світі автомобілів
-          </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left Column: Text Content */}
+          <div className="space-y-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
+              Про Khust Car
+            </h2>
 
-          <Card className="shadow-lg">
-            <CardContent className="p-8 md:p-12">
-              <div className="space-y-6 text-left">
-                <p className="text-lg text-gray-800 leading-relaxed">
-                  Ми - провідна компанія з продажу автомобілів з понад <strong>15-річним досвідом</strong> роботи
-                  на українському ринку. Наша місія - допомогти кожному клієнту знайти ідеальний автомобіль,
-                  який відповідає його потребам та бюджету.
-                </p>
+            <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
+              <p>
+                Маючи понад 15 років досвіду в автомобільній індустрії, Khust Car
+                стало довіреним ім&apos;ям завдяки якісним автомобілям та
+                винятковому обслуговуванню клієнтів. Ми пишаємося тим, що
+                пропонуємо ретельно підібраний вибір преміальних автомобілів,
+                які відповідають найвищим стандартам.
+              </p>
+              <p>
+                Наша команда автомобільних експертів невтомно працює, щоб
+                гарантувати, що кожен транспортний засіб у нашому інвентарі
+                ретельно перевірений та сертифікований. Ми віримо в прозорість,
+                чесність та побудову довгострокових відносин з нашими клієнтами.
+              </p>
+            </div>
 
-                <p className="text-lg text-gray-800 leading-relaxed">
-                  У нашому розпорядженні <strong>більше 500 автомобілів</strong> різних марок та моделей.
-                  Ми пропонуємо як нові, так і перевірені автомобілі з пробігом, кожен з яких проходить
-                  ретельну діагностику та підготовку.
-                </p>
-
-                <p className="text-lg text-gray-800 leading-relaxed">
-                  Наша команда професіоналів завжди готова надати експертну консультацію, допомогти
-                  з оформленням документів та запропонувати вигідні умови фінансування. Ми цінуємо
-                  кожного клієнта і прагнемо побудувати довгострокові відносини, засновані на довірі
-                  та якості обслуговування.
-                </p>
-
-                <div className="grid grid-cols-3 gap-6 pt-8 border-t mt-8">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary mb-2">500+</div>
-                    <div className="text-sm text-gray-700">Автомобілів</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary mb-2">2000+</div>
-                    <div className="text-sm text-gray-700">Клієнтів</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary mb-2">15+</div>
-                    <div className="text-sm text-gray-700">Років</div>
-                  </div>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-8 pt-4">
+              <div>
+                <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">
+                  500+
+                </div>
+                <div className="text-sm md:text-base text-slate-600 font-medium">
+                  Проданих Авто
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <div>
+                <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">
+                  15+
+                </div>
+                <div className="text-sm md:text-base text-slate-600 font-medium">
+                  Років Досвіду
+                </div>
+              </div>
+              <div>
+                <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">
+                  98%
+                </div>
+                <div className="text-sm md:text-base text-slate-600 font-medium">
+                  Задоволених Клієнтів
+                </div>
+              </div>
+              <div>
+                <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">
+                  24/7
+                </div>
+                <div className="text-sm md:text-base text-slate-600 font-medium">
+                  Підтримка
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Image */}
+          <div className="relative h-[400px] lg:h-[600px] w-full rounded-2xl overflow-hidden shadow-xl">
+            <Image
+              src="/images/about-audi-front.png"
+              alt="Audi RS7 в автосалоні"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
+            />
+          </div>
         </div>
       </div>
     </section>
