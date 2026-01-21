@@ -23,7 +23,7 @@ export function Footer() {
                                 Khust Car
                             </span>
                         </Link>
-                        <p className="text-sm text-gray-500 mb-6 max-w-xs">
+                        <p className="text-sm text-gray-500 mb-6 max-w-xs mt-6">
                             {SITE_CONFIG.description}
                         </p>
                         <div className="flex gap-2">

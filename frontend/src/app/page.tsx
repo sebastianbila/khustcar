@@ -1,34 +1,25 @@
-'use client'
+"use client";
 
-import { ErrorMessage } from '@/components/ErrorMessage'
-import { LoadingSpinner } from '@/components/LoadingSpinner'
-import { CatalogPreviewSection } from '@/components/sections/CatalogPreviewSection'
-import { ContactUsSection } from '@/components/sections/ContactUsSection'
-import { HeroSection } from '@/components/sections/HeroSection'
-import { WhyChooseUsSection } from '@/components/sections/WhyChooseUsSection'
-import { getBrands, getCars } from '@/services/carService'
-import type { CarFilters as Filters } from '@/types/car'
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { ErrorMessage } from "@/components/ErrorMessage";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { CatalogPreviewSection } from "@/components/sections/CatalogPreviewSection";
+import { ContactUsSection } from "@/components/sections/ContactUsSection";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
+import { getCars } from "@/services/carService";
+import { useQuery } from "@tanstack/react-query";
 
 export default function HomePage() {
-    const [filters, setFilters] = useState<Filters>({})
-
-    const { data: brands = [], isLoading: brandsLoading } = useQuery({
-        queryKey: ['brands'],
-        queryFn: getBrands,
-    })
-
     const {
         data: cars = [],
         isLoading: carsLoading,
         error,
     } = useQuery({
-        queryKey: ['cars', filters],
-        queryFn: () => getCars(filters),
-    })
+        queryKey: ["cars"],
+        queryFn: () => getCars(),
+    });
 
-    if (brandsLoading || carsLoading) {
+    if (carsLoading) {
         return (
             <div className="flex items-center justify-center py-20">
                 <LoadingSpinner />
@@ -57,12 +48,8 @@ export default function HomePage() {
             {/* 3. New Cars Slider */}
             {/*{newestCars.length > 0 && <NewCarsSlider cars={newestCars} />}*/}
 
-            {/* 4. Catalog Preview with Filters */}
-            <CatalogPreviewSection
-                cars={cars}
-                brands={brands}
-                onFilterChange={setFilters}
-            />
+            {/* 4. Catalog Preview */}
+            <CatalogPreviewSection cars={cars} />
 
             {/* 6. Why Choose Us / Advantages */}
             <WhyChooseUsSection />

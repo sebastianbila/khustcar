@@ -1,32 +1,37 @@
-'use client'
+"use client";
 
-import { SearchOverlay } from '@/components/SearchOverlay'
-import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants'
-import { Menu, Phone, Search } from 'lucide-react'
-import Link from 'next/link'
-import { useState } from 'react'
-import { FaInstagram, FaTelegramPlane } from 'react-icons/fa'
+import { SearchOverlay } from "@/components/SearchOverlay";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
+import { Menu, Phone, Search } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
 
 export function Header() {
-    const [searchOpen, setSearchOpen] = useState(false)
-    const [sheetOpen, setSheetOpen] = useState(false)
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [sheetOpen, setSheetOpen] = useState(false);
 
     return (
         <>
-            <header className="sticky top-0 z-50 w-full bg-header shadow-sm font-medium">
+            <header className="top-0 z-50 w-full bg-header shadow-sm font-medium">
                 <nav className="border-b border-gray-100 bg-background/80 backdrop-blur-md">
                     <div className="container-custom">
                         <div className="flex h-20 items-center">
                             {/* Logo */}
-                            <Link href="/" className="flex items-center gap-2 mr-12 shrink-0">
+                            <Link
+                                href="/"
+                                className="flex items-center gap-2 mr-12 shrink-0"
+                            >
                                 <img
                                     src="/khustcar_logo.png"
                                     alt={SITE_CONFIG.name}
                                     className="h-10 w-auto object-contain"
                                 />
-                                <span className="text-xl font-bold text-slate-800">Khust Car</span>
+                                <span className="text-xl font-bold text-slate-800">
+                                    Khust Car
+                                </span>
                             </Link>
 
                             {/* Desktop Navigation */}
@@ -58,7 +63,9 @@ export function Header() {
                                     className="hidden md:flex items-center gap-2 text-slate-700 hover:text-slate-900 transition-colors"
                                 >
                                     <Phone className="h-4 w-4" />
-                                    <span className="text-[15px] font-semibold">{SITE_CONFIG.contact.phone}</span>
+                                    <span className="text-[15px] font-semibold">
+                                        {SITE_CONFIG.contact.phone}
+                                    </span>
                                 </a>
 
                                 {/* Social Icons */}
@@ -82,7 +89,10 @@ export function Header() {
                                 </div>
 
                                 {/* Mobile Menu Button */}
-                                <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+                                <Sheet
+                                    open={sheetOpen}
+                                    onOpenChange={setSheetOpen}
+                                >
                                     <SheetTrigger asChild>
                                         <Button
                                             variant="ghost"
@@ -92,14 +102,19 @@ export function Header() {
                                             <Menu className="h-6 w-6" />
                                         </Button>
                                     </SheetTrigger>
-                                    <SheetContent side="right" className="bg-background w-10/12 sm:w-[400px]">
+                                    <SheetContent
+                                        side="right"
+                                        className="bg-background w-10/12 sm:w-[400px]"
+                                    >
                                         <nav className="flex flex-col gap-4 mt-8">
                                             {NAV_LINKS.map((link) => (
                                                 <Link
                                                     key={link.href}
                                                     href={link.href}
                                                     className="text-lg font-medium text-slate-800 hover:text-primary transition-colors py-2"
-                                                    onClick={() => setSheetOpen(false)}
+                                                    onClick={() =>
+                                                        setSheetOpen(false)
+                                                    }
                                                 >
                                                     {link.label}
                                                 </Link>
@@ -107,7 +122,10 @@ export function Header() {
 
                                             <div className="flex items-center gap-4 mt-8 pt-8 border-t border-gray-100">
                                                 <a
-                                                    href={SITE_CONFIG.social.instagram}
+                                                    href={
+                                                        SITE_CONFIG.social
+                                                            .instagram
+                                                    }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600"
@@ -115,7 +133,10 @@ export function Header() {
                                                     <FaInstagram className="h-5 w-5" />
                                                 </a>
                                                 <a
-                                                    href={SITE_CONFIG.social.telegram}
+                                                    href={
+                                                        SITE_CONFIG.social
+                                                            .telegram
+                                                    }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600"
@@ -133,7 +154,10 @@ export function Header() {
             </header>
 
             {/* Search Overlay */}
-            <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+            <SearchOverlay
+                isOpen={searchOpen}
+                onClose={() => setSearchOpen(false)}
+            />
         </>
-    )
+    );
 }

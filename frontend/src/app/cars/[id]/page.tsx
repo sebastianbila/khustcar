@@ -109,20 +109,15 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
     return (
         <div className="bg-gray-50 min-h-screen pb-12">
-            {/* Breadcrumb */}
-            <div className="bg-white border-b border-gray-200">
-                <div className="container-custom py-4">
-                    <Link
-                        href="/catalog"
-                        className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
-                    >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to catalog
-                    </Link>
-                </div>
-            </div>
-
             <div className="container-custom py-8">
+                <Link
+                    href="/catalog"
+                    className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors mb-6"
+                >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Назад до каталогу
+                </Link>
+
                 <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
                     {/* Left Column - Content */}
                     <div className="lg:col-span-2 space-y-8">
@@ -197,7 +192,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                             {/* Thumbnails */}
                             {media.length > 1 && (
-                                <div className="grid grid-cols-5 sm:grid-cols-6 gap-3 mt-4">
+                                <div className="grid grid-cols-5 sm:grid-cols-6 gap-3 p-4">
                                     {media.map((item, idx) => (
                                         <button
                                             key={idx}
@@ -206,7 +201,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                             }
                                             className={`relative aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 ${
                                                 idx === selectedImageIndex
-                                                    ? "ring-2 ring-gray-900 ring-offset-2 opacity-100"
+                                                    ? "ring-2 ring-zinc-700 ring-offset-1 opacity-100"
                                                     : "opacity-60 hover:opacity-100"
                                             }`}
                                         >
