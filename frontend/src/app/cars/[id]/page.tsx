@@ -113,9 +113,9 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
     };
 
     return (
-        <div className="bg-gray-50 min-h-screen pb-12">
+        <div className="bg-gray-50 min-h-screen pb-2">
             {/* Navigation Section */}
-            <div className="container-custom py-6">
+            <div className="container-custom py-4 lg:py-6">
                 <Link
                     href="/catalog"
                     className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
@@ -126,12 +126,12 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
             </div>
 
             {/* Main Layout Grid */}
-            <div className="max-w-360 mx-auto p-5">
-                <div className="flex flex-col xl:grid xl:grid-cols-3 xl:gap-x-8 xl:px-8 items-start">
+            <div className="container-custom p-6 pt-0">
+                <div className="flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-8  items-start">
 
                     {/* 1. Image Gallery - Full width on mobile, 2/3 on desktop */}
-                    <div className="xl:col-span-2 w-full xl:mb-8">
-                        <div className="xl:bg-white xl:rounded-2xl xl:shadow-sm overflow-hidden">
+                    <div className="lg:col-span-2 w-full lg:mb-6">
+                        <div className="lg:bg-white lg:rounded-2xl lg:shadow-sm overflow-hidden">
                             <div className="relative aspect-16/11 sm:aspect-16/10 bg-gray-100 group">
                                 {media.length > 0 ? (
                                     <>
@@ -169,13 +169,13 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                             <>
                                                 <button
                                                     onClick={prevImage}
-                                                    className="absolute left-4 top-1/2 -translate-y-1/2 xl:bg-white/80 hover:xl:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 xl:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm xl:flex hidden"
+                                                    className="absolute left-4 top-1/2 -translate-y-1/2 lg:bg-white/80 hover:lg:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 lg:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm lg:flex hidden"
                                                 >
                                                     <ChevronLeft className="h-5 w-5" />
                                                 </button>
                                                 <button
                                                     onClick={nextImage}
-                                                    className="absolute right-4 top-1/2 -translate-y-1/2 xl:bg-white/80 hover:xl:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 xl:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm xl:flex hidden"
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 lg:bg-white/80 hover:lg:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 lg:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm lg:flex hidden"
                                                 >
                                                     <ChevronRight className="h-5 w-5" />
                                                 </button>
@@ -191,12 +191,12 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                             {/* Thumbnails */}
                             {media.length > 1 && (
-                                <div className="flex gap-3 py-3 xl:p-4 overflow-x-auto no-scrollbar xl:grid xl:grid-cols-6 xl:overflow-visible">
+                                <div className="flex gap-3 py-3 lg:p-4 overflow-x-auto no-scrollbar lg:grid lg:grid-cols-6 lg:overflow-visible">
                                     {media.map((item, idx) => (
                                         <button
                                             key={(item as any).asset?._ref || (item as any).src || idx}
                                             onClick={() => setSelectedImageIndex(idx)}
-                                            className={`relative shrink-0 w-20 xl:w-auto aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 border-2 ${
+                                            className={`relative shrink-0 w-20 lg:w-auto aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 border-2 ${
                                                 idx === selectedImageIndex
                                                     ? "border-gray-400 opacity-100"
                                                     : "border-gray-100 opacity-60 hover:opacity-100"
@@ -226,8 +226,8 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                     </div>
 
                     {/* 2. Price Section (Sidebar Position on Desktop) - Full width on mobile */}
-                    <div className="xl:row-start-1 xl:col-start-3 xl:sticky xl:top-24 w-full xl:mb-8 mt-5 xl:mt-0">
-                        <div className="xl:xl:bg-white xl:rounded-2xl p-0 sm:p-8 xl:shadow-sm border-b xl:border-none border-gray-100">
+                    <div className="lg:row-start-1 lg:col-start-3 lg:sticky lg:top-5 w-full lg:mb-8 mt-5 lg:mt-0">
+                        <div className="lg:bg-white lg:rounded-2xl p-0 lg:p-6 lg:shadow-sm border-b lg:border-none border-gray-100">
                             <div className="mb-6">
                                 <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1">
                                     {car.brand} {car.model}
@@ -251,7 +251,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 )}
                             </div>
 
-                            <div className="flex flex-col gap-3 py-6 border-t border-gray-100 mb-6 font-medium">
+                            <div className="flex flex-col gap-3 py-2 lg:py-6 border-t border-gray-100 mb-6 font-medium">
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500">Стан</span>
                                     <span className="text-gray-900">З пробігом</span>
@@ -283,12 +283,12 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                     </div>
 
                     {/* 3. Specifications - Full width on mobile, 2/3 on desktop */}
-                    <div className="xl:col-span-2 w-full xl:mb-8">
-                        <div className="xl:bg-white xl:rounded-2xl py-6 xl:p-8 xl:shadow-sm border-b xl:border-none border-gray-100">
+                    <div className="lg:col-span-2 w-full lg:mb-4 lg:mb-8">
+                        <div className="lg:bg-white lg:rounded-2xl py-6 lg:p-6 lg:shadow-sm border-b lg:border-none border-gray-100">
                             <h3 className="text-xl font-black text-gray-900 mb-8 uppercase tracking-wider">
                                 Характеристики
                             </h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 lg:gap-y-8 gap-x-12">
                                 <SpecItem icon={Calendar} label="Рік випуску" value={car.year} />
                                 <SpecItem icon={Gauge} label="Пробіг" value={`${formatMileage(car.mileage)} км`} />
                                 <SpecItem icon={Wrench} label="Двигун" value={car.engineSize} />
@@ -313,8 +313,8 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                     {/* 4. Description - Full width on mobile, 2/3 on desktop */}
                     {car.description && (
-                        <div className="xl:col-span-2 w-full mb-12 xl:mb-0">
-                            <div className="xl:bg-white xl:rounded-2xl py-6 xl:p-8 xl:shadow-sm">
+                        <div className="lg:col-span-2 w-full mb-12 lg:mb-0">
+                            <div className="lg:bg-white lg:rounded-2xl py-6 lg:p-6 lg:shadow-sm">
                                 <h3 className="text-xl font-black text-gray-900 mb-6 uppercase tracking-wider">
                                     Опис автомобіля
                                 </h3>
