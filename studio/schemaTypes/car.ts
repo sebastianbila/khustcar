@@ -3,10 +3,10 @@ import { defineType } from 'sanity'
 export default defineType({
     name: 'car',
     type: 'document',
-    title: 'Автомобіль', // Car -> Автомобіль
+    title: 'Автомобілі',
     fieldsets: [
         {
-            name: 'brandModelColumns',
+            name: 'generalDetailsColumn',
             title: ' ',
             options: {columns: 2},
         },
@@ -16,7 +16,7 @@ export default defineType({
             options: {columns: 2},
         },
         {
-            name: 'engineAndMileageColumns',
+            name: 'carDetailsColumn',
             title: ' ',
             options: {columns: 2},
         },
@@ -32,20 +32,21 @@ export default defineType({
             type: 'string',
             title: 'Марка', // Brand -> Марка
             validation: (rule) => rule.required(),
-            fieldset: 'brandModelColumns',
+            fieldset: 'generalDetailsColumn',
         },
         {
             name: 'model',
             type: 'string',
             title: 'Модель', // Model -> Модель
             validation: (rule) => rule.required(),
-            fieldset: 'brandModelColumns',
+            fieldset: 'generalDetailsColumn',
         },
         {
             name: 'year',
             type: 'number',
             title: 'Рік', // Year -> Рік
             validation: (rule) => rule.required().min(1900).max(2030),
+            fieldset: 'generalDetailsColumn',
         },
         {
             name: 'condition',
@@ -53,6 +54,7 @@ export default defineType({
             title: 'Стан (1-10)', // New field
             description: 'Оцінка стану автомобіля від 1 до 10',
             validation: (rule) => rule.required().min(1).max(10),
+            fieldset: 'generalDetailsColumn',
         },
         {
             name: 'price',
@@ -75,16 +77,15 @@ export default defineType({
             title: 'Об\'єм двигуна', // Engine Size -> Об'єм двигуна
             description: 'наприклад, 2.0L, 3.5L V6',
             validation: (rule) => rule.required(),
-            fieldset: 'engineAndMileageColumns',
+            fieldset: 'carDetailsColumn',
         },
         {
             name: 'mileage',
             type: 'number',
             title: 'Пробіг (тис. км)', // Mileage (km) -> Пробіг (км)
             validation: (rule) => rule.required().min(0),
-            fieldset: 'engineAndMileageColumns',
+            fieldset: 'carDetailsColumn',
         },
-
         {
             name: 'fuelType',
             type: 'string',
@@ -98,7 +99,7 @@ export default defineType({
                 layout: 'radio',
             },
             validation: (rule) => rule.required(),
-            fieldset: 'fuelTypeAndDrivetrainColumns',
+            fieldset: 'carDetailsColumn',
         },
          {
             name: 'drivetrain',
@@ -113,7 +114,7 @@ export default defineType({
                 layout: 'radio',
             },
             validation: (rule) => rule.required(),
-            fieldset: 'fuelTypeAndDrivetrainColumns',
+            fieldset: 'carDetailsColumn',
         },
         {
             name: 'transmission',
@@ -127,6 +128,8 @@ export default defineType({
                 layout: 'radio',
             },
             validation: (rule) => rule.required(),
+            fieldset: 'carDetailsColumn',
+
         },
          {
             name: 'color',

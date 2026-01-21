@@ -5,8 +5,9 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CatalogPreviewSection } from "@/components/sections/CatalogPreviewSection";
 import { ContactUsSection } from "@/components/sections/ContactUsSection";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { NewCarsSlider } from "@/components/sections/NewCarsSlider";
 import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
-import { getCars } from "@/services/carService";
+import { getCars, getFeaturedCars } from "@/services/carService";
 import { useQuery } from "@tanstack/react-query";
 
 export default function HomePage() {
@@ -19,12 +20,17 @@ export default function HomePage() {
         queryFn: () => getCars(),
     });
 
+    const { data: featuredCars = [] } = useQuery({
+        queryKey: ["featured-cars"],
+        queryFn: getFeaturedCars,
+    });
+
     if (carsLoading) {
         return (
             <div className="flex items-center justify-center py-20">
                 <LoadingSpinner />
             </div>
-        )
+        );
     }
 
     if (error) {
@@ -32,11 +38,11 @@ export default function HomePage() {
             <div className="flex items-center justify-center py-20">
                 <ErrorMessage message="Не вдалося завантажити автомобілі. Будь ласка, спробуйте пізніше." />
             </div>
-        )
+        );
     }
 
     // Get newest cars (last 6 cars added)
-    const newestCars = [...cars].slice(0, 6)
+    const newestCars = [...cars].slice(0, 6);
 
     return (
         <div>
@@ -46,7 +52,7 @@ export default function HomePage() {
             <HeroSection />
 
             {/* 3. New Cars Slider */}
-            {/*{newestCars.length > 0 && <NewCarsSlider cars={newestCars} />}*/}
+            {featuredCars?.length > 0 && <NewCarsSlider cars={featuredCars} />}
 
             {/* 4. Catalog Preview */}
             <CatalogPreviewSection cars={cars} />
@@ -62,5 +68,5 @@ export default function HomePage() {
 
             {/* 9. Footer - Already in layout */}
         </div>
-    )
+    );
 }

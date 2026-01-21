@@ -47,17 +47,17 @@ export function HeroSection() {
             <div className="container-custom relative z-20">
                 <div className="max-w-3xl space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-1000">
                     <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
-                        Find Your Perfect Vehicle Today
+                        Знайдіть свій ідеальний автомобіль сьогодні
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-200 leading-relaxed max-w-xl">
-                        Discover premium quality cars with flexible financing options and trusted service
+                        Відкрийте для себе автомобілі преміум-класу з гнучкими варіантами фінансування та надійним сервісом
                     </p>
 
                     <div className="flex pt-4">
                         <Link href={'/catalog'}>
                             <Button size="lg" className="bg-white text-zinc-900 hover:bg-gray-100 font-semibold px-8 h-12 text-base">
-                                Browse Catalog
+                                Переглянути каталог
                                 <ArrowRight className="ml-2 h-5 w-5" />
                             </Button>
                         </Link>

@@ -122,7 +122,7 @@ export function NewCarsSlider({ cars }: NewCarsSliderProps) {
                                             className="object-cover"
                                         />
                                         <div className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-1 rounded-full text-xs font-medium">
-                                            New
+                                            Новинка
                                         </div>
                                     </div>
 
