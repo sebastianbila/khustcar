@@ -1,162 +1,174 @@
-'use client'
+"use client";
 
-import { useEffect, useState, useCallback } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { urlFor } from '@/lib/sanity'
-import type { Car } from '@/types/car'
+import { Button } from "@/components/ui/button";
+import { urlFor } from "@/lib/sanity";
+import type { Car } from "@/types/car";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
 
 interface NewCarsSliderProps {
-  cars: Car[]
+    cars: Car[];
 }
 
-export function NewCarsSlider({ cars }: NewCarsSliderProps) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [cardsPerView, setCardsPerView] = useState(3)
-
-  // Update cards per view based on screen size
-  useEffect(() => {
-    const updateCardsPerView = () => {
-      if (window.innerWidth < 768) {
-        setCardsPerView(1)
-      } else if (window.innerWidth < 1024) {
-        setCardsPerView(2)
-      } else {
-        setCardsPerView(3)
-      }
+const getFuelTypeLabel = (fuelType: string) => {
+    switch (fuelType) {
+        case "diesel":
+            return "Дизель";
+        case "electric":
+            return "Електро";
+        case "hybrid":
+            return "Гібрид";
+        default:
+            return "Бензин";
     }
+};
 
-    updateCardsPerView()
-    window.addEventListener('resize', updateCardsPerView)
-    return () => window.removeEventListener('resize', updateCardsPerView)
-  }, [])
+export function NewCarsSlider({ cars }: NewCarsSliderProps) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [cardsPerView, setCardsPerView] = useState(3);
 
-  const maxIndex = Math.max(0, cars.length - cardsPerView)
+    useEffect(() => {
+        const updateCardsPerView = () => {
+            if (window.innerWidth < 768) {
+                setCardsPerView(1);
+            } else if (window.innerWidth < 1024) {
+                setCardsPerView(2);
+            } else {
+                setCardsPerView(3);
+            }
+        };
 
-  const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1))
-  }, [maxIndex])
+        updateCardsPerView();
+        window.addEventListener("resize", updateCardsPerView);
+        return () => window.removeEventListener("resize", updateCardsPerView);
+    }, []);
 
-  const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1))
-  }, [maxIndex])
+    const maxIndex = Math.max(0, cars.length - cardsPerView);
 
-  // Auto-scroll
-  useEffect(() => {
-    const interval = setInterval(nextSlide, 5000)
-    return () => clearInterval(interval)
-  }, [nextSlide])
+    const nextSlide = useCallback(() => {
+        setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, [maxIndex]);
 
-  if (cars.length === 0) return null
+    const prevSlide = useCallback(() => {
+        setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+    }, [maxIndex]);
 
-  return (
-    <section className="py-15 bg-zinc-100">
-      <div className="container-custom">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Нові Автомобілі в Наявності
-          </h2>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            Відкрийте для себе наші найновіші надходження - преміум автомобілі щойно додані до нашого інвентарю
-          </p>
-        </div>
+    if (cars.length === 0) return null;
 
-        <div className="relative">
-          {/* Slider Container */}
-          <div className="overflow-hidden">
-            <div
-              className="flex gap-6 transition-transform duration-500 ease-out"
-              style={{
-                transform: `translateX(-${currentIndex * (100 / cardsPerView)}%)`,
-              }}
-            >
-              {cars.map((car) => (
-                <div
-                  key={car._id}
-                  className="flex-shrink-0"
-                  style={{ width: `calc(${100 / cardsPerView}% - ${(cardsPerView - 1) * 24 / cardsPerView}px)` }}
-                >
-                  <Card className="overflow-hidden hover:shadow-xl transition-shadow group">
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <Image
-                        src={
-                          car.images?.[0]
-                            ? urlFor(car.images[0]).width(600).height(450).url()
-                            : '/placeholder-car.jpg'
-                        }
-                        alt={`${car.brand} ${car.model}`}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                      <div className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        Новинка
-                      </div>
+    return (
+        <section className="py-16 bg-white">
+            <div className="container-custom">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-10">
+                    <div>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                            Нові Надходження
+                        </h2>
+                        <p className="text-gray-500">
+                            Ознайомтесь з нашою колекцією преміум автомобілів
+                        </p>
                     </div>
-                    <CardContent className="p-6">
-                      <div className="mb-4">
-                        <h3 className="text-xl font-bold text-gray-900 mb-1">
-                          {car.brand} {car.model}
-                        </h3>
-                        <p className="text-sm text-gray-700">Рік: {car.year}</p>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="text-2xl font-bold text-primary">
-                          ${car.price.toLocaleString()}
+
+                    {cars.length > cardsPerView && (
+                        <div className="flex gap-2">
+                            <button
+                                onClick={prevSlide}
+                                className="h-10 w-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                            >
+                                <ChevronLeft className="h-5 w-5" />
+                            </button>
+                            <button
+                                onClick={nextSlide}
+                                className="h-10 w-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                            >
+                                <ChevronRight className="h-5 w-5" />
+                            </button>
                         </div>
-                        <Link href={`/cars/${car._id}`}>
-                          <Button size="sm">Деталі</Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
+                    )}
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Navigation Buttons */}
-          {cars.length > cardsPerView && (
-            <>
-              <Button
-                variant="outline"
-                size="sm"
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 h-12 w-12 rounded-full shadow-lg bg-background hover:bg-primary hover:text-white z-10"
-                onClick={prevSlide}
-              >
-                <ChevronLeft className="h-6 w-6" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 h-12 w-12 rounded-full shadow-lg bg-background hover:bg-primary hover:text-white z-10"
-                onClick={nextSlide}
-              >
-                <ChevronRight className="h-6 w-6" />
-              </Button>
-            </>
-          )}
+                {/* Slider */}
+                <div className="overflow-hidden">
+                    <div
+                        className="flex gap-6 transition-transform duration-500 ease-out"
+                        style={{
+                            transform: `translateX(-${currentIndex * (100 / cardsPerView)}%)`,
+                        }}
+                    >
+                        {cars.map((car) => (
+                            <div
+                                key={car._id}
+                                className="shrink-0"
+                                style={{
+                                    width: `calc(${100 / cardsPerView}% - ${((cardsPerView - 1) * 24) / cardsPerView}px)`,
+                                }}
+                            >
+                                <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                                    {/* Image */}
+                                    <div className="relative aspect-4/3 bg-gray-50 overflow-hidden">
+                                        <Image
+                                            src={
+                                                car.images?.[0]
+                                                    ? urlFor(car.images[0])
+                                                          .width(600)
+                                                          .height(450)
+                                                          .url()
+                                                    : "/placeholder-car.jpg"
+                                            }
+                                            alt={`${car.brand} ${car.model}`}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                        <div className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-1 rounded-full text-xs font-medium">
+                                            New
+                                        </div>
+                                    </div>
 
-          {/* Dots Indicator */}
-          {cars.length > cardsPerView && (
-            <div className="flex justify-center gap-2 mt-8">
-              {Array.from({ length: maxIndex + 1 }).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`h-2 rounded-full transition-all ${
-                    index === currentIndex
-                      ? 'w-8 bg-primary'
-                      : 'w-2 bg-gray-300 hover:bg-gray-400'
-                  }`}
-                />
-              ))}
+                                    {/* Content */}
+                                    <div className="p-5">
+                                        <h3 className="text-lg font-bold text-gray-900 mb-1">
+                                            {car.brand} {car.model}
+                                        </h3>
+                                        <p className="text-sm text-gray-500 mb-4">
+                                            {car.year} •{" "}
+                                            {car.transmission === "automatic"
+                                                ? "Автомат"
+                                                : "Механіка"}{" "}
+                                            • {getFuelTypeLabel(car.fuelType)}
+                                        </p>
+
+                                        <div className="flex items-end justify-between">
+                                            <div>
+                                                <div className="text-2xl font-bold text-gray-900">
+                                                    $
+                                                    {(car.discountPrice || car.price).toLocaleString()}
+                                                </div>
+                                                <div className="text-xs text-gray-400">
+                                                    Від $
+                                                    {Math.round(
+                                                        (car.discountPrice || car.price) / 60
+                                                    ).toLocaleString()}
+                                                    /міс
+                                                </div>
+                                            </div>
+                                            <Link href={`/cars/${car._id}`}>
+                                                <Button
+                                                    size="sm"
+                                                    className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg px-4"
+                                                >
+                                                    Деталі
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
-          )}
-        </div>
-      </div>
-    </section>
-  )
+        </section>
+    );
 }
