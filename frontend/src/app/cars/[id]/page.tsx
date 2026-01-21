@@ -6,12 +6,9 @@ import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/lib/constants";
 import { urlFor } from "@/lib/sanity";
-import {
-    formatMileage,
-    getFuelTypeLabel,
-    getTransmissionLabel,
-} from "@/lib/utils";
+import { cn, formatMileage, getFuelTypeLabel, getTransmissionLabel } from "@/lib/utils";
 import { getCarById } from "@/services/carService";
+import { useFavoritesStore } from "@/stores/favoritesStore";
 import { PortableText } from "@portabletext/react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -44,6 +41,8 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
     const { id } = use(params);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const { toggleFavorite, isFavorite } = useFavoritesStore();
+    const isCarFavorite = isFavorite(id);
 
     const {
         data: car,
@@ -298,10 +297,16 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 <div className="grid grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-3 pt-2">
                                     <Button
                                         variant="outline"
-                                        className="w-full h-12 text-zinc-600 border-zinc-200"
+                                        onClick={() => toggleFavorite(id)}
+                                        className={cn(
+                                            "w-full h-12 border-zinc-200",
+                                            isCarFavorite
+                                                ? "text-rose-500 border-rose-200 hover:bg-rose-50"
+                                                : "text-zinc-600"
+                                        )}
                                     >
-                                        <Heart className="h-4 w-4 mr-2" />
-                                        Зберегти
+                                        <Heart className={cn("h-4 w-4 mr-2", isCarFavorite && "fill-rose-500")} />
+                                        {isCarFavorite ? "В обраному" : "Зберегти"}
                                     </Button>
                                     <Button
                                         variant="outline"
