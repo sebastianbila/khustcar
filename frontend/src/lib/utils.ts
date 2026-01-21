@@ -25,3 +25,16 @@ export const getFuelTypeLabel = (fuelType: string) => {
           return "Бензин";
   }
 };
+
+export const getDrivetrainLabel = (drivetrain: string) => {
+  switch (drivetrain) {
+      case "fwd":
+          return "Передній";
+      case "rwd":
+          return "Задній";
+      case "awd":
+          return "Повний";
+      default:
+          return drivetrain;
+  }
+};
