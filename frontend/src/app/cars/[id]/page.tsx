@@ -5,6 +5,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/lib/constants";
 import { urlFor } from "@/lib/sanity";
+import { formatMileage } from "@/lib/utils";
 import { getCarById } from "@/services/carService";
 import { PortableText } from "@portabletext/react";
 import { useQuery } from "@tanstack/react-query";
@@ -90,7 +91,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
     if (error || !car) {
         return (
             <div className="flex items-center justify-center py-20 min-h-screen">
-                <ErrorMessage message="Could not load car details. Please try again later." />
+                <ErrorMessage message="Не вдалося завантажити дані автомобіля. Будь ласка, спробуйте пізніше." />
             </div>
         );
     }
@@ -185,7 +186,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                     </>
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                        No Images Available
+                                        Зображення відсутні
                                     </div>
                                 )}
                             </div>
@@ -208,7 +209,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                             {item.type === "video" ? (
                                                 <div className="w-full h-full bg-black flex items-center justify-center">
                                                     <span className="text-white text-xs">
-                                                        Video
+                                                        Відео
                                                     </span>
                                                 </div>
                                             ) : (
@@ -217,7 +218,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                                         .width(200)
                                                         .height(150)
                                                         .url()}
-                                                    alt="Thumbnail"
+                                                    alt="Мініатюра"
                                                     fill
                                                     className="object-cover"
                                                 />
@@ -231,53 +232,59 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                         {/* Specifications Card */}
                         <div className="bg-white rounded-2xl p-8 shadow-sm">
                             <h3 className="text-xl font-bold text-gray-900 mb-8">
-                                Specifications
+                                Характеристики
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
                                 <SpecItem
                                     icon={Calendar}
-                                    label="Year"
+                                    label="Рік випуску"
                                     value={car.year}
                                 />
                                 <SpecItem
                                     icon={Gauge}
-                                    label="Mileage"
-                                    value={`${car.mileage.toLocaleString()} miles`}
+                                    label="Пробіг"
+                                    value={`${formatMileage(car.mileage)} км`}
                                 />
                                 <SpecItem
                                     icon={Wrench}
-                                    label="Engine"
+                                    label="Двигун"
                                     value={car.engineSize}
                                 />
                                 <SpecItem
                                     icon={Settings}
-                                    label="Transmission"
+                                    label="Коробка передач"
                                     value={
                                         car.transmission === "automatic"
-                                            ? "8-Speed Automatic"
-                                            : "Manual"
+                                            ? "Автомат"
+                                            : "Механічна"
                                     }
                                 />
                                 <SpecItem
                                     icon={Fuel}
-                                    label="Fuel Type"
+                                    label="Тип палива"
                                     value={
                                         car.fuelType === "petrol"
-                                            ? "Premium Gasoline"
+                                            ? "Бензин"
                                             : car.fuelType === "diesel"
-                                              ? "Diesel"
-                                              : "Electric"
+                                              ? "Дизель"
+                                              : "Електро"
                                     }
                                 />
                                 <SpecItem
                                     icon={Palette}
-                                    label="Exterior Color"
-                                    value={car.color || "N/A"}
+                                    label="Колір екстер'єру"
+                                    value={car.color || "н/д"}
                                 />
                                 <SpecItem
                                     icon={Car}
-                                    label="Drivetrain"
-                                    value="All-Wheel Drive"
+                                    label="Привід"
+                                    value={
+                                        car.drivetrain === "fwd"
+                                            ? "Передній"
+                                            : car.drivetrain === "rwd"
+                                              ? "Задній"
+                                              : "Повний"
+                                    }
                                 />
                                 <SpecItem
                                     icon={FileText}
@@ -291,7 +298,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                         {car.description && (
                             <div className="bg-white rounded-2xl p-6 shadow-sm">
                                 <h3 className="text-lg font-bold text-gray-900 mb-4">
-                                    Description
+                                    Опис
                                 </h3>
                                 <div className="prose prose-gray max-w-none text-gray-600">
                                     <PortableText value={car.description} />
@@ -332,7 +339,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 <div className="flex justify-between">
                                     <span className="text-gray-500">Стан</span>
                                     <span className="font-semibold text-gray-900">
-                                        Pre-Owned
+                                        З пробігом
                                     </span>
                                 </div>
                                 <div className="flex justify-between col-span-2">

@@ -49,10 +49,7 @@ export function CatalogPreviewSection({ cars }: CatalogPreviewSectionProps) {
                         {/* View All Button */}
                         <div className="text-center">
                             <Link href="/catalog">
-                                <Button
-                                    size="lg"
-                                    className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg px-8 gap-2"
-                                >
+                                <Button size="lg">
                                     Переглянути Всі Авто
                                     <ArrowRight className="h-5 w-5" />
                                 </Button>

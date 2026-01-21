@@ -16,6 +16,9 @@ interface CarFiltersProps {
     setLocalSearch: (value: string) => void;
     localBrand: string;
     setLocalBrand: (value: string) => void;
+    models: string[];
+    localModel: string;
+    setLocalModel: (value: string) => void;
     localMinYear: string;
     setLocalMinYear: (value: string) => void;
     localMaxYear: string;
@@ -32,6 +35,8 @@ interface CarFiltersProps {
     setLocalFuelType: (value: string) => void;
     localTransmission: string;
     setLocalTransmission: (value: string) => void;
+    localDrivetrain: string;
+    setLocalDrivetrain: (value: string) => void;
     localColor: string;
     setLocalColor: (value: string) => void;
     localInStock: string;
@@ -64,6 +69,8 @@ export function CarFilters({
     setLocalFuelType,
     localTransmission,
     setLocalTransmission,
+    localDrivetrain,
+    setLocalDrivetrain,
     localColor,
     setLocalColor,
     localInStock,
@@ -71,6 +78,9 @@ export function CarFilters({
     hasActiveFilters,
     onResetFilters,
     hideTitle,
+    models,
+    localModel,
+    setLocalModel,
 }: CarFiltersProps) {
     return (
         <>
@@ -130,6 +140,28 @@ export function CarFilters({
                     </NativeSelect>
                 </div>
 
+                {/* Model */}
+                <div className="flex flex-col space-y-2">
+                    <Label htmlFor="filter-model" className="text-gray-800">
+                        Модель
+                    </Label>
+                    <NativeSelect
+                        id="filter-model"
+                        value={localModel}
+                        onChange={(e) => setLocalModel(e.target.value)}
+                        disabled={!localBrand}
+                    >
+                        <NativeSelectOption value="">
+                            Всі Моделі
+                        </NativeSelectOption>
+                        {models.map((model) => (
+                            <NativeSelectOption key={model} value={model}>
+                                {model}
+                            </NativeSelectOption>
+                        ))}
+                    </NativeSelect>
+                </div>
+
                 {/* Fuel Type */}
                 <div className="flex flex-col space-y-2">
                     <Label htmlFor="filter-fuelType" className="text-gray-800">
@@ -151,6 +183,31 @@ export function CarFilters({
                         </NativeSelectOption>
                         <NativeSelectOption value="electric">
                             Електро
+                        </NativeSelectOption>
+                    </NativeSelect>
+                </div>
+
+                {/* Drivetrain */}
+                <div className="flex flex-col space-y-2">
+                    <Label htmlFor="filter-drivetrain" className="text-gray-800">
+                        Привід
+                    </Label>
+                    <NativeSelect
+                        id="filter-drivetrain"
+                        value={localDrivetrain}
+                        onChange={(e) => setLocalDrivetrain(e.target.value)}
+                    >
+                        <NativeSelectOption value="">
+                            Всі Типи
+                        </NativeSelectOption>
+                        <NativeSelectOption value="fwd">
+                            Передній
+                        </NativeSelectOption>
+                        <NativeSelectOption value="rwd">
+                            Задній
+                        </NativeSelectOption>
+                        <NativeSelectOption value="awd">
+                            Повний
                         </NativeSelectOption>
                     </NativeSelect>
                 </div>
@@ -261,7 +318,7 @@ export function CarFilters({
 
                 {/* Mileage Range */}
                 <div className="flex flex-col space-y-2">
-                    <Label className="text-gray-800">Пробіг (км)</Label>
+                    <Label className="text-gray-800">Пробіг (тис. км)</Label>
                     <div className="grid grid-cols-2 gap-2">
                         <Input
                             type="number"

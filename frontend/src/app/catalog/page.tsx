@@ -37,7 +37,7 @@ type SortOption =
     | "mileage-desc"
     | "";
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 8;
 
 function CatalogContent() {
     const searchParams = useSearchParams();
@@ -69,6 +69,7 @@ function CatalogContent() {
             : undefined,
         fuelType: (searchParams.get("fuelType") as any) || undefined,
         transmission: (searchParams.get("transmission") as any) || undefined,
+        drivetrain: (searchParams.get("drivetrain") as any) || undefined,
         color: searchParams.get("color") || undefined,
         inStock:
             searchParams.get("inStock") === "true"
@@ -102,6 +103,9 @@ function CatalogContent() {
     const [localFuelType, setLocalFuelType] = useState(filters.fuelType || "");
     const [localTransmission, setLocalTransmission] = useState(
         filters.transmission || "",
+    );
+    const [localDrivetrain, setLocalDrivetrain] = useState(
+        filters.drivetrain || "",
     );
     const [localColor, setLocalColor] = useState(filters.color || "");
     const [localInStock, setLocalInStock] = useState<string>(
@@ -162,6 +166,7 @@ function CatalogContent() {
             fuelType: (searchParams.get("fuelType") as any) || undefined,
             transmission:
                 (searchParams.get("transmission") as any) || undefined,
+            drivetrain: (searchParams.get("drivetrain") as any) || undefined,
             color: searchParams.get("color") || undefined,
             inStock:
                 searchParams.get("inStock") === "true"
@@ -182,6 +187,7 @@ function CatalogContent() {
         setLocalMaxMileage(params.maxMileage?.toString() || "");
         setLocalFuelType(params.fuelType || "");
         setLocalTransmission(params.transmission || "");
+        setLocalDrivetrain(params.drivetrain || "");
         setLocalColor(params.color || "");
         setLocalInStock(
             params.inStock === true
@@ -212,6 +218,8 @@ function CatalogContent() {
         if (newFilters.fuelType) params.set("fuelType", newFilters.fuelType);
         if (newFilters.transmission)
             params.set("transmission", newFilters.transmission);
+        if (newFilters.drivetrain)
+            params.set("drivetrain", newFilters.drivetrain);
         if (newFilters.color) params.set("color", newFilters.color);
         if (newFilters.inStock !== undefined)
             params.set("inStock", newFilters.inStock.toString());
@@ -245,6 +253,7 @@ function CatalogContent() {
                     : undefined,
                 fuelType: (localFuelType as any) || undefined,
                 transmission: (localTransmission as any) || undefined,
+                drivetrain: (localDrivetrain as any) || undefined,
                 color: localColor || undefined,
                 inStock:
                     localInStock === "true"
@@ -286,6 +295,7 @@ function CatalogContent() {
         setLocalMaxMileage("");
         setLocalFuelType("");
         setLocalTransmission("");
+        setLocalDrivetrain("");
         setLocalColor("");
         setLocalInStock("");
         setFilters({});
@@ -425,6 +435,8 @@ function CatalogContent() {
                             setLocalFuelType={setLocalFuelType}
                             localTransmission={localTransmission}
                             setLocalTransmission={setLocalTransmission}
+                            localDrivetrain={localDrivetrain}
+                            setLocalDrivetrain={setLocalDrivetrain}
                             localColor={localColor}
                             setLocalColor={setLocalColor}
                             localInStock={localInStock}
@@ -435,18 +447,18 @@ function CatalogContent() {
                         />
                     </div>
                 </div>
-                <div className=" py-8 mb-8 border-b border-b-border">
+                <div className="py-8 border-b border-b-border">
                     <div className="container-custom flex flex-col md:flex-row md:items-end justify-between gap-4 ">
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                                Available Cars
+                                Доступні автомобілі
                             </h2>
                             <p className="text-sm text-gray-500 font-medium">
-                                Showing{" "}
+                                Показано{" "}
                                 <span className="text-gray-900 font-bold">
-                                    {sortedCars.length} results
+                                    {sortedCars.length} результатів
                                 </span>{" "}
-                                for your search
+                                для вашого запиту
                             </p>
                         </div>
 
@@ -464,34 +476,34 @@ function CatalogContent() {
                                 className="w-auto min-w-[180px]"
                             >
                                 <NativeSelectOption value="">
-                                    Recommended
+                                    Рекомендовані
                                 </NativeSelectOption>
                                 <NativeSelectOption value="price-asc">
-                                    Price: Low to High
+                                    Ціна: від дешевих до дорогих
                                 </NativeSelectOption>
                                 <NativeSelectOption value="price-desc">
-                                    Price: High to Low
+                                    Ціна: від дорогих до дешевих
                                 </NativeSelectOption>
                                 <NativeSelectOption value="year-desc">
-                                    Year: Newest First
+                                    Рік: спочатку нові
                                 </NativeSelectOption>
                                 <NativeSelectOption value="year-asc">
-                                    Year: Oldest First
+                                    Рік: спочатку старі
                                 </NativeSelectOption>
                             </NativeSelect>
                         </div>
                     </div>
                 </div>
-                <div className="container-custom">
+                <div className="py-8 container-custom">
                     {/* Empty State */}
                     {!carsLoading && !error && cars.length === 0 && (
                         <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
                             <div className="text-4xl mb-4">🔍</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                No cars found
+                                Автомобілів не знайдено
                             </h3>
                             <p className="text-gray-500 mb-6">
-                                Try adjusting your filters or search terms
+                                Спробуйте змінити фільтри або параметри пошуку
                             </p>
                             {hasActiveFilters && (
                                 <Button
@@ -582,20 +594,6 @@ function CatalogContent() {
                                         </PaginationContent>
                                     </Pagination>
                                 )}
-
-                                <Button
-                                    variant="default"
-                                    className="bg-gray-900 hover:bg-gray-800 text-white font-bold h-12 px-8 rounded-lg shadow-sm"
-                                    onClick={() => {
-                                        if (currentPage < totalPages)
-                                            setCurrentPage(
-                                                (p: number) => p + 1,
-                                            );
-                                    }}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    Load More Results
-                                </Button>
                             </div>
                         </div>
                     )}

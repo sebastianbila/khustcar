@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { urlFor } from "@/lib/sanity";
-import { cn } from "@/lib/utils";
+import { cn, formatMileage } from "@/lib/utils";
 import type { Car } from "@/types/car";
 import { ArrowRight, Heart } from "lucide-react";
 import Image from "next/image";
@@ -21,7 +21,7 @@ export function CarCard({ car }: CarCardProps) {
     return (
         <Card
             className={cn(
-                "overflow-hidden hover:shadow-md transition-all duration-300 group shadow-xs",
+                "overflow-hidden hover:shadow-md transition-all duration-300 group shadow-xs h-full flex flex-col",
                 "relative pt-0 pb-2 bg-background gap-y-0",
                 !car.inStock && "opacity-70",
             )}
@@ -54,12 +54,12 @@ export function CarCard({ car }: CarCardProps) {
                 {!car.inStock && (
                     <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
                         <Badge className="bg-gray-900 text-white">
-                            {"Sold"}
+                            {"Продано"}
                         </Badge>
                     </div>
                 )}
             </Link>
-            <CardContent className="p-4">
+            <CardContent className="p-4 grow flex flex-col">
                 <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-bold text-gray-900 leading-tight">
                         <Link
@@ -80,10 +80,10 @@ export function CarCard({ car }: CarCardProps) {
                 <div className="text-xs text-gray-500 mb-4 font-medium">
                     {car.brand} {car.model} •{" "}
                     {car.transmission === "automatic" ? "Автомат" : "Механіка"}{" "}
-                    • {car.mileage.toLocaleString()} км
+                    • {formatMileage(car.mileage)} км
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
                     <div>
                         <div className="text-xl font-extrabold text-gray-900">
                             ${(car.discountPrice || car.price).toLocaleString()}

@@ -11,6 +11,7 @@ export interface Car {
   color: string
   fuelType: 'diesel' | 'petrol' | 'electric'
   transmission: 'manual' | 'automatic'
+  drivetrain?: 'fwd' | 'rwd' | 'awd'
   inStock: boolean
   description?: any[]
   images?: Array<{
@@ -37,6 +38,7 @@ export interface CarFilters {
   maxMileage?: number
   fuelType?: 'diesel' | 'petrol' | 'electric'
   transmission?: 'manual' | 'automatic'
+  drivetrain?: 'fwd' | 'rwd' | 'awd'
   color?: string
   inStock?: boolean
 }

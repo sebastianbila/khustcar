@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { urlFor } from "@/lib/sanity";
 import type { Car } from "@/types/car";
 import Image from "next/image";
@@ -29,7 +28,7 @@ const getFuelTypeLabel = (fuelType: string) => {
 
 export function CarPreviewCard({ car }: CarPreviewCardProps) {
     return (
-        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div className="bg-background rounded-xl border border-border overflow-hidden hover:shadow-lg transition-shadow duration-300">
             {/* Image */}
             <Link
                 href={`/cars/${car._id}`}
@@ -64,18 +63,18 @@ export function CarPreviewCard({ car }: CarPreviewCardProps) {
                         : getTransmissionLabel(car.transmission)}
                 </p>
 
-                <div className="text-2xl font-bold text-gray-900 mb-4">
+                <div className="text-2xl font-bold text-gray-900">
                     ${(car.discountPrice || car.price).toLocaleString()}
                 </div>
 
-                <Link href={`/cars/${car._id}`} className="block">
+                {/* <Link href={`/cars/${car._id}`} className="block">
                     <Button
                         variant="outline"
                         className="w-full rounded-lg bg-background-muted border-0 shadow-md"
                     >
                         Деталі
                     </Button>
-                </Link>
+                </Link> */}
             </div>
         </div>
     );

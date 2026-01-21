@@ -20,6 +20,11 @@ export default defineType({
             title: ' ',
             options: {columns: 2},
         },
+         {
+            name: 'fuelTypeAndDrivetrainColumns',
+            title: ' ',
+            options: {columns: 2},
+        },
     ],
     fields: [
         {
@@ -75,15 +80,11 @@ export default defineType({
         {
             name: 'mileage',
             type: 'number',
-            title: 'Пробіг (км)', // Mileage (km) -> Пробіг (км)
+            title: 'Пробіг (тис. км)', // Mileage (km) -> Пробіг (км)
             validation: (rule) => rule.required().min(0),
             fieldset: 'engineAndMileageColumns',
         },
-        {
-            name: 'color',
-            type: 'string',
-            title: 'Колір', // Color -> Колір
-        },
+
         {
             name: 'fuelType',
             type: 'string',
@@ -97,6 +98,22 @@ export default defineType({
                 layout: 'radio',
             },
             validation: (rule) => rule.required(),
+            fieldset: 'fuelTypeAndDrivetrainColumns',
+        },
+         {
+            name: 'drivetrain',
+            type: 'string',
+            title: 'Привід',
+            options: {
+                list: [
+                    {title: 'Передній', value: 'fwd'},
+                    {title: 'Задній', value: 'rwd'},
+                    {title: 'Повний', value: 'awd'},
+                ],
+                layout: 'radio',
+            },
+            validation: (rule) => rule.required(),
+            fieldset: 'fuelTypeAndDrivetrainColumns',
         },
         {
             name: 'transmission',
@@ -110,6 +127,11 @@ export default defineType({
                 layout: 'radio',
             },
             validation: (rule) => rule.required(),
+        },
+         {
+            name: 'color',
+            type: 'string',
+            title: 'Колір', // Color -> Колір
         },
         {
             name: 'inStock',
