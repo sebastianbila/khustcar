@@ -110,54 +110,42 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
     return (
         <div className="bg-gray-50 min-h-screen pb-12">
-            <div className="container-custom py-8">
+            {/* Navigation Section */}
+            <div className="container-custom py-6">
                 <Link
                     href="/catalog"
-                    className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors mb-6"
+                    className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Назад до каталогу
                 </Link>
+            </div>
 
-                <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
-                    {/* Left Column - Content */}
-                    <div className="lg:col-span-2 space-y-8">
-                        {/* Image Gallery */}
-                        <div className="bg-white rounded-2xl shadow-sm">
-                            <div className="relative aspect-16/10 bg-gray-100 rounded-xl overflow-hidden group">
+            {/* Main Layout Grid */}
+            <div className="max-w-[1440px] mx-auto p-5">
+                <div className="flex flex-col xl:grid xl:grid-cols-3 xl:gap-x-8 xl:px-8 items-start">
+
+                    {/* 1. Image Gallery - Full width on mobile, 2/3 on desktop */}
+                    <div className="xl:col-span-2 w-full xl:mb-8">
+                        <div className="bg-white xl:rounded-2xl xl:shadow-sm overflow-hidden">
+                            <div className="relative aspect-16/11 sm:aspect-16/10 bg-gray-100 group">
                                 {media.length > 0 ? (
                                     <>
-                                        {media[selectedImageIndex].type ===
-                                        "video" ? (
+                                        {media[selectedImageIndex].type === "video" ? (
                                             <video
-                                                src={
-                                                    media[selectedImageIndex]
-                                                        .src
-                                                }
+                                                src={media[selectedImageIndex].src}
                                                 controls
                                                 className="w-full h-full object-contain"
-                                                poster={
-                                                    media[selectedImageIndex]
-                                                        .poster
-                                                }
+                                                poster={media[selectedImageIndex].poster}
                                                 playsInline
                                             />
                                         ) : (
                                             <button
-                                                className="w-full h-full relative"
-                                                onClick={() =>
-                                                    setIsLightboxOpen(true)
-                                                }
+                                                className="w-full h-full relative cursor-zoom-in"
+                                                onClick={() => setIsLightboxOpen(true)}
                                             >
                                                 <Image
-                                                    src={urlFor(
-                                                        media[
-                                                            selectedImageIndex
-                                                        ],
-                                                    )
-                                                        .width(1200)
-                                                        .height(800)
-                                                        .url()}
+                                                    src={urlFor(media[selectedImageIndex]).width(1200).height(800).url()}
                                                     alt={`${car.brand} ${car.model}`}
                                                     fill
                                                     className="object-cover"
@@ -171,13 +159,13 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                             <>
                                                 <button
                                                     onClick={prevImage}
-                                                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
+                                                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 xl:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm xl:flex hidden"
                                                 >
                                                     <ChevronLeft className="h-5 w-5" />
                                                 </button>
                                                 <button
                                                     onClick={nextImage}
-                                                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 xl:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm xl:flex hidden"
                                                 >
                                                     <ChevronRight className="h-5 w-5" />
                                                 </button>
@@ -193,31 +181,24 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                             {/* Thumbnails */}
                             {media.length > 1 && (
-                                <div className="grid grid-cols-5 sm:grid-cols-6 gap-3 p-4">
+                                <div className="flex gap-3 py-3 xl:p-4 overflow-x-auto no-scrollbar xl:grid xl:grid-cols-6 xl:overflow-visible">
                                     {media.map((item, idx) => (
                                         <button
                                             key={idx}
-                                            onClick={() =>
-                                                setSelectedImageIndex(idx)
-                                            }
-                                            className={`relative aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 ${
+                                            onClick={() => setSelectedImageIndex(idx)}
+                                            className={`relative shrink-0 w-20 xl:w-auto aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 border-2 ${
                                                 idx === selectedImageIndex
-                                                    ? "ring-2 ring-zinc-700 ring-offset-1 opacity-100"
-                                                    : "opacity-60 hover:opacity-100"
+                                                    ? "border-zinc-800 opacity-100"
+                                                    : "border-transparent opacity-60 hover:opacity-100"
                                             }`}
                                         >
                                             {item.type === "video" ? (
                                                 <div className="w-full h-full bg-black flex items-center justify-center">
-                                                    <span className="text-white text-xs">
-                                                        Відео
-                                                    </span>
+                                                    <span className="text-white text-[10px] font-bold uppercase">Відео</span>
                                                 </div>
                                             ) : (
                                                 <Image
-                                                    src={urlFor(item)
-                                                        .width(200)
-                                                        .height(150)
-                                                        .url()}
+                                                    src={urlFor(item).width(200).height(150).url()}
                                                     alt="Мініатюра"
                                                     fill
                                                     className="object-cover"
@@ -228,43 +209,78 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 </div>
                             )}
                         </div>
+                    </div>
 
-                        {/* Specifications Card */}
-                        <div className="bg-white rounded-2xl p-8 shadow-sm">
-                            <h3 className="text-xl font-bold text-gray-900 mb-8">
+                    {/* 2. Price Section (Sidebar Position on Desktop) - Full width on mobile */}
+                    <div className="xl:row-start-1 xl:col-start-3 xl:sticky xl:top-24 w-full xl:mb-8 mt- xl:mt-0">
+                        <div className="bg-white xl:rounded-2xl p-0 sm:p-8 xl:shadow-sm border-b xl:border-none border-gray-100">
+                            <div className="mb-6">
+                                <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1">
+                                    {car.brand} {car.model}
+                                </h1>
+                                <div className="flex items-center gap-2 text-gray-500 font-medium">
+                                    <span>{car.year} рік</span>
+                                    <span className="text-gray-300">•</span>
+                                    <span>{formatMileage(car.mileage)} км</span>
+                                </div>
+                            </div>
+
+                            <div className="mb-8">
+                                <div className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
+                                    $
+                                    {(car.discountPrice || car.price).toLocaleString()}
+                                </div>
+                                {car.discountPrice && (
+                                    <div className="text-xl text-gray-400 font-medium line-through mt-1">
+                                        ${car.price.toLocaleString()}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex flex-col gap-3 py-6 border-t border-gray-100 mb-6 font-medium">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-gray-500">Стан</span>
+                                    <span className="text-gray-900">З пробігом</span>
+                                </div>
+                                <div className="flex justify-between items-start gap-4">
+                                    <span className="text-gray-500">Адреса</span>
+                                    <span className="text-gray-900 text-right">{SITE_CONFIG.contact.address}</span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3">
+                                <a href={`tel:${SITE_CONFIG.contact.phone}`} className="block w-full">
+                                    <Button className="w-full bg-zinc-900 hover:bg-zinc-800 text-white h-14 text-lg font-bold">
+                                        Зателефонувати
+                                    </Button>
+                                </a>
+                                <div className="grid grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-3 pt-2">
+                                    <Button variant="outline" className="w-full h-12 text-zinc-600 border-zinc-200">
+                                        <Heart className="h-4 w-4 mr-2" />
+                                        Зберегти
+                                    </Button>
+                                    <Button variant="outline" className="w-full h-12 text-zinc-600 border-zinc-200">
+                                        <Share2 className="h-4 w-4 mr-2" />
+                                        Поділитись
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 3. Specifications - Full width on mobile, 2/3 on desktop */}
+                    <div className="xl:col-span-2 w-full xl:mb-8">
+                        <div className="bg-white xl:rounded-2xl p-6 sm:p-8 xl:shadow-sm border-b xl:border-none border-gray-100">
+                            <h3 className="text-xl font-black text-gray-900 mb-8 uppercase tracking-wider">
                                 Характеристики
                             </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
-                                <SpecItem
-                                    icon={Calendar}
-                                    label="Рік випуску"
-                                    value={car.year}
-                                />
-                                <SpecItem
-                                    icon={Gauge}
-                                    label="Пробіг"
-                                    value={`${formatMileage(car.mileage)} км`}
-                                />
-                                <SpecItem
-                                    icon={Wrench}
-                                    label="Двигун"
-                                    value={car.engineSize}
-                                />
-                                <SpecItem
-                                    icon={Settings}
-                                    label="Коробка передач"
-                                    value={getTransmissionLabel(car.transmission)}
-                                />
-                                <SpecItem
-                                    icon={Fuel}
-                                    label="Тип палива"
-                                    value={getFuelTypeLabel(car.fuelType)}
-                                />
-                                <SpecItem
-                                    icon={Palette}
-                                    label="Колір екстер'єру"
-                                    value={car.color || "н/д"}
-                                />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
+                                <SpecItem icon={Calendar} label="Рік випуску" value={car.year} />
+                                <SpecItem icon={Gauge} label="Пробіг" value={`${formatMileage(car.mileage)} км`} />
+                                <SpecItem icon={Wrench} label="Двигун" value={car.engineSize} />
+                                <SpecItem icon={Settings} label="Коробка передач" value={getTransmissionLabel(car.transmission)} />
+                                <SpecItem icon={Fuel} label="Тип палива" value={getFuelTypeLabel(car.fuelType)} />
+                                <SpecItem icon={Palette} label="Колір" value={car.color || "н/д"} />
                                 <SpecItem
                                     icon={Car}
                                     label="Привід"
@@ -276,100 +292,24 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                               : "Повний"
                                     }
                                 />
-                                <SpecItem
-                                    icon={FileText}
-                                    label="VIN"
-                                    value="WBSJF0C50NCE12345"
-                                />
+                                <SpecItem icon={FileText} label="VIN" value="WBSJF0C50NCE12345" />
                             </div>
                         </div>
+                    </div>
 
-                        {/* Description */}
-                        {car.description && (
-                            <div className="bg-white rounded-2xl p-6 shadow-sm">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4">
-                                    Опис
+                    {/* 4. Description - Full width on mobile, 2/3 on desktop */}
+                    {car.description && (
+                        <div className="xl:col-span-2 w-full mb-12 xl:mb-0">
+                            <div className="bg-white xl:rounded-2xl p-6 sm:p-8 xl:shadow-sm">
+                                <h3 className="text-xl font-black text-gray-900 mb-6 uppercase tracking-wider">
+                                    Опис автомобіля
                                 </h3>
-                                <div className="prose prose-gray max-w-none text-gray-600">
+                                <div className="prose prose-zinc max-w-none text-gray-600 leading-relaxed text-lg">
                                     <PortableText value={car.description} />
                                 </div>
                             </div>
-                        )}
-                    </div>
-
-                    {/* Right Column - Sidebar */}
-                    <div className="relative lg:sticky lg:top-24 space-y-6">
-                        <div className="bg-white rounded-2xl p-6 shadow-sm">
-                            <div className="mb-6">
-                                <h1 className="text-3xl font-bold text-gray-900 mb-1">
-                                    {car.brand} {car.model}
-                                </h1>
-                                <p className="text-gray-500 font-medium">
-                                    {car.year}
-                                </p>
-                            </div>
-
-                            <div className="mb-4">
-                                <div>
-                                    <div className="text-4xl font-extrabold text-gray-900">
-                                        $
-                                        {(
-                                            car.discountPrice || car.price
-                                        ).toLocaleString()}
-                                    </div>
-                                    {car.discountPrice && (
-                                        <div className="text-lg text-gray-400 font-medium line-through">
-                                            ${car.price.toLocaleString()}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col gap-y-1.5 gap-x-8 text-sm border-t border-b border-gray-100 py-4 mb-6">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500">Стан</span>
-                                    <span className="font-semibold text-gray-900">
-                                        З пробігом
-                                    </span>
-                                </div>
-                                <div className="flex justify-between col-span-2">
-                                    <span className="text-gray-500">
-                                        Адреса
-                                    </span>
-                                    <span className="font-semibold text-gray-900 text-right">
-                                        {SITE_CONFIG.contact.address}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="space-y-3">
-                                <a
-                                    href={`tel:${SITE_CONFIG.contact.phone}`}
-                                    className="block w-full"
-                                >
-                                    <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white h-12 text-base">
-                                        Зателефонувати
-                                    </Button>
-                                </a>
-                                <div className="grid grid-cols-2 gap-3 pt-2">
-                                    <Button
-                                        variant="ghost"
-                                        className="w-full border border-gray-200 text-gray-600"
-                                    >
-                                        <Heart className="h-4 w-4 mr-2" />
-                                        Зберегти
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        className="w-full border border-gray-200 text-gray-600"
-                                    >
-                                        <Share2 className="h-4 w-4 mr-2" />
-                                        Поділитись
-                                    </Button>
-                                </div>
-                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
 
@@ -377,9 +317,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                 open={isLightboxOpen}
                 close={() => setIsLightboxOpen(false)}
                 slides={slides}
-                index={
-                    selectedImageIndex - (media[0]?.type === "video" ? 1 : 0)
-                }
+                index={selectedImageIndex - (media[0]?.type === "video" ? 1 : 0)}
                 plugins={[Slideshow, Thumbnails]}
                 thumbnails={{ position: "bottom", width: 120, height: 80 }}
             />
@@ -397,13 +335,13 @@ function SpecItem({
     value: string | number;
 }) {
     return (
-        <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-100 text-slate-700">
-                <Icon className="h-6 w-6" />
+        <div className="flex items-center gap-5">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 text-zinc-700 shrink-0">
+                <Icon className="h-5 w-5" />
             </div>
             <div>
-                <p className="text-sm text-gray-500 mb-1">{label}</p>
-                <p className="text-base font-bold text-gray-900 leading-none">
+                <p className="text-xs font-semibold text-gray-400 mb-0.5 uppercase tracking-wide">{label}</p>
+                <p className="text-base font-bold text-gray-900 leading-tight">
                     {value}
                 </p>
             </div>
