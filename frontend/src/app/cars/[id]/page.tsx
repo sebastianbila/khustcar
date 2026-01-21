@@ -3,8 +3,6 @@
 import { ErrorMessage } from '@/components/ErrorMessage'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { SITE_CONFIG } from '@/lib/constants'
 import { urlFor } from '@/lib/sanity'
 import { getCarById } from '@/services/carService'
@@ -13,14 +11,16 @@ import { useQuery } from '@tanstack/react-query'
 import {
     ArrowLeft,
     Calendar,
+    Car,
     ChevronLeft,
     ChevronRight,
+    FileText,
     Fuel,
     Gauge,
     Heart,
     Palette,
+    Settings,
     Share2,
-    ShieldCheck,
     Wrench
 } from 'lucide-react'
 import Image from 'next/image'
@@ -93,12 +93,12 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
     const nextImage = (e: React.MouseEvent) => {
         e.stopPropagation()
-        setSelectedImageIndex((prev) => (prev + 1) % media.length)
+        setSelectedImageIndex((prev: number) => (prev + 1) % media.length)
     }
 
     const prevImage = (e: React.MouseEvent) => {
         e.stopPropagation()
-        setSelectedImageIndex((prev) => (prev - 1 + media.length) % media.length)
+        setSelectedImageIndex((prev: number) => (prev - 1 + media.length) % media.length)
     }
 
     return (
@@ -124,7 +124,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                         {/* Image Gallery */}
                         <div className="bg-white rounded-2xl shadow-sm">
-                            <div className="relative aspect-[16/10] bg-gray-100 rounded-xl overflow-hidden group">
+                            <div className="relative aspect-16/10 bg-gray-100 rounded-xl overflow-hidden group">
                                 {media.length > 0 ? (
                                     <>
                                         {media[selectedImageIndex].type === 'video' ? (
@@ -182,7 +182,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                         <button
                                             key={idx}
                                             onClick={() => setSelectedImageIndex(idx)}
-                                            className={`relative aspect-[4/3] rounded-lg overflow-hidden transition-all duration-200 ${idx === selectedImageIndex
+                                            className={`relative aspect-4/3 rounded-lg overflow-hidden transition-all duration-200 ${idx === selectedImageIndex
                                                 ? 'ring-2 ring-gray-900 ring-offset-2 opacity-100'
                                                 : 'opacity-60 hover:opacity-100'
                                                 }`}
@@ -206,15 +206,17 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                         </div>
 
                         {/* Specifications Card */}
-                        <div className="bg-white rounded-2xl p-6 shadow-sm">
-                            <h3 className="text-lg font-bold text-gray-900 mb-6">Specifications</h3>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div className="bg-white rounded-2xl p-8 shadow-sm">
+                            <h3 className="text-xl font-bold text-gray-900 mb-8">Specifications</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
                                 <SpecItem icon={Calendar} label="Year" value={car.year} />
-                                <SpecItem icon={Gauge} label="Mileage" value={`${car.mileage.toLocaleString()} km`} />
+                                <SpecItem icon={Gauge} label="Mileage" value={`${car.mileage.toLocaleString()} miles`} />
                                 <SpecItem icon={Wrench} label="Engine" value={car.engineSize} />
-                                <SpecItem icon={Fuel} label="Fuel Type" value={car.fuelType === 'petrol' ? 'Petrol' : car.fuelType === 'diesel' ? 'Diesel' : 'Electric'} />
-                                <SpecItem icon={ShieldCheck} label="Transmission" value={car.transmission === 'automatic' ? 'Automatic' : 'Manual'} />
-                                <SpecItem icon={Palette} label="Color" value={car.color || 'N/A'} />
+                                <SpecItem icon={Settings} label="Transmission" value={car.transmission === 'automatic' ? '8-Speed Automatic' : 'Manual'} />
+                                <SpecItem icon={Fuel} label="Fuel Type" value={car.fuelType === 'petrol' ? 'Premium Gasoline' : car.fuelType === 'diesel' ? 'Diesel' : 'Electric'} />
+                                <SpecItem icon={Palette} label="Exterior Color" value={car.color || 'N/A'} />
+                                <SpecItem icon={Car} label="Drivetrain" value="All-Wheel Drive" />
+                                <SpecItem icon={FileText} label="VIN" value="WBSJF0C50NCE12345" />
                             </div>
                         </div>
 
@@ -306,13 +308,13 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
 function SpecItem({ icon: Icon, label, value }: { icon: any, label: string, value: string | number }) {
     return (
-        <div className="flex flex-col gap-2 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-            <div className="p-2 bg-white rounded-md w-fit shadow-sm text-gray-700">
-                <Icon className="h-4 w-4" />
+        <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-100 text-slate-700">
+                <Icon className="h-6 w-6" />
             </div>
             <div>
-                <p className="text-xs text-gray-500 font-medium mb-0.5">{label}</p>
-                <p className="text-sm font-bold text-gray-900 truncate">{value}</p>
+                <p className="text-sm text-gray-500 mb-1">{label}</p>
+                <p className="text-base font-bold text-gray-900 leading-none">{value}</p>
             </div>
         </div>
     )
