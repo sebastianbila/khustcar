@@ -11,8 +11,8 @@ import { getCarById } from "@/services/carService";
 import { useFavoritesStore } from "@/stores/favoritesStore";
 import { PortableText } from "@portabletext/react";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
 import {
+    Activity,
     Calendar,
     Car,
     ChevronLeft,
@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { use, useMemo, useState } from "react";
+import { toast } from "sonner";
 import Lightbox from "yet-another-react-lightbox";
 import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -272,8 +273,8 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                             <div className="flex flex-col gap-3 py-2 lg:py-6 border-t border-gray-100 mb-6 font-medium">
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500">Стан</span>
-                                    <span className="text-gray-900">
-                                        З пробігом
+                                    <span className="text-gray-900 font-bold">
+                                        {car.condition ? `${car.condition}/10` : "З пробігом"}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-start gap-4">
@@ -342,7 +343,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                             <h3 className="text-xl font-black text-gray-900 mb-8 uppercase tracking-wider">
                                 Характеристики
                             </h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 lg:gap-y-8 gap-x-12">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-12">
                                 <SpecItem
                                     icon={Calendar}
                                     label="Рік випуску"
@@ -391,6 +392,13 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                     label="VIN"
                                     value="WBSJF0C50NCE12345"
                                 />
+                                {car.condition && (
+                                    <SpecItem
+                                        icon={Activity}
+                                        label="Технічний стан"
+                                        value={`${car.condition}/10`}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>
@@ -441,7 +449,7 @@ function SpecItem({
 }) {
     return (
         <div className="flex items-center gap-5">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 text-zinc-700 shrink-0">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-background-elevated text-zinc-700 shrink-0">
                 <Icon className="h-5 w-5" />
             </div>
             <div>

@@ -32,7 +32,7 @@ export function HeroSection() {
             <div
                 className="absolute inset-0 z-0"
                 style={{
-                    backgroundImage: `url('/images/hero-car-bg.png')`,
+                    backgroundImage: `url('/images/hero-car-background.png')`,
                     backgroundPosition: "center",
                     backgroundSize: "cover",
                     transform: `translateY(${offset * 0.3}px)`, // Apply parallax translation

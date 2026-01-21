@@ -12,6 +12,7 @@ export interface Car {
   fuelType: 'diesel' | 'petrol' | 'electric'
   transmission: 'manual' | 'automatic'
   drivetrain?: 'fwd' | 'rwd' | 'awd'
+  condition?: number
   inStock: boolean
   description?: any[]
   images?: Array<{

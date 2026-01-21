@@ -16,6 +16,11 @@
         var(--color-gray-200) 30%,
         transparent
     );
+    --color-background-elevated: color-mix(
+        in oklch,
+        var(--color-gray-200) 80%,
+        transparent
+    );
 
     --color-foreground: var(--color-zinc-800);
 

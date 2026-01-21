@@ -60,6 +60,11 @@ export async function getCars(filters?: CarFilters): Promise<Car[]> {
     params.transmission = filters.transmission
   }
 
+  if (filters?.drivetrain) {
+    query += ' && drivetrain == $drivetrain'
+    params.drivetrain = filters.drivetrain
+  }
+
   if (filters?.color) {
     query += ' && color == $color'
     params.color = filters.color
