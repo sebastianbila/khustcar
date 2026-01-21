@@ -32,7 +32,7 @@ import {
     Wrench,
 } from "lucide-react";
 import Image from "next/image";
-import { use, useMemo, useState } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import Lightbox from "yet-another-react-lightbox";
 import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
@@ -50,6 +50,24 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const { toggleFavorite, isFavorite } = useFavoritesStore();
     const isCarFavorite = isFavorite(id);
+
+    // Scroll selected thumbnail into view
+    const thumbnailsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (thumbnailsRef.current) {
+            const selectedThumbnail = thumbnailsRef.current.children[
+                selectedImageIndex
+            ] as HTMLElement;
+            if (selectedThumbnail) {
+                selectedThumbnail.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "center",
+                });
+            }
+        }
+    }, [selectedImageIndex]);
 
     const {
         data: car,
@@ -113,6 +131,8 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
         e.stopPropagation();
         setSelectedImageIndex((prev: number) => (prev + 1) % media.length);
     };
+
+
 
     const prevImage = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -205,7 +225,10 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                             {/* Thumbnails */}
                             {media.length > 1 && (
-                                <div className="flex gap-3 py-3 overflow-x-auto no-scrollbar">
+                                <div
+                                    ref={thumbnailsRef}
+                                    className="flex gap-3 py-3 overflow-x-auto no-scrollbar"
+                                >
                                     {media.map((item, idx) => (
                                         <button
                                             key={
@@ -448,6 +471,12 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                 index={
                     selectedImageIndex - (media[0]?.type === "video" ? 1 : 0)
                 }
+                on={{
+                    view: ({ index }) => {
+                        const hasVideo = media[0]?.type === "video";
+                        setSelectedImageIndex(index + (hasVideo ? 1 : 0));
+                    },
+                }}
                 plugins={[Slideshow, Thumbnails]}
                 thumbnails={{
                     position: "bottom",
