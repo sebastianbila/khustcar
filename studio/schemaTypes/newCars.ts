@@ -9,12 +9,6 @@ export default defineType({
   icon: () => '⭐',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Заголовок',
-      type: 'string',
-      initialValue: 'Нові Надходження',
-    }),
-    defineField({
       name: 'cars',
       title: 'Список автомобілів',
       type: 'array',
@@ -28,7 +22,7 @@ export default defineType({
     },
     prepare({ title }) {
       return {
-        title: title || 'Нові Надходження',
+        title:  'Новинки',
       }
     },
   },

@@ -6,7 +6,7 @@ export const structure: StructureResolver = (S) =>
     .items([
       // Our singleton "config page"
       S.listItem()
-        .title('Нові Надходження')
+        .title('Новинки')
         .id('newCarsSingleton')
         .icon(() => '⭐')
         .child(
