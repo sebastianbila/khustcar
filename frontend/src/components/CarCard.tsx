@@ -58,6 +58,14 @@ export function CarCard({ car }: CarCardProps) {
                         </Badge>
                     </div>
                 )}
+
+                {car.inStock && car.discountPrice && (
+                    <div className="absolute top-3 left-3 z-10">
+                        <Badge className="bg-emerald-600 text-white border-none font-bold px-2 py-1 rounded shadow-sm">
+                            -{Math.abs(Math.round(((car.price - car.discountPrice) / car.price) * 100))}%
+                        </Badge>
+                    </div>
+                )}
             </Link>
             <CardContent className="p-4 grow flex flex-col">
                 <div className="flex justify-between items-start mb-2">

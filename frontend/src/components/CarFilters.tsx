@@ -229,10 +229,10 @@ export function CarFilters({
                             Всі Типи
                         </NativeSelectOption>
                         <NativeSelectOption value="manual">
-                            Механічна
+                            Механіка
                         </NativeSelectOption>
                         <NativeSelectOption value="automatic">
-                            Автоматична
+                            Автомат
                         </NativeSelectOption>
                     </NativeSelect>
                 </div>

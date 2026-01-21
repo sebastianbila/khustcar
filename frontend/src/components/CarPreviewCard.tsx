@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { urlFor } from "@/lib/sanity";
 import type { Car } from "@/types/car";
 import Image from "next/image";
@@ -7,6 +8,7 @@ import Link from "next/link";
 
 interface CarPreviewCardProps {
     car: Car;
+    isNew?: boolean;
 }
 
 const getTransmissionLabel = (transmission: string) => {
@@ -26,7 +28,7 @@ const getFuelTypeLabel = (fuelType: string) => {
     }
 };
 
-export function CarPreviewCard({ car }: CarPreviewCardProps) {
+export function CarPreviewCard({ car, isNew }: CarPreviewCardProps) {
     return (
         <div className="bg-background rounded-xl border border-border overflow-hidden hover:shadow-lg transition-shadow duration-300">
             {/* Image */}
@@ -44,6 +46,20 @@ export function CarPreviewCard({ car }: CarPreviewCardProps) {
                     fill
                     className="object-cover"
                 />
+
+                {car.inStock && car.discountPrice && (
+                    <div className="absolute top-3 left-3 z-10">
+                        <Badge className="bg-emerald-600 text-white border-none font-bold px-2 py-1 rounded shadow-sm">
+                            -{Math.abs(Math.round(((car.price - car.discountPrice) / car.price) * 100))}%
+                        </Badge>
+                    </div>
+                )}
+
+                {isNew && (
+                    <div className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-1 rounded-full text-xs font-medium z-10">
+                        Новинка
+                    </div>
+                )}
             </Link>
 
             {/* Content */}
@@ -63,8 +79,15 @@ export function CarPreviewCard({ car }: CarPreviewCardProps) {
                         : getTransmissionLabel(car.transmission)}
                 </p>
 
-                <div className="text-2xl font-bold text-gray-900">
-                    ${(car.discountPrice || car.price).toLocaleString()}
+                <div className="flex items-center gap-2">
+                    {car.discountPrice && (
+                        <span className="text-sm text-gray-400 line-through">
+                            ${car.price.toLocaleString()}
+                        </span>
+                    )}
+                    <div className="text-2xl font-bold text-gray-900">
+                        ${(car.discountPrice || car.price).toLocaleString()}
+                    </div>
                 </div>
 
                 {/* <Link href={`/cars/${car._id}`} className="block">

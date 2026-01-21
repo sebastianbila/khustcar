@@ -256,7 +256,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                     value={
                                         car.transmission === "automatic"
                                             ? "Автомат"
-                                            : "Механічна"
+                                            : "Механіка"
                                     }
                                 />
                                 <SpecItem

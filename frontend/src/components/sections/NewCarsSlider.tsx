@@ -1,29 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { urlFor } from "@/lib/sanity";
+import { CarPreviewCard } from "@/components/CarPreviewCard";
 import type { Car } from "@/types/car";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 interface NewCarsSliderProps {
     cars: Car[];
 }
 
-const getFuelTypeLabel = (fuelType: string) => {
-    switch (fuelType) {
-        case "diesel":
-            return "Дизель";
-        case "electric":
-            return "Електро";
-        case "hybrid":
-            return "Гібрид";
-        default:
-            return "Бензин";
-    }
-};
+
 
 export function NewCarsSlider({ cars }: NewCarsSliderProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -105,65 +91,7 @@ export function NewCarsSlider({ cars }: NewCarsSliderProps) {
                                     width: `calc(${100 / cardsPerView}% - ${((cardsPerView - 1) * 24) / cardsPerView}px)`,
                                 }}
                             >
-                                <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-                                    {/* Image */}
-                                    <div className="relative aspect-4/3 bg-gray-50 overflow-hidden">
-                                        <Image
-                                            src={
-                                                car.images?.[0]
-                                                    ? urlFor(car.images[0])
-                                                          .width(600)
-                                                          .height(450)
-                                                          .url()
-                                                    : "/placeholder-car.jpg"
-                                            }
-                                            alt={`${car.brand} ${car.model}`}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                        <div className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-1 rounded-full text-xs font-medium">
-                                            Новинка
-                                        </div>
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className="p-5">
-                                        <h3 className="text-lg font-bold text-gray-900 mb-1">
-                                            {car.brand} {car.model}
-                                        </h3>
-                                        <p className="text-sm text-gray-500 mb-4">
-                                            {car.year} •{" "}
-                                            {car.transmission === "automatic"
-                                                ? "Автомат"
-                                                : "Механіка"}{" "}
-                                            • {getFuelTypeLabel(car.fuelType)}
-                                        </p>
-
-                                        <div className="flex items-end justify-between">
-                                            <div>
-                                                <div className="text-2xl font-bold text-gray-900">
-                                                    $
-                                                    {(car.discountPrice || car.price).toLocaleString()}
-                                                </div>
-                                                <div className="text-xs text-gray-400">
-                                                    Від $
-                                                    {Math.round(
-                                                        (car.discountPrice || car.price) / 60
-                                                    ).toLocaleString()}
-                                                    /міс
-                                                </div>
-                                            </div>
-                                            <Link href={`/cars/${car._id}`}>
-                                                <Button
-                                                    size="sm"
-                                                    className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg px-4"
-                                                >
-                                                    Деталі
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
+                                <CarPreviewCard car={car} isNew={true} />
                             </div>
                         ))}
                     </div>

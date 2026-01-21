@@ -3,7 +3,7 @@ export const SITE_CONFIG = {
   description: 'Ваш надійний партнер в автомобільній досконалості',
   contact: {
     phone: '+380 (96) 832-8880',
-    email: 'info@carmanagement.com',
+    email: 'info@khustcar.com',
     address: 'вул. Окружка, м. Хуст',
   },
   social: {
