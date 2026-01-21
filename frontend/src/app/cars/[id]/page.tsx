@@ -183,13 +183,13 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                             <>
                                                 <button
                                                     onClick={prevImage}
-                                                    className="absolute left-4 top-1/2 -translate-y-1/2 lg:bg-white/80 hover:lg:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 lg:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm lg:flex hidden"
+                                                    className="absolute z-50 left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg backdrop-blur-sm flex transition-all duration-300 opacity-100"
                                                 >
                                                     <ChevronLeft className="h-5 w-5" />
                                                 </button>
                                                 <button
                                                     onClick={nextImage}
-                                                    className="absolute right-4 top-1/2 -translate-y-1/2 lg:bg-white/80 hover:lg:bg-white text-gray-800 p-2 rounded-full shadow-lg opacity-0 lg:group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm lg:flex hidden"
+                                                    className="absolute z-50 right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg backdrop-blur-sm flex transition-all duration-300 opacity-100"
                                                 >
                                                     <ChevronRight className="h-5 w-5" />
                                                 </button>
