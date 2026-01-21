@@ -21,7 +21,7 @@ export function CarCard({ car }: CarCardProps) {
     return (
         <Card
             className={cn(
-                "overflow-hidden hover:shadow-xl transition-all duration-300 group shadow-xs",
+                "overflow-hidden hover:shadow-md transition-all duration-300 group shadow-xs",
                 "relative pt-0 pb-2 bg-background gap-y-0",
                 !car.inStock && "opacity-70",
             )}
@@ -42,13 +42,13 @@ export function CarCard({ car }: CarCardProps) {
 
                 {/* Heart Icon Overlay */}
                 <button
-                    className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md text-gray-400 hover:text-rose-500 transition-colors duration-500 z-10"
+                    className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:text-rose-500 z-10 group/heart cursor-pointer text-text-light transition-colors"
                     onClick={(e) => {
                         e.preventDefault();
                         // Save functionality
                     }}
                 >
-                    <Heart className="h-4 w-4" />
+                    <Heart className="h-4 w-4 group-hover/heart:text-rose-500 duration-500" />
                 </button>
 
                 {!car.inStock && (
@@ -79,8 +79,8 @@ export function CarCard({ car }: CarCardProps) {
 
                 <div className="text-xs text-gray-500 mb-4 font-medium">
                     {car.brand} {car.model} •{" "}
-                    {car.transmission === "automatic" ? "Automatic" : "Manual"}{" "}
-                    • {car.mileage.toLocaleString()} miles
+                    {car.transmission === "automatic" ? "Автомат" : "Механіка"}{" "}
+                    • {car.mileage.toLocaleString()} км
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-50">
@@ -88,13 +88,11 @@ export function CarCard({ car }: CarCardProps) {
                         <div className="text-xl font-extrabold text-gray-900">
                             ${(car.discountPrice || car.price).toLocaleString()}
                         </div>
-                        <div className="text-[11px] text-gray-400 font-medium">
-                            $
-                            {Math.round(
-                                (car.discountPrice || car.price) / 60,
-                            ).toLocaleString()}
-                            /mo financing
-                        </div>
+                        {car.discountPrice && (
+                            <div className="text-[11px] text-gray-400 font-medium line-through">
+                                ${car.price.toLocaleString()}
+                            </div>
+                        )}
                     </div>
 
                     <Link
