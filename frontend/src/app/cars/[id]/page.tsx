@@ -1,11 +1,11 @@
 "use client";
 
 import { ErrorMessage } from "@/components/ErrorMessage";
+import { ImageGallery } from "@/components/ImageGallery";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/lib/constants";
-import { urlFor } from "@/lib/sanity";
 import {
     cn,
     formatMileage,
@@ -20,8 +20,6 @@ import {
     Activity,
     Calendar,
     Car,
-    ChevronLeft,
-    ChevronRight,
     FileText,
     Fuel,
     Gauge,
@@ -31,14 +29,8 @@ import {
     Share2,
     Wrench,
 } from "lucide-react";
-import Image from "next/image";
-import { use, useEffect, useMemo, useRef, useState } from "react";
+import { use, useMemo } from "react";
 import { toast } from "sonner";
-import Lightbox from "yet-another-react-lightbox";
-import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
-import "yet-another-react-lightbox/styles.css";
 
 interface CarDetailPageProps {
     params: Promise<{ id: string }>;
@@ -46,28 +38,8 @@ interface CarDetailPageProps {
 
 export default function CarDetailPage({ params }: CarDetailPageProps) {
     const { id } = use(params);
-    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const { toggleFavorite, isFavorite } = useFavoritesStore();
     const isCarFavorite = isFavorite(id);
-
-    // Scroll selected thumbnail into view
-    const thumbnailsRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (thumbnailsRef.current) {
-            const selectedThumbnail = thumbnailsRef.current.children[
-                selectedImageIndex
-            ] as HTMLElement;
-            if (selectedThumbnail) {
-                selectedThumbnail.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "center",
-                });
-            }
-        }
-    }, [selectedImageIndex]);
 
     const {
         data: car,
@@ -80,7 +52,12 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
     // Unified media array
     const media = useMemo(() => {
-        const items = [];
+        const items: Array<{
+            type: "video" | "image";
+            src?: string;
+            poster?: string;
+            asset?: { _ref: string };
+        }> = [];
         if (car?.videoUrl) {
             items.push({
                 type: "video",
@@ -95,21 +72,6 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
         }
         return items;
     }, [car]);
-
-    // Prepare slides for lightbox
-    const slides = useMemo(() => {
-        return media
-            .filter((item) => item.type === "image")
-            .map((item) => ({
-                type: "image" as const,
-                src: urlFor(item)
-                    .ignoreImageParams()
-                    .width(1920)
-                    .auto("format")
-                    .url(),
-                alt: `${car?.brand} ${car?.model}`,
-            }));
-    }, [media, car]);
 
     if (isLoading) {
         return (
@@ -127,20 +89,6 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
         );
     }
 
-    const nextImage = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setSelectedImageIndex((prev: number) => (prev + 1) % media.length);
-    };
-
-
-
-    const prevImage = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setSelectedImageIndex(
-            (prev: number) => (prev - 1 + media.length) % media.length,
-        );
-    };
-
     return (
         <div className="bg-gray-50 min-h-screen pb-2">
             <PageHeader
@@ -152,122 +100,10 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                 <div className="flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-8  items-start">
                     {/* 1. Image Gallery - Full width on mobile, 2/3 on desktop */}
                     <div className="lg:col-span-2 w-full lg:mb-6">
-                        <div className="lg:bg-white lg:rounded-2xl lg:shadow-sm overflow-hidden">
-                            <div className="relative aspect-16/11 sm:aspect-16/10 bg-gray-100 group">
-                                {media.length > 0 ? (
-                                    <>
-                                        {media[selectedImageIndex].type ===
-                                        "video" ? (
-                                            <video
-                                                src={
-                                                    media[selectedImageIndex]
-                                                        .src
-                                                }
-                                                controls
-                                                className="w-full h-full object-contain"
-                                                poster={
-                                                    media[selectedImageIndex]
-                                                        .poster
-                                                }
-                                                playsInline
-                                            >
-                                                <track kind="captions" />
-                                            </video>
-                                        ) : (
-                                            <button
-                                                className="w-full h-full relative cursor-zoom-in"
-                                                onClick={() =>
-                                                    setIsLightboxOpen(true)
-                                                }
-                                            >
-                                                <Image
-                                                    src={urlFor(
-                                                        media[
-                                                            selectedImageIndex
-                                                        ],
-                                                    )
-                                                        .ignoreImageParams()
-                                                        .width(1200)
-                                                        .auto("format")
-                                                        .url()}
-                                                    alt={`${car.brand} ${car.model}`}
-                                                    fill
-                                                    className="object-cover"
-                                                    priority
-                                                />
-                                            </button>
-                                        )}
-
-                                        {/* Navigation Arrows */}
-                                        {media.length > 1 && (
-                                            <>
-                                                <button
-                                                    onClick={prevImage}
-                                                    className="absolute z-50 left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg backdrop-blur-sm flex transition-all duration-300 opacity-100"
-                                                >
-                                                    <ChevronLeft className="h-5 w-5" />
-                                                </button>
-                                                <button
-                                                    onClick={nextImage}
-                                                    className="absolute z-50 right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg backdrop-blur-sm flex transition-all duration-300 opacity-100"
-                                                >
-                                                    <ChevronRight className="h-5 w-5" />
-                                                </button>
-                                            </>
-                                        )}
-                                    </>
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                        Зображення відсутні
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Thumbnails */}
-                            {media.length > 1 && (
-                                <div
-                                    ref={thumbnailsRef}
-                                    className="flex gap-3 py-3 overflow-x-auto no-scrollbar"
-                                >
-                                    {media.map((item, idx) => (
-                                        <button
-                                            key={
-                                                (item as any).asset?._ref ||
-                                                (item as any).src ||
-                                                idx
-                                            }
-                                            onClick={() =>
-                                                setSelectedImageIndex(idx)
-                                            }
-                                            className={`relative shrink-0 w-25 lg:w-20 aspect-4/3 overflow-hidden transition-all duration-200 border-2 ${
-                                                idx === selectedImageIndex
-                                                    ? "border-gray-400 opacity-100"
-                                                    : "border-gray-100 opacity-60 hover:opacity-100"
-                                            }`}
-                                        >
-                                            {item.type === "video" ? (
-                                                <div className="w-full h-full bg-black flex items-center justify-center">
-                                                    <span className="text-white text-[10px] font-bold uppercase">
-                                                        Відео
-                                                    </span>
-                                                </div>
-                                            ) : (
-                                                <Image
-                                                    src={urlFor(item)
-                                                        .ignoreImageParams()
-                                                        .width(400)
-                                                        .auto("format")
-                                                        .url()}
-                                                    alt="Мініатюра"
-                                                    fill
-                                                    className="object-cover"
-                                                />
-                                            )}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                        <ImageGallery
+                            media={media}
+                            alt={`${car.brand} ${car.model}`}
+                        />
                     </div>
 
                     {/* 2. Price Section (Sidebar Position on Desktop) - Full width on mobile */}
@@ -463,28 +299,6 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                     )}
                 </div>
             </div>
-
-            <Lightbox
-                open={isLightboxOpen}
-                close={() => setIsLightboxOpen(false)}
-                slides={slides}
-                index={
-                    selectedImageIndex - (media[0]?.type === "video" ? 1 : 0)
-                }
-                on={{
-                    view: ({ index }) => {
-                        const hasVideo = media[0]?.type === "video";
-                        setSelectedImageIndex(index + (hasVideo ? 1 : 0));
-                    },
-                }}
-                plugins={[Slideshow, Thumbnails]}
-                thumbnails={{
-                    position: "bottom",
-                    width: 120,
-                    height: 80,
-                    borderColor: "#262626",
-                }}
-            />
         </div>
     );
 }
