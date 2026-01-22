@@ -42,14 +42,32 @@ export default defineType({
             fieldset: "generalDetailsColumn",
         },
         {
-            title: "Slug",
+            title: "Посилання",
             name: "slug",
             type: "slug",
+            validation: (rule) => rule.required(),
             options: {
-                source: "title",
-                maxLength: 200, // will be ignored if slugify is set
-                slugify: (input) =>
-                    input.toLowerCase().replace(/\s+/g, "-").slice(0, 200),
+                source: (doc: any) => {
+                    const parts = [
+                        doc.brand,
+                        doc.model,
+                        doc.year,
+                        doc.fuelType,
+                        doc.transmission,
+                        doc.drivetrain,
+                        doc.vin,
+                        doc.color,
+                    ].filter(Boolean);
+
+                    return parts.join(" ");
+                },
+                slugify: (input: string) =>
+                    input
+                        .toLowerCase()
+                        .trim()
+                        .replaceAll(/[^a-z0-9]+/g, "-")
+                        .replaceAll(/(^-|-$)+/g, "")
+                        .slice(0, 200),
             },
         },
         {
@@ -131,7 +149,7 @@ export default defineType({
         {
             name: "transmission",
             type: "string",
-            title: "Коробка передач", // Transmission -> Коробка передач
+            title: "Коробка передач",
             options: {
                 list: [
                     { title: "Ручна", value: "manual" },
@@ -143,9 +161,16 @@ export default defineType({
             fieldset: "carDetailsColumn",
         },
         {
+            name: "vin",
+            type: "string",
+            title: "VIN Код",
+            description: "(необов'язково)",
+            fieldset: "carDetailsColumn",
+        },
+        {
             name: "color",
             type: "string",
-            title: "Колір", // Color -> Колір
+            title: "Колір",
         },
         {
             name: "inStock",
