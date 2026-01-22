@@ -9,7 +9,7 @@ interface NewCarsSliderProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function NewCarsSlider({ cars, className, ...props }: Readonly<NewCarsSliderProps>) {
-    if (cars?.length === 0) return null;
+    if (cars?.length < 1) return null;
 
     // Show only first 4 cars for the homepage arrival section, or all if preferred.
     // Given it's a "New Arrivals" section, showing a fixed amount makes sense for a grid.

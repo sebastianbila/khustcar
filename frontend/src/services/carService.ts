@@ -114,6 +114,10 @@ function getSortClause(sort: string): string {
       return '| order(mileage asc)'
     case 'mileage-desc':
       return '| order(mileage desc)'
+    case 'date-asc':
+      return '| order(_createdAt asc)'
+    case 'date-desc':
+      return '| order(_createdAt desc)'
     default:
       return '| order(brand asc, model asc)'
   }

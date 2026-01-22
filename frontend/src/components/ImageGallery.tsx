@@ -57,6 +57,15 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
     const onSelect = useCallback(() => {
         if (!emblaApi) return;
         setSelectedIndex(emblaApi.selectedScrollSnap());
+
+        // Pause all videos when slide changes
+        const rootNode = emblaApi.rootNode();
+        const videos = rootNode.querySelectorAll("video");
+        videos.forEach((video) => {
+            if (!video.paused) {
+                video.pause();
+            }
+        });
     }, [emblaApi]);
 
     useEffect(() => {

@@ -4,13 +4,10 @@ import { ActiveFilters } from "@/components/ActiveFilters";
 import { CarCard } from "@/components/CarCard";
 import { CarFilters as CarFiltersComponent } from "@/components/CarFilters";
 import { CarPagination } from "@/components/CarPagination";
+import { CarSort, SortOption } from "@/components/CarSort";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
-import {
-    NativeSelect,
-    NativeSelectOption,
-} from "@/components/ui/native-select";
 import {
     Sheet,
     SheetContent,
@@ -29,15 +26,6 @@ import { useQuery } from "@tanstack/react-query";
 import { SlidersHorizontal } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
-
-type SortOption =
-    | "price-asc"
-    | "price-desc"
-    | "year-asc"
-    | "year-desc"
-    | "mileage-asc"
-    | "mileage-desc"
-    | "";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -200,36 +188,7 @@ function CatalogContent() {
                         </>
                     }
                     actions={
-                        <>
-                            <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                                Сортувати за:
-                            </span>
-                            <NativeSelect
-                                id="sort-by"
-                                value={sortBy}
-                                onChange={(
-                                    e: React.ChangeEvent<HTMLSelectElement>,
-                                ) => setSortBy(e.target.value as SortOption)}
-                                size="sm"
-                                className="w-auto min-w-[180px]"
-                            >
-                                <NativeSelectOption value="">
-                                    Рекомендовані
-                                </NativeSelectOption>
-                                <NativeSelectOption value="price-asc">
-                                    Ціна: від дешевих до дорогих
-                                </NativeSelectOption>
-                                <NativeSelectOption value="price-desc">
-                                    Ціна: від дорогих до дешевих
-                                </NativeSelectOption>
-                                <NativeSelectOption value="year-desc">
-                                    Рік: спочатку нові
-                                </NativeSelectOption>
-                                <NativeSelectOption value="year-asc">
-                                    Рік: спочатку старі
-                                </NativeSelectOption>
-                            </NativeSelect>
-                        </>
+                        <CarSort value={sortBy} onChange={setSortBy} />
                     }
                 />
                 <div className="py-8 container-custom">

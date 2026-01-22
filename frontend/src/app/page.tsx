@@ -19,12 +19,12 @@ import { useEffect } from "react";
 
 export default function HomePage() {
     const {
-        data: cars = [],
+        data: carsData = { cars: [], total: 0 },
         isLoading: carsLoading,
         error,
     } = useQuery({
-        queryKey: ["cars"],
-        queryFn: () => getCars(),
+        queryKey: ["cars", "preview"],
+        queryFn: () => getCars(undefined, 1, 4, "date-desc"),
     });
 
     const { data: featuredCars = [] } = useQuery({
@@ -73,7 +73,7 @@ export default function HomePage() {
 
             {/* Catalog Preview */}
             <CatalogPreviewSection
-                cars={cars}
+                cars={carsData.cars}
                 className={getSectionBg(1)}
                 data-aos="fade-up"
             />

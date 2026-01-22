@@ -12,6 +12,8 @@ interface CatalogPreviewSectionProps extends React.HTMLAttributes<HTMLDivElement
 }
 
 export function CatalogPreviewSection({ cars, className, ...props }: CatalogPreviewSectionProps) {
+    if (cars?.length < 1) return null;
+
     // Show only first 4 cars in preview
     const previewCars = cars.slice(0, 4);
 
