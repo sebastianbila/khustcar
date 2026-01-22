@@ -191,6 +191,7 @@ function CatalogContent() {
                             <SheetContent
                                 side="left"
                                 className="w-full sm:w-96"
+                                onOpenAutoFocus={(e) => e.preventDefault()}
                             >
                                 <SheetHeader>
                                     <SheetTitle>Фільтри</SheetTitle>

@@ -20,7 +20,7 @@ export function PageHeader({
     subtitle,
     actions,
     backLink,
-}: PageHeaderProps) {
+}: Readonly<PageHeaderProps>) {
     return (
         <section className="py-6 border-b border-b-border bg-background">
             <div className="container-custom flex flex-col md:flex-row md:items-end justify-between gap-4">
