@@ -243,9 +243,12 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                                         <video
                                             src={item.src}
                                             controls
-                                            className="w-full h-full object-contain"
+                                            className="w-full h-full object-contain pointer-events-auto"
                                             poster={item.poster}
                                             playsInline
+                                            preload="metadata"
+                                            onTouchStart={(e) => e.stopPropagation()}
+                                            onMouseDown={(e) => e.stopPropagation()}
                                         >
                                             <track kind="captions" />
                                         </video>

@@ -1,6 +1,5 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { ThemeProvider } from "@/components/theme-provider";
 import { SITE_CONFIG } from "@/lib/constants";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
@@ -26,12 +25,6 @@ export default function RootLayout({
     <html lang="uk">
       <body>
         <Providers>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem={false}
-            disableTransitionOnChange
-          >
             <div className="flex flex-col w-full min-h-screen">
               <Header />
               <main className="flex-1 w-full">
@@ -40,7 +33,6 @@ export default function RootLayout({
               <Footer />
             </div>
             <Toaster position="bottom-center" richColors />
-          </ThemeProvider>
         </Providers>
       </body>
     </html>

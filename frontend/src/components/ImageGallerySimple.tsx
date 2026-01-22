@@ -8,8 +8,8 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import Counter from "yet-another-react-lightbox/plugins/counter";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/plugins/counter.css";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 
@@ -25,7 +25,7 @@ interface ImageGallerySimpleProps {
     alt: string;
 }
 
-export function ImageGallerySimple({ media, alt }: ImageGallerySimpleProps) {
+export function ImageGallerySimple({ media, alt }: Readonly<ImageGallerySimpleProps>) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const thumbnailsRef = useRef<HTMLDivElement>(null);
@@ -111,8 +111,8 @@ export function ImageGallerySimple({ media, alt }: ImageGallerySimpleProps) {
             }
         };
 
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
+        globalThis.addEventListener("keydown", handleKeyDown);
+        return () => globalThis.removeEventListener("keydown", handleKeyDown);
     }, [lightboxIndex, scrollPrev, scrollNext]);
 
     if (media.length === 0) {
@@ -145,9 +145,12 @@ export function ImageGallerySimple({ media, alt }: ImageGallerySimpleProps) {
                                         <video
                                             src={item.src}
                                             controls
-                                            className="w-full h-full object-contain"
+                                            className="w-full h-full object-contain pointer-events-auto"
                                             poster={item.poster}
                                             playsInline
+                                            preload="metadata"
+                                            onTouchStart={(e) => e.stopPropagation()}
+                                            onMouseDown={(e) => e.stopPropagation()}
                                         >
                                             <track kind="captions" />
                                         </video>
