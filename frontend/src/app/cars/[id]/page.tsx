@@ -103,6 +103,14 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                         <ImageGallery
                             media={media}
                             alt={`${car.brand} ${car.model}`}
+                            carInfo={{
+                                brand: car.brand,
+                                model: car.model,
+                                year: car.year,
+                                price: car.price,
+                                discountPrice: car.discountPrice,
+                                phone: SITE_CONFIG.contact.phone,
+                            }}
                         />
                     </div>
 

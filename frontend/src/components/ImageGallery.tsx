@@ -1,15 +1,22 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogClose,
+    DialogOverlay,
+    DialogPortal,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import { urlFor } from "@/lib/sanity";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight, Phone, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import useEmblaCarousel from "embla-carousel-react";
 import Lightbox from "yet-another-react-lightbox";
-import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 
 interface MediaItem {
@@ -19,15 +26,28 @@ interface MediaItem {
     asset?: { _ref: string };
 }
 
+interface CarInfo {
+    brand: string;
+    model: string;
+    year: number;
+    price: number;
+    discountPrice?: number;
+    phone: string;
+}
+
 interface ImageGalleryProps {
     media: MediaItem[];
     alt: string;
+    carInfo?: CarInfo;
 }
 
-export function ImageGallery({ media, alt }: ImageGalleryProps) {
+export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const thumbnailsRef = useRef<HTMLDivElement>(null);
+    const modalThumbnailsRef = useRef<HTMLDivElement>(null);
+    const mainImageRef = useRef<HTMLDivElement>(null);
 
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: true,
@@ -49,7 +69,7 @@ export function ImageGallery({ media, alt }: ImageGalleryProps) {
         };
     }, [emblaApi, onSelect]);
 
-    // Scroll selected thumbnail into view
+    // Scroll selected thumbnail into view (main gallery)
     useEffect(() => {
         if (thumbnailsRef.current) {
             const selectedThumbnail = thumbnailsRef.current.children[
@@ -65,14 +85,24 @@ export function ImageGallery({ media, alt }: ImageGalleryProps) {
         }
     }, [selectedIndex]);
 
-    // Prepare slides for lightbox (images only)
-    const slides = media
-        .filter((item) => item.type === "image")
-        .map((item) => ({
-            type: "image" as const,
-            src: urlFor(item).ignoreImageParams().width(1920).auto("format").url(),
-            alt,
-        }));
+    // Scroll selected thumbnail into view (modal)
+    useEffect(() => {
+        if (modalThumbnailsRef.current && isModalOpen) {
+            const selectedThumbnail = modalThumbnailsRef.current.children[
+                selectedIndex
+            ] as HTMLElement;
+            if (selectedThumbnail) {
+                selectedThumbnail.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest",
+                });
+            }
+        }
+    }, [selectedIndex, isModalOpen]);
+
+    // Filter only images for the modal view
+    const imageMedia = media.filter((item) => item.type === "image");
 
     const scrollPrev = useCallback(() => {
         if (emblaApi) emblaApi.scrollPrev();
@@ -86,23 +116,94 @@ export function ImageGallery({ media, alt }: ImageGalleryProps) {
         (index: number) => {
             if (emblaApi) emblaApi.scrollTo(index);
         },
-        [emblaApi]
+        [emblaApi],
     );
 
-    // Keyboard navigation
+    const goToImageInModal = (index: number) => {
+        // Find the actual index in media array for an image
+        let imageCount = 0;
+        for (let i = 0; i < media.length; i++) {
+            if (media[i].type === "image") {
+                if (imageCount === index) {
+                    setSelectedIndex(i);
+                    scrollTo(i);
+                    break;
+                }
+                imageCount++;
+            }
+        }
+
+        // Scroll to the image in the modal content area
+        // Use setTimeout to ensure the DOM has updated
+        setTimeout(() => {
+            const imageElement = document.getElementById(
+                `modal-image-${index}`,
+            );
+            if (imageElement && mainImageRef.current) {
+                const container = mainImageRef.current;
+                const elementTop = imageElement.offsetTop;
+                const containerHeight = container.clientHeight;
+                const elementHeight = imageElement.clientHeight;
+
+                container.scrollTo({
+                    top: elementTop - containerHeight / 2 + elementHeight / 2,
+                    behavior: "smooth",
+                });
+            }
+        }, 0);
+    };
+
+    // Get current image index in imageMedia array
+    const currentImageIndex = imageMedia.findIndex((_, idx) => {
+        let count = 0;
+        for (let i = 0; i < media.length; i++) {
+            if (media[i].type === "image") {
+                if (count === idx) {
+                    return i === selectedIndex;
+                }
+                count++;
+            }
+        }
+        return false;
+    });
+
+    const modalPrevImage = () => {
+        const newIndex =
+            (currentImageIndex - 1 + imageMedia.length) % imageMedia.length;
+        goToImageInModal(newIndex);
+    };
+
+    const modalNextImage = () => {
+        const newIndex = (currentImageIndex + 1) % imageMedia.length;
+        goToImageInModal(newIndex);
+    };
+
+    // Keyboard navigation (lightbox handles its own keyboard events)
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (isLightboxOpen) return;
-            if (e.key === "ArrowLeft") {
-                scrollPrev();
-            } else if (e.key === "ArrowRight") {
-                scrollNext();
+            // Skip if lightbox is open - it handles its own keyboard events
+            if (lightboxIndex !== null) return;
+
+            if (isModalOpen) {
+                if (e.key === "ArrowLeft") {
+                    modalPrevImage();
+                } else if (e.key === "ArrowRight") {
+                    modalNextImage();
+                } else if (e.key === "Escape") {
+                    setIsModalOpen(false);
+                }
+            } else {
+                if (e.key === "ArrowLeft") {
+                    scrollPrev();
+                } else if (e.key === "ArrowRight") {
+                    scrollNext();
+                }
             }
         };
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isLightboxOpen, scrollPrev, scrollNext]);
+    }, [isModalOpen, lightboxIndex, scrollPrev, scrollNext, currentImageIndex]);
 
     if (media.length === 0) {
         return (
@@ -123,7 +224,11 @@ export function ImageGallery({ media, alt }: ImageGalleryProps) {
                         <div className="flex">
                             {media.map((item, idx) => (
                                 <div
-                                    key={(item as any).asset?._ref || (item as any).src || idx}
+                                    key={
+                                        (item as any).asset?._ref ||
+                                        (item as any).src ||
+                                        idx
+                                    }
                                     className="relative flex-[0_0_100%] min-w-0 aspect-16/11 sm:aspect-16/10 bg-gray-100"
                                 >
                                     {item.type === "video" ? (
@@ -139,7 +244,7 @@ export function ImageGallery({ media, alt }: ImageGalleryProps) {
                                     ) : (
                                         <button
                                             className="w-full h-full relative cursor-zoom-in"
-                                            onClick={() => setIsLightboxOpen(true)}
+                                            onClick={() => setIsModalOpen(true)}
                                         >
                                             <Image
                                                 src={urlFor(item)
@@ -189,7 +294,7 @@ export function ImageGallery({ media, alt }: ImageGalleryProps) {
                                         "w-2 h-2 rounded-full transition-all",
                                         idx === selectedIndex
                                             ? "bg-white w-4"
-                                            : "bg-white/50"
+                                            : "bg-white/50",
                                     )}
                                 />
                             ))}
@@ -205,13 +310,17 @@ export function ImageGallery({ media, alt }: ImageGalleryProps) {
                     >
                         {media.map((item, idx) => (
                             <button
-                                key={(item as any).asset?._ref || (item as any).src || idx}
+                                key={
+                                    (item as any).asset?._ref ||
+                                    (item as any).src ||
+                                    idx
+                                }
                                 onClick={() => scrollTo(idx)}
                                 className={cn(
                                     "relative shrink-0 w-25 lg:w-20 aspect-4/3 overflow-hidden transition-all duration-200 border-2",
                                     idx === selectedIndex
                                         ? "border-gray-400 opacity-100"
-                                        : "border-gray-100 opacity-60 hover:opacity-100"
+                                        : "border-gray-100 opacity-60 hover:opacity-100",
                                 )}
                             >
                                 {item.type === "video" ? (
@@ -238,26 +347,199 @@ export function ImageGallery({ media, alt }: ImageGalleryProps) {
                 )}
             </div>
 
-            {/* Lightbox */}
+            {/* Fullscreen Modal */}
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogPortal>
+                    <DialogOverlay className="bg-white" />
+                    <DialogPrimitive.Content
+                        className={cn(
+                            "fixed inset-0 z-50 bg-white data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+                        )}
+                        onEscapeKeyDown={(e) => {
+                            // Prevent dialog from closing if lightbox is open
+                            if (lightboxIndex !== null) {
+                                e.preventDefault();
+                            }
+                        }}
+                    >
+                        <VisuallyHidden>
+                            <DialogTitle>Галерея зображень</DialogTitle>
+                        </VisuallyHidden>
+
+                        {/* Close button */}
+                        <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-gray-100 hover:bg-gray-200 p-2 transition-colors">
+                            <X className="h-5 w-5 text-gray-700" />
+                            <span className="sr-only">Закрити</span>
+                        </DialogClose>
+
+                        <div className="h-full flex flex-col lg:flex-row">
+                            {/* Left side - Thumbnails (desktop) */}
+                            <div className="hidden lg:flex flex-col w-24 xl:w-28 bg-gray-50 border-r border-gray-200 p-3 overflow-y-auto">
+                                <div
+                                    ref={modalThumbnailsRef}
+                                    className="flex flex-col gap-2"
+                                >
+                                    {imageMedia.map((item, idx) => (
+                                        <button
+                                            key={
+                                                (item as any).asset?._ref || idx
+                                            }
+                                            onClick={() =>
+                                                goToImageInModal(idx)
+                                            }
+                                            className={cn(
+                                                "relative shrink-0 aspect-4/3 overflow-hidden transition-all duration-200 rounded-md border-2",
+                                                idx === currentImageIndex
+                                                    ? "border-zinc-900 opacity-100 ring-2 ring-zinc-900 ring-offset-2"
+                                                    : "border-transparent opacity-60 hover:opacity-100",
+                                            )}
+                                        >
+                                            <Image
+                                                src={urlFor(item)
+                                                    .ignoreImageParams()
+                                                    .width(200)
+                                                    .auto("format")
+                                                    .url()}
+                                                alt="Мініатюра"
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            {/* Center - Main content area with scrollable images */}
+                            <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+                                {/* Images area */}
+                                <div
+                                    ref={mainImageRef}
+                                    className="flex-1 overflow-y-auto p-4 lg:p-8"
+                                >
+                                    <div className="max-w-5xl mx-auto space-y-4">
+                                        {imageMedia.map((item, idx) => (
+                                            <button
+                                                key={
+                                                    (item as any).asset?._ref ||
+                                                    idx
+                                                }
+                                                id={`modal-image-${idx}`}
+                                                onClick={() =>
+                                                    setLightboxIndex(idx)
+                                                }
+                                                className={cn(
+                                                    "relative w-full rounded-lg overflow-hidden bg-gray-100 cursor-zoom-in block",
+                                                )}
+                                            >
+                                                <Image
+                                                    src={urlFor(item)
+                                                        .ignoreImageParams()
+                                                        .width(1920)
+                                                        .auto("format")
+                                                        .url()}
+                                                    alt={`${alt} - фото ${idx + 1}`}
+                                                    width={1920}
+                                                    height={1280}
+                                                    className="w-full h-auto object-contain"
+                                                    priority={idx === 0}
+                                                />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Right side - Car info (desktop) */}
+                                {carInfo && (
+                                    <div className="hidden lg:flex flex-col w-72 xl:w-80 bg-gray-50 border-l border-gray-200 p-6">
+                                        <div className="sticky top-6">
+                                            <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                                                {carInfo.brand} {carInfo.model}
+                                            </h2>
+                                            <p className="text-gray-500 font-medium mb-6">
+                                                {carInfo.year} рік
+                                            </p>
+
+                                            <div className="mb-8">
+                                                <div className="text-3xl xl:text-4xl font-black text-gray-900 tracking-tight">
+                                                    $
+                                                    {(
+                                                        carInfo.discountPrice ||
+                                                        carInfo.price
+                                                    ).toLocaleString()}
+                                                </div>
+                                                {carInfo.discountPrice && (
+                                                    <div className="text-lg text-gray-400 font-medium line-through mt-1">
+                                                        $
+                                                        {carInfo.price.toLocaleString()}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <a
+                                                href={`tel:${carInfo.phone}`}
+                                                className="block w-full"
+                                            >
+                                                <Button className="w-full bg-zinc-900 hover:bg-zinc-800 text-white h-14 text-lg font-bold">
+                                                    <Phone className="h-5 w-5 mr-2" />
+                                                    Зателефонувати
+                                                </Button>
+                                            </a>
+
+                                            <p className="text-sm text-gray-500 mt-4 text-center">
+                                                {imageMedia.length} фото
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            {/* Mobile bottom bar with car info */}
+                            {carInfo && (
+                                <div className="lg:hidden flex items-center justify-between gap-4 p-4 bg-white border-t border-gray-200 shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.1)]">
+                                    <div>
+                                        <h2 className="text-lg font-bold text-gray-900">
+                                            {carInfo.brand} {carInfo.model}
+                                        </h2>
+                                        <div className="text-xl font-black text-gray-900">
+                                            $
+                                            {(
+                                                carInfo.discountPrice ||
+                                                carInfo.price
+                                            ).toLocaleString()}
+                                        </div>
+                                    </div>
+                                    <a href={`tel:${carInfo.phone}`}>
+                                        <Button className="bg-zinc-900 hover:bg-zinc-800 text-white h-12 px-6 font-bold">
+                                            <Phone className="h-4 w-4 mr-2" />
+                                            Зателефонувати
+                                        </Button>
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    </DialogPrimitive.Content>
+                </DialogPortal>
+            </Dialog>
+
+            {/* Lightbox for individual image */}
             <Lightbox
-                open={isLightboxOpen}
-                close={() => setIsLightboxOpen(false)}
-                slides={slides}
-                index={selectedIndex - (media[0]?.type === "video" ? 1 : 0)}
+                open={lightboxIndex !== null}
+                close={() => setLightboxIndex(null)}
+                index={lightboxIndex ?? 0}
+                slides={imageMedia.map((item) => ({
+                    src: urlFor(item)
+                        .ignoreImageParams()
+                        .width(1920)
+                        .auto("format")
+                        .url(),
+                    alt,
+                }))}
                 on={{
-                    view: ({ index }) => {
-                        const hasVideo = media[0]?.type === "video";
-                        const newIndex = index + (hasVideo ? 1 : 0);
-                        setSelectedIndex(newIndex);
-                        scrollTo(newIndex);
-                    },
+                    view: ({ index }) => setLightboxIndex(index),
                 }}
-                plugins={[Slideshow, Thumbnails]}
-                thumbnails={{
-                    position: "bottom",
-                    width: 120,
-                    height: 80,
-                    borderColor: "#262626",
+                carousel={{ finite: false }}
+                controller={{ closeOnBackdropClick: true }}
+                styles={{
+                    container: { backgroundColor: "rgba(0, 0, 0, 0.95)" },
+                    root: { zIndex: 100 },
                 }}
             />
         </>
