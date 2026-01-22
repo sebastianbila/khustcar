@@ -59,7 +59,7 @@ function CatalogContent() {
         error,
     } = useQuery({
         queryKey: ["cars", filters, currentPage, sortBy],
-        queryFn: () => getCars(filters, currentPage, ITEMS_PER_PAGE, sortBy),
+        queryFn: () => getCars({ filters, page: currentPage, limit: ITEMS_PER_PAGE, sort: sortBy }),
     });
 
     const cars = data?.cars || [];

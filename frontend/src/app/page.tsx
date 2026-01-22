@@ -24,7 +24,7 @@ export default function HomePage() {
         error,
     } = useQuery({
         queryKey: ["cars", "preview"],
-        queryFn: () => getCars(undefined, 1, 4, "date-desc"),
+        queryFn: () => getCars({ page: 1, limit: 4, sort: "date-desc" }),
     });
 
     const { data: featuredCars = [] } = useQuery({

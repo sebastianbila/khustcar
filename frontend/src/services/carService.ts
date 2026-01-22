@@ -1,12 +1,19 @@
 import { client } from '@/lib/sanity';
 import type { Car, CarFilters } from '@/types/car';
 
-export async function getCars(
-  filters?: CarFilters,
-  page: number = 1,
-  limit: number = 12,
-  sort: string = ''
-): Promise<{ cars: Car[]; total: number }> {
+export interface GetCarsOptions {
+  filters?: CarFilters;
+  page?: number;
+  limit?: number;
+  sort?: string;
+}
+
+export async function getCars({
+  filters,
+  page = 1,
+  limit = 12,
+  sort = ''
+}: GetCarsOptions = {}): Promise<{ cars: Car[]; total: number }> {
   const { filterQuery, params } = buildFilterQuery(filters)
   const orderClause = getSortClause(sort)
 
@@ -147,7 +154,7 @@ export async function getFeaturedCars(): Promise<Car[]> {
 
   if (!featuredCars || featuredCars.length === 0) {
     // Fallback: Fetch latest 6 cars using existing getCars function
-    const { cars } = await getCars({}, 1, 6, "date-desc");
+    const { cars } = await getCars({ limit: 6, sort: "date-desc" });
     return cars;
   }
 
