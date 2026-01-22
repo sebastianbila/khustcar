@@ -348,7 +348,14 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
             </div>
 
             {/* Fullscreen Modal */}
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <Dialog
+                open={isModalOpen}
+                modal={false}
+                onOpenChange={(open) => {
+                    if (lightboxIndex !== null) return;
+                    setIsModalOpen(open);
+                }}
+            >
                 <DialogPortal>
                     <DialogOverlay className="bg-white" />
                     <DialogPrimitive.Content
@@ -544,6 +551,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                 controller={{
                     closeOnPullUp: true,
                     closeOnPullDown: true,
+                    closeOnBackdropClick: true,
                 }}
                 carousel={{ finite: false }}
                 styles={{
