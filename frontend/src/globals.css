@@ -30,8 +30,12 @@
 
     --color-header: var(--color-zinc-50);
 
-    --color-footer: color-mix(in oklch, var(--color-gray-200) 30%, transparent);
+    --color-footer: var(--color-background-muted);
     --color-border: var(--color-zinc-200);
+
+    --color-w1: #ffffff;
+    --color-w2: #ffffff;
+    --color-w3: #ffffff;
 }
 
 @layer base {

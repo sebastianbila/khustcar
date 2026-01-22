@@ -66,13 +66,16 @@ function CatalogContent() {
     });
 
     const {
-        data: cars = [],
+        data,
         isLoading: carsLoading,
         error,
     } = useQuery({
-        queryKey: ["cars", filters],
-        queryFn: () => getCars(filters),
+        queryKey: ["cars", filters, currentPage, sortBy],
+        queryFn: () => getCars(filters, currentPage, ITEMS_PER_PAGE, sortBy),
     });
+
+    const cars = data?.cars || [];
+    const totalCount = data?.total || 0;
 
     // Update URL when filters change (debounced via store)
     useEffect(() => {
@@ -109,35 +112,8 @@ function CatalogContent() {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [currentPage]);
 
-    // Sort cars based on selected option
-    const sortedCars = useMemo(() => {
-        if (!sortBy || cars.length === 0) return cars;
-
-        const sorted = [...cars];
-        switch (sortBy) {
-            case "price-asc":
-                return sorted.sort((a, b) => a.price - b.price);
-            case "price-desc":
-                return sorted.sort((a, b) => b.price - a.price);
-            case "year-asc":
-                return sorted.sort((a, b) => a.year - b.year);
-            case "year-desc":
-                return sorted.sort((a, b) => b.year - a.year);
-            case "mileage-asc":
-                return sorted.sort((a, b) => a.mileage - b.mileage);
-            case "mileage-desc":
-                return sorted.sort((a, b) => b.mileage - a.mileage);
-            default:
-                return sorted;
-        }
-    }, [cars, sortBy]);
-
     // Pagination calculations
-    const totalPages = Math.ceil(sortedCars.length / ITEMS_PER_PAGE);
-    const paginatedCars = useMemo(() => {
-        const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        return sortedCars.slice(start, start + ITEMS_PER_PAGE);
-    }, [sortedCars, currentPage]);
+    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
     const filtersContent = useMemo(
         () => (
@@ -218,7 +194,7 @@ function CatalogContent() {
                         <>
                             Показано{" "}
                             <span className="text-gray-900 font-bold">
-                                {sortedCars.length} результатів
+                                {totalCount} результатів
                             </span>{" "}
                             для вашого запиту
                         </>
@@ -280,10 +256,10 @@ function CatalogContent() {
                     )}
 
                     {/* Grid */}
-                    {!carsLoading && !error && sortedCars.length > 0 && (
+                    {!carsLoading && !error && cars.length > 0 && (
                         <div className="space-y-12">
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                {paginatedCars.map((car: any) => (
+                                {cars.map((car: any) => (
                                     <CarCard key={car._id} car={car} />
                                 ))}
                             </div>
