@@ -189,7 +189,7 @@ export function ImageGallerySimple({ media, alt }: Readonly<ImageGallerySimplePr
                     </div>
 
                     {/* Navigation Arrows */}
-                    {media.length > 1 && (
+                    {media.length > 1 && media[selectedIndex]?.type !== "video" && (
                         <>
                             <button
                                 onClick={scrollPrev}

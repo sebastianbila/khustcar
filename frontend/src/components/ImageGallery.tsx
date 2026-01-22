@@ -277,7 +277,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                     </div>
 
                     {/* Navigation Arrows */}
-                    {media.length > 1 && (
+                    {media.length > 1 && media[selectedIndex]?.type !== "video" && (
                         <>
                             <button
                                 onClick={scrollPrev}
