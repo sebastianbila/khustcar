@@ -295,7 +295,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                     )}
 
                     {/* Slide Indicators (dots) for mobile */}
-                    {media.length > 1 && (
+                    {/* {media.length > 1 && (
                         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 lg:hidden">
                             {media.map((_, idx) => (
                                 <button
@@ -310,7 +310,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                                 />
                             ))}
                         </div>
-                    )}
+                    )} */}
                 </div>
 
                 {/* Thumbnails */}
