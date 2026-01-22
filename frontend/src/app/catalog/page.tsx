@@ -91,9 +91,10 @@ function CatalogContent() {
     ).length;
 
     // Reset to page 1 when filters or sort changes
+    const filtersString = JSON.stringify(filters);
     useEffect(() => {
         setCurrentPage(1);
-    }, [filters, sortBy]);
+    }, [filtersString, sortBy]);
 
     // Scroll to top when page changes
     useEffect(() => {
