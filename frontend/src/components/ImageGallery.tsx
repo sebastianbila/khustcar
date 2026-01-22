@@ -216,7 +216,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
 
     return (
         <>
-            <div className="lg:bg-white lg:rounded-2xl lg:shadow-sm overflow-hidden">
+            <div className="lg:bg-white lg:rounded-t-2xl lg:shadow-sm overflow-hidden">
                 {/* Main Carousel */}
                 <div className="relative group">
                     <div className="overflow-hidden" ref={emblaRef}>
@@ -305,7 +305,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                 {media.length > 1 && (
                     <div
                         ref={thumbnailsRef}
-                        className="flex gap-3 py-3 overflow-x-auto no-scrollbar"
+                        className="flex gap-3 pt-1 pb-3 overflow-x-auto no-scrollbar"
                     >
                         {media.map((item, idx) => (
                             <button

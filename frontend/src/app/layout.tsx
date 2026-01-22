@@ -32,9 +32,9 @@ export default function RootLayout({
             enableSystem={false}
             disableTransitionOnChange
           >
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full min-h-screen">
               <Header />
-              <main className="flex-grow w-full">
+              <main className="flex-1 w-full">
                 {children}
               </main>
               <Footer />

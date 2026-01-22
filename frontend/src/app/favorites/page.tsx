@@ -1,6 +1,7 @@
 "use client";
 
 import { CarCard } from "@/components/CarCard";
+import { ErrorMessage } from "@/components/ErrorMessage";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -100,14 +101,8 @@ export default function FavoritesPage() {
 
                 {/* Error State */}
                 {error && (
-                    <div className="text-center py-20">
-                        <div className="text-4xl mb-4">😕</div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">
-                            Помилка завантаження
-                        </h3>
-                        <p className="text-gray-500 mb-6">
-                            Не вдалося завантажити обрані автомобілі
-                        </p>
+                    <div className="py-20">
+                        <ErrorMessage message="Не вдалося завантажити обрані автомобілі" />
                     </div>
                 )}
 

@@ -105,9 +105,9 @@ export function CarDetails({ params }: CarDetailsProps) {
 
             {/* Main Layout Grid */}
             <div className="container-custom p-6 mt-2">
-                <div className="flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-8  items-start">
+                <div className="flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-8 items-start gap-y-6 lg:gap-y-0">
                     {/* 1. Image Gallery - Full width on mobile, 2/3 on desktop */}
-                    <div className="lg:col-span-2 w-full lg:mb-6">
+                    <div className="lg:col-span-2 w-full">
                         {USE_NEW_GALLERY ? (
                             <ImageGallery
                                 media={media}
@@ -130,8 +130,8 @@ export function CarDetails({ params }: CarDetailsProps) {
                     </div>
 
                     {/* 2. Price Section (Sidebar Position on Desktop) - Full width on mobile */}
-                    <div className="lg:row-start-1 lg:col-start-3 lg:sticky lg:top-5 w-full lg:mb-8 mt-5 lg:mt-0">
-                        <div className="lg:bg-white lg:rounded-2xl p-0 lg:p-6 lg:shadow-sm border-b lg:border-none border-border">
+                    <div className="lg:row-start-1 lg:col-start-3 lg:sticky lg:top-5 w-full">
+                        <div className="lg:bg-white lg:rounded-2xl p-0 lg:p-6 lg:shadow-sm">
                             <div className="">
                                 <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1">
                                     {car.brand} {car.model}
@@ -236,8 +236,8 @@ export function CarDetails({ params }: CarDetailsProps) {
                     </div>
 
                     {/* 3. Specifications - Full width on mobile, 2/3 on desktop */}
-                    <div className="lg:col-span-2 w-full lg:mb-4 lg:mb-8">
-                        <div className="lg:bg-white lg:rounded-2xl py-6 lg:p-6 lg:shadow-sm border-b lg:border-none border-border">
+                    <div className="lg:col-span-2 w-full">
+                        <div className="lg:bg-white pt-6 lg:p-6 lg:shadow-sm border-t lg:border-none border-border">
                             <h3 className="text-xl font-black text-gray-900 mb-8 uppercase tracking-wider">
                                 Характеристики
                             </h3>
@@ -297,8 +297,8 @@ export function CarDetails({ params }: CarDetailsProps) {
 
                     {/* 4. Description - Full width on mobile, 2/3 on desktop */}
                     {car.description && (
-                        <div className="lg:col-span-2 w-full mb-12 lg:mb-0">
-                            <div className="lg:bg-white lg:rounded-2xl py-6 lg:p-6 lg:shadow-sm">
+                        <div className="lg:col-span-2 w-full mb-12 pt-6 lg:pt-0 border-t lg:border-none border-border">
+                            <div className="lg:bg-white lg:rounded-b-2xl lg:p-6 lg:shadow-sm">
                                 <h3 className="text-xl font-black text-gray-900 mb-6 uppercase tracking-wider">
                                     Опис автомобіля
                                 </h3>
