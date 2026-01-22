@@ -161,6 +161,20 @@ export async function getFeaturedCars(): Promise<Car[]> {
   return featuredCars
 }
 
+export async function getCatalogFeaturedCars(): Promise<Car[]> {
+  const query = '*[_id == "catalogItems"].cars[]->{ ..., "slug": slug.current, "videoUrl": video.asset->url }'
+  const featuredCars = await client.fetch(query)
+
+  if (!featuredCars || featuredCars.length === 0) {
+    // Fallback: Fetch latest 6 cars using existing getCars function
+    // limit 6 is good choice
+    const { cars } = await getCars({ limit: 6, sort: "date-desc" });
+    return cars;
+  }
+
+  return featuredCars
+}
+
 export async function getSimilarCars(car: Car): Promise<Car[]> {
   const { _id, brand, price, year, fuelType } = car
 

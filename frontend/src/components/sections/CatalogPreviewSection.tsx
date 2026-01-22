@@ -1,11 +1,8 @@
 "use client";
 
 import { CarCard } from "@/components/CarCard";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { CarSlider } from "@/components/CarSlider";
 import type { Car } from "@/types/car";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 interface CatalogPreviewSectionProps extends React.HTMLAttributes<HTMLDivElement> {
     cars: Car[];
@@ -14,53 +11,24 @@ interface CatalogPreviewSectionProps extends React.HTMLAttributes<HTMLDivElement
 export function CatalogPreviewSection({ cars, className, ...props }: CatalogPreviewSectionProps) {
     if (cars?.length < 1) return null;
 
-    // Show only first 4 cars in preview
-    const previewCars = cars.slice(0, 4);
-
     return (
-        <section id="catalog" className={cn("py-20 bg-background", className)} {...props}>
-            <div className="container-custom">
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3 uppercase">
-                        Наш Каталог Автомобілів
-                    </h2>
-                    <p className="text-gray-500">
-                        Переглядайте нашу обширну колекцію якісних автомобілів
-                    </p>
-                </div>
-
-                {/* Car Preview Grid */}
-                {previewCars.length === 0 ? (
-                    <div className="text-center py-15">
-                        <div className="text-6xl mb-4">🔍</div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                            Автомобілі не знайдено
-                        </h3>
-                        <p className="text-gray-700">
-                            Спробуйте налаштувати фільтри
-                        </p>
+        <CarSlider
+          title="Наш Каталог Автомобілів"
+          description="Переглядайте нашу обширну колекцію якісних автомобілів"
+          className={className}
+          headerAlignment="center"
+          {...props}
+        >
+            {cars.map((car) => (
+                <div
+                    key={car._id}
+                    className="flex-[0_0_85%] min-w-0 pl-4 sm:flex-[0_0_50%] lg:flex-[0_0_25%] lg:pl-6"
+                >
+                    <div className="h-full">
+                        <CarCard car={car} showArrow />
                     </div>
-                ) : (
-                    <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                            {previewCars.map((car) => (
-                                <CarCard key={car._id} car={car} showArrow/>
-                            ))}
-                        </div>
-
-                        {/* View All Button */}
-                        <div className="text-center">
-                            <Link href="/catalog">
-                                <Button size="lg">
-                                    Переглянути Всі Авто
-                                    <ArrowRight className="h-5 w-5" />
-                                </Button>
-                            </Link>
-                        </div>
-                    </>
-                )}
-            </div>
-        </section>
+                </div>
+            ))}
+        </CarSlider>
     );
 }
