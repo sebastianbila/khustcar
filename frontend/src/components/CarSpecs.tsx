@@ -1,4 +1,9 @@
-import { cn, formatMileage, getTransmissionLabel } from "@/lib/utils";
+import {
+    cn,
+    formatMileage,
+    getFuelTypeLabel,
+    getTransmissionLabel,
+} from "@/lib/utils";
 import type { Car } from "@/types/car";
 
 interface CarSpecsProps {
@@ -8,7 +13,7 @@ interface CarSpecsProps {
 
 export function CarSpecs({ car, size = "xs" }: Readonly<CarSpecsProps>) {
     const specs = [
-        car.engineSize,
+        car.engineSize ?? getFuelTypeLabel(car.fuelType),
         getTransmissionLabel(car.transmission),
         `${formatMileage(car.mileage)} км`,
     ].filter(Boolean);
