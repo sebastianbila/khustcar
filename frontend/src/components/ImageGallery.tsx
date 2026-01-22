@@ -298,13 +298,13 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                         <>
                             <button
                                 onClick={scrollPrev}
-                                className="absolute z-50 left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg backdrop-blur-sm flex transition-all duration-300 opacity-100"
+                                className="absolute z-5 left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg backdrop-blur-sm flex transition-all duration-300 opacity-100"
                             >
                                 <ChevronLeft className="h-5 w-5" />
                             </button>
                             <button
                                 onClick={scrollNext}
-                                className="absolute z-50 right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg backdrop-blur-sm flex transition-all duration-300 opacity-100"
+                                className="absolute z-5 right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg backdrop-blur-sm flex transition-all duration-300 opacity-100"
                             >
                                 <ChevronRight className="h-5 w-5" />
                             </button>
@@ -451,7 +451,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                                                     setLightboxIndex(idx)
                                                 }
                                                 className={cn(
-                                                    "relative w-full rounded-lg overflow-hidden bg-gray-100 cursor-zoom-in block",
+                                                    "relative w-full rounded-lg overflow-hidden bg-gray-100 cursor-zoom-in flex items-center justify-center",
                                                 )}
                                             >
                                                 <Image
@@ -463,7 +463,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                                                     alt={`${alt} - фото ${idx + 1}`}
                                                     width={1920}
                                                     height={1280}
-                                                    className="w-full h-auto object-contain"
+                                                    className="w-auto h-auto max-w-full"
                                                     priority={idx === 0}
                                                 />
                                             </button>
@@ -474,7 +474,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                                 {/* Right side - Car info (desktop) */}
                                 {carInfo && (
                                     <div className="hidden lg:flex flex-col w-72 xl:w-80 bg-gray-50 border-l border-gray-200 p-6">
-                                        <div className="sticky top-6">
+                                        <div className="sticky top-20">
                                             <h2 className="text-2xl font-bold text-gray-900 mb-1">
                                                 {carInfo.brand} {carInfo.model}
                                             </h2>
