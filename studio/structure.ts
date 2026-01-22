@@ -15,10 +15,20 @@ export const structure: StructureResolver = (S) =>
             .documentId('newCars') // Hardcoded ID to ensure singleton
         ),
 
+      S.listItem()
+        .title('Обрані Авто')
+        .id('catalogItemsSingleton')
+        .icon(() => '🚗')
+        .child(
+          S.document()
+            .schemaType('catalogItems')
+            .documentId('catalogItems')
+        ),
+
       S.divider(),
 
       // Regular document types (filtering out the singleton from the regular list)
       ...S.documentTypeListItems().filter(
-        (listItem) => !['newCars'].includes(listItem.getId() || '')
+        (listItem) => !['newCars', 'catalogItems'].includes(listItem.getId() || '')
       ),
     ])
