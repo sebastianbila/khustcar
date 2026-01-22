@@ -42,4 +42,5 @@ export interface CarFilters {
   drivetrain?: 'fwd' | 'rwd' | 'awd'
   color?: string
   inStock?: boolean
+  hasVideo?: boolean
 }

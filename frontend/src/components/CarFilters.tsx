@@ -8,7 +8,8 @@ import {
     NativeSelectOption,
 } from "@/components/ui/native-select";
 import { useFiltersStore } from "@/stores/filtersStore";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
+import { Switch } from "./ui/switch";
 
 interface CarFiltersProps {
     brands: string[];
@@ -29,26 +30,11 @@ export function CarFilters({
 }: Readonly<CarFiltersProps>) {
     const { filters, setFilter } = useFiltersStore();
 
-    const hasActiveFilters = Object.values(filters).some(
-        (v) => v !== undefined,
-    );
-
     return (
         <>
             <div className="flex items-center justify-between mb-4">
                 {!hideTitle && (
                     <h3 className="text-lg font-bold text-gray-900">Фільтри</h3>
-                )}
-                {hasActiveFilters && (
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={onResetFilters}
-                        className="text-xs cursor-pointer"
-                    >
-                        <X className="h-4 w-4 mr-1" />
-                        Очистити
-                    </Button>
                 )}
             </div>
 
@@ -288,6 +274,23 @@ export function CarFilters({
                             value={filters.maxMileage?.toString() || ""}
                             onChange={(e) => setFilter("maxMileage", e.target.value ? Number(e.target.value) : undefined)}
                         />
+                    </div>
+                </div>
+
+                 {/* Has Video */}
+                <div className="flex flex-col space-y-2">
+                    <Label htmlFor="filter-hasVideo" className="text-gray-800">
+                        Мультимедіа
+                    </Label>
+                    <div className="flex items-center space-x-2 h-10">
+                        <Switch
+                            id="filter-hasVideo"
+                            checked={filters.hasVideo || false}
+                            onCheckedChange={(checked) => setFilter("hasVideo", checked ? true : undefined)}
+                        />
+                        <Label htmlFor="filter-hasVideo" className="cursor-pointer font-normal">
+                            З відео
+                        </Label>
                     </div>
                 </div>
             </div>

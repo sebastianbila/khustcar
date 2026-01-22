@@ -43,6 +43,11 @@ export const useFiltersStore = create<FiltersState>((set, get) => ({
     if (inStockParam === "true") inStockVal = true;
     else if (inStockParam === "false") inStockVal = false;
 
+    const hasVideoParam = searchParams.get("hasVideo");
+    let hasVideoVal: boolean | undefined = undefined;
+    if (hasVideoParam === "true") hasVideoVal = true;
+    else if (hasVideoParam === "false") hasVideoVal = false;
+
     const params: CarFilters = {
         search: searchParams.get("search") || undefined,
         brand: searchParams.get("brand") || undefined,
@@ -71,6 +76,7 @@ export const useFiltersStore = create<FiltersState>((set, get) => ({
         drivetrain: (searchParams.get("drivetrain") as any) || undefined,
         color: searchParams.get("color") || undefined,
         inStock: inStockVal,
+        hasVideo: hasVideoVal,
     };
 
     set({ filters: params });
@@ -93,6 +99,7 @@ export const useFiltersStore = create<FiltersState>((set, get) => ({
       if (filters.drivetrain) params.set("drivetrain", filters.drivetrain);
       if (filters.color) params.set("color", filters.color);
       if (filters.inStock !== undefined) params.set("inStock", filters.inStock.toString());
+      if (filters.hasVideo !== undefined) params.set("hasVideo", filters.hasVideo.toString());
 
       const queryString = params.toString();
       const url = queryString ? `/catalog?${queryString}` : "/catalog";

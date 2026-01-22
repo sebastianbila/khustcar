@@ -6,7 +6,7 @@ import { useFiltersStore } from "@/stores/filtersStore";
 import { X } from "lucide-react";
 
 export function ActiveFilters() {
-    const { filters, setFilter } = useFiltersStore();
+    const { filters, setFilter, resetFilters } = useFiltersStore();
 
     const hasActiveFilters = Object.values(filters).some(
         (v) => v !== undefined,
@@ -146,6 +146,24 @@ export function ActiveFilters() {
                     </button>
                 </Badge>
             )}
+            {filters.hasVideo && (
+                <Badge variant="dark" className="gap-1 pl-2 pr-1 py-1">
+                    З відео
+                    <button
+                        onClick={() => setFilter("hasVideo", undefined)}
+                        className="ml-1 hover:bg-zinc-700 rounded-full p-0.5 transition-colors"
+                    >
+                        <X className="h-3 w-3" />
+                    </button>
+                </Badge>
+            )}
+             <button
+                onClick={resetFilters}
+                className="cursor-pointer text-xs text-red-500 hover:text-red-700 font-medium px-2 py-1 transition-colors flex items-center gap-1"
+            >
+                <X className="h-3 w-3" />
+                Очистити всі
+            </button>
         </div>
     );
 }

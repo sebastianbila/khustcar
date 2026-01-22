@@ -97,6 +97,10 @@ function buildFilterQuery(filters?: CarFilters) {
     params.inStock = filters.inStock
   }
 
+  if (filters.hasVideo) {
+    query += ' && defined(video)'
+  }
+
   return { filterQuery: query, params }
 }
 
