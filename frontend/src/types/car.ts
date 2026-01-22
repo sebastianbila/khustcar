@@ -12,6 +12,7 @@ export interface Car {
   fuelType: 'diesel' | 'petrol' | 'electric'
   transmission: 'manual' | 'automatic'
   slug?: string
+  vin?: string
   drivetrain?: 'fwd' | 'rwd' | 'awd'
   condition?: number
   inStock: boolean

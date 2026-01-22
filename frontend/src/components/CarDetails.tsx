@@ -281,11 +281,13 @@ export function CarDetails({ params }: CarDetailsProps) {
                                     label="Привід"
                                     value={getDrivetrainLabel(car.drivetrain)}
                                 />
-                                <SpecItem
-                                    icon={FileText}
-                                    label="VIN"
-                                    value="WBSJF0C50NCE12345"
-                                />
+                                {car.vin && (
+                                    <SpecItem
+                                        icon={FileText}
+                                        label="VIN"
+                                        value={car.vin}
+                                    />
+                                )}
                                 {car.condition && (
                                     <SpecItem
                                         icon={Activity}
