@@ -26,7 +26,8 @@ export const getFuelTypeLabel = (fuelType: string) => {
   }
 };
 
-export const getDrivetrainLabel = (drivetrain: string) => {
+export const getDrivetrainLabel = (drivetrain?: string) => {
+  if (!drivetrain) return "Не вказано";
   switch (drivetrain) {
       case "fwd":
           return "Передній";
@@ -41,4 +42,9 @@ export const getDrivetrainLabel = (drivetrain: string) => {
 
 export const getSectionBg = (index: number) => {
     return index % 2 === 0 ? "bg-background" : "bg-background-muted";
+};
+
+export const getConditionLabel = (condition?: number) => {
+    if (!condition) return "-";
+    return `${condition}/10`;
 };

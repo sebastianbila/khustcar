@@ -3,18 +3,21 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { urlFor } from "@/lib/sanity";
-import { cn, formatMileage, getTransmissionLabel } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favoritesStore";
 import type { Car } from "@/types/car";
 import { ArrowRight, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { CarSpecs } from "./CarSpecs";
 
 interface CarCardProps {
     car: Car;
     isNew?: boolean;
+    showArrow?: boolean;
 }
-export function CarCard({ car, isNew }: CarCardProps) {
+
+export function CarCard({ car, isNew, showArrow }: CarCardProps) {
     const { toggleFavorite, isFavorite } = useFavoritesStore();
     const isCarFavorite = isFavorite(car._id);
 
@@ -32,10 +35,11 @@ export function CarCard({ car, isNew }: CarCardProps) {
                 "overflow-hidden hover:shadow-md transition-all duration-300 group shadow-xs h-full flex flex-col",
                 "relative pt-0 pb-2 bg-background gap-y-0",
                 !car.inStock && "opacity-70",
+                "cursor-pointer"
             )}
         >
-            <Link
-                href={`/cars/${car._id}`}
+            <Link href={`/cars/${car._id}`} className="absolute inset-0 z-10"><span className="sr-only">View Details</span></Link>
+            <div
                 className="relative block aspect-3/2 overflow-hidden bg-gray-50 p-0"
             >
                 <Image
@@ -51,7 +55,7 @@ export function CarCard({ car, isNew }: CarCardProps) {
                 {/* Heart Icon Overlay */}
                 <button
                     className={cn(
-                        "absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md z-10 group/heart cursor-pointer transition-colors",
+                        "absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md z-20 group/heart cursor-pointer transition-colors",
                            isCarFavorite
                             ? "text-rose-500"
                             : "text-gray-400 hover:text-rose-500",
@@ -89,27 +93,18 @@ export function CarCard({ car, isNew }: CarCardProps) {
                         )}
                     </div>
                 )}
-            </Link>
+            </div>
             <CardContent className="p-4 grow flex flex-col">
                 <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-bold text-gray-900 leading-tight">
-                        <Link
-                            href={`/cars/${car._id}`}
-                            className="hover:text-gray-700 transition-colors"
-                        >
-                            {car.brand} {car.model}
-                        </Link>
+                        {car.brand} {car.model}
                     </h3>
                     <Badge variant="secondary">
                         {String(car.year)}
                     </Badge>
                 </div>
 
-                <div className="text-xs text-gray-500 mb-4 font-medium">
-                    {car.brand} {car.model} •{" "}
-                    {getTransmissionLabel(car.transmission)}{" "}
-                    • {formatMileage(car.mileage)} км
-                </div>
+                <CarSpecs car={car} />
 
                 <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-2">
@@ -123,12 +118,11 @@ export function CarCard({ car, isNew }: CarCardProps) {
                         </div>
                     </div>
 
-                    <Link
-                        href={`/cars/${car._id}`}
-                        className="rounded-full flex items-center justify-center text-text mr-2"
-                    >
-                        <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    {showArrow && (
+                        <div className="rounded-full flex items-center justify-center text-text mr-2">
+                            <ArrowRight className="h-4 w-4" />
+                        </div>
+                    )}
                 </div>
             </CardContent>
         </Card>

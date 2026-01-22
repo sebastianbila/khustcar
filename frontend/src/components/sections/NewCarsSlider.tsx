@@ -47,7 +47,7 @@ export function NewCarsSlider({ cars, className, ...props }: Readonly<NewCarsSli
                     )}
                 >
                     {displayCars.map((car) => (
-                        <CarCard key={car._id} car={car} isNew={true} />
+                        <CarCard key={car._id} car={car} isNew showArrow />
                     ))}
                 </div>
             </div>

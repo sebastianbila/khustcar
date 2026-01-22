@@ -12,8 +12,10 @@ import { SITE_CONFIG } from "@/lib/constants";
 import {
     cn,
     formatMileage,
+    getConditionLabel,
+    getDrivetrainLabel,
     getFuelTypeLabel,
-    getTransmissionLabel,
+    getTransmissionLabel
 } from "@/lib/utils";
 import { getCarById } from "@/services/carService";
 import { useFavoritesStore } from "@/stores/favoritesStore";
@@ -158,9 +160,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500">Стан</span>
                                     <span className="text-gray-900 font-bold">
-                                        {car.condition
-                                            ? `${car.condition}/10`
-                                            : "З пробігом"}
+                                        {getConditionLabel(car.condition)}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-start gap-4">
@@ -280,13 +280,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 <SpecItem
                                     icon={Car}
                                     label="Привід"
-                                    value={(() => {
-                                        if (car.drivetrain === "fwd")
-                                            return "Передній";
-                                        if (car.drivetrain === "rwd")
-                                            return "Задній";
-                                        return "Повний";
-                                    })()}
+                                    value={getDrivetrainLabel(car.drivetrain)}
                                 />
                                 <SpecItem
                                     icon={FileText}
@@ -297,7 +291,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                     <SpecItem
                                         icon={Activity}
                                         label="Технічний стан"
-                                        value={`${car.condition}/10`}
+                                        value={getConditionLabel(car.condition)}
                                     />
                                 )}
                             </div>

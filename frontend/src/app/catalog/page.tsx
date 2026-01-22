@@ -200,7 +200,7 @@ function CatalogContent() {
                                 </div>
                             </SheetContent>
                         </Sheet>
-                        <div className="mt-4">{activeFiltersContent}</div>
+                        {activeFiltersCount > 0 && <div className="mt-4">{activeFiltersContent}</div>}
                     </div>
                 </div>
 
