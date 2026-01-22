@@ -49,7 +49,7 @@ export function Footer() {
                     </div>
 
                     {/* Navigation */}
-                    <div>
+                    <div className="hidden md:block">
                         <h3 className="font-semibold text-gray-900 mb-4">
                             Навігація
                         </h3>
