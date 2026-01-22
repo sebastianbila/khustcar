@@ -1,11 +1,12 @@
-import { formatMileage, getTransmissionLabel } from "@/lib/utils";
+import { cn, formatMileage, getTransmissionLabel } from "@/lib/utils";
 import type { Car } from "@/types/car";
 
 interface CarSpecsProps {
     car: Car;
+    size?: "xs" | "sm";
 }
 
-export function CarSpecs({ car }: Readonly<CarSpecsProps>) {
+export function CarSpecs({ car, size = "xs" }: Readonly<CarSpecsProps>) {
     const specs = [
         car.engineSize,
         getTransmissionLabel(car.transmission),
@@ -13,7 +14,12 @@ export function CarSpecs({ car }: Readonly<CarSpecsProps>) {
     ].filter(Boolean);
 
     return (
-        <div className="text-xs text-gray-500 mb-4 font-medium">
+        <div
+            className={cn("text-gray-500 mb-4 font-medium", {
+                "text-xs": size === "xs",
+                "text-base": size === "sm",
+            })}
+        >
             {specs.join(" • ")}
         </div>
     );

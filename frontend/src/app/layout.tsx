@@ -1,14 +1,20 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SITE_CONFIG } from "@/lib/constants";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import "../globals.css";
 import { Providers } from "./providers";
 
+// @ts-ignore
+import "../globals.css";
+
 export const metadata: Metadata = {
-  title: "Car Management System - Your Trusted Automotive Partner",
-  description: "Discover the finest selection of quality vehicles at unbeatable prices. Browse our extensive inventory of new and pre-owned cars.",
+  title: {
+    default: SITE_CONFIG.name,
+    template: `%s | ${SITE_CONFIG.name}`,
+  },
+  description: SITE_CONFIG.description,
 };
 
 export default function RootLayout({
@@ -17,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="uk">
       <body>
         <Providers>
           <ThemeProvider

@@ -16,7 +16,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Phone, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
 interface MediaItem {
@@ -350,11 +349,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
             {/* Fullscreen Modal */}
             <Dialog
                 open={isModalOpen}
-                modal={false}
-                onOpenChange={(open) => {
-                    if (lightboxIndex !== null) return;
-                    setIsModalOpen(open);
-                }}
+                onOpenChange={setIsModalOpen}
             >
                 <DialogPortal>
                     <DialogOverlay className="bg-white" />
@@ -362,12 +357,6 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                         className={cn(
                             "fixed inset-0 z-50 bg-white data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
                         )}
-                        onEscapeKeyDown={(e) => {
-                            // Prevent dialog from closing if lightbox is open
-                            if (lightboxIndex !== null) {
-                                e.preventDefault();
-                            }
-                        }}
                     >
                         <VisuallyHidden>
                             <DialogTitle>Галерея зображень</DialogTitle>
@@ -375,11 +364,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
 
                         {/* Close button */}
                         <DialogClose
-                            className={cn(
-                                "absolute right-4 top-4 z-50 rounded-full bg-gray-100 hover:bg-gray-200 p-2 transition-colors",
-                                lightboxIndex !== null &&
-                                    "hidden touch-none z-[9999]",
-                            )}
+                            className={cn("absolute right-4 top-4 z-50 rounded-full bg-gray-100 hover:bg-gray-200 p-2 transition-colors",)}
                         >
                             <X className="h-5 w-5 text-gray-700" />
                             <span className="sr-only">Закрити</span>
@@ -396,9 +381,6 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                                         <button
                                             key={
                                                 (item as any).asset?._ref || idx
-                                            }
-                                            onClick={() =>
-                                                goToImageInModal(idx)
                                             }
                                             className={cn(
                                                 "relative shrink-0 aspect-4/3 overflow-hidden transition-all duration-200 rounded-md border-2",
@@ -533,7 +515,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
             </Dialog>
 
             {/* Lightbox for individual image */}
-            <Lightbox
+            {/* <Lightbox
                 open={lightboxIndex !== null}
                 close={() => setLightboxIndex(null)}
                 index={lightboxIndex ?? 0}
@@ -558,7 +540,7 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                     container: { backgroundColor: "rgba(0, 0, 0, 0.95)" },
                     root: { zIndex: 100 },
                 }}
-            />
+            /> */}
         </>
     );
 }

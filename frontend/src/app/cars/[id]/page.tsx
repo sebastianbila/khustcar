@@ -1,5 +1,6 @@
 "use client";
 
+import { CarSpecs } from "@/components/CarSpecs";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ImageGallery } from "@/components/ImageGallery";
 import { ImageGallerySimple } from "@/components/ImageGallerySimple";
@@ -82,7 +83,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center py-20 min-h-screen">
+            <div className="flex items-center justify-center py-20">
                 <LoadingSpinner />
             </div>
         );
@@ -90,14 +91,14 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
     if (error || !car) {
         return (
-            <div className="flex items-center justify-center py-20 min-h-screen">
+            <div className="flex items-center justify-center py-20">
                 <ErrorMessage message="Не вдалося завантажити дані автомобіля. Будь ласка, спробуйте пізніше." />
             </div>
         );
     }
 
     return (
-        <div className="bg-gray-50 min-h-screen pb-2">
+        <div className="bg-background pb-2">
             <PageHeader
                 backLink={{ href: "/catalog", label: "Назад до каталогу" }}
             />
@@ -130,19 +131,15 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                     {/* 2. Price Section (Sidebar Position on Desktop) - Full width on mobile */}
                     <div className="lg:row-start-1 lg:col-start-3 lg:sticky lg:top-5 w-full lg:mb-8 mt-5 lg:mt-0">
-                        <div className="lg:bg-white lg:rounded-2xl p-0 lg:p-6 lg:shadow-sm border-b lg:border-none border-gray-100">
-                            <div className="mb-6">
+                        <div className="lg:bg-white lg:rounded-2xl p-0 lg:p-6 lg:shadow-sm border-b lg:border-none border-border">
+                            <div className="">
                                 <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1">
                                     {car.brand} {car.model}
                                 </h1>
-                                <div className="flex items-center gap-2 text-gray-500 font-medium">
-                                    <span>{car.year} рік</span>
-                                    <span className="text-gray-300">•</span>
-                                    <span>{formatMileage(car.mileage)} км</span>
-                                </div>
+                                <CarSpecs car={car} size="sm" />
                             </div>
 
-                            <div className="mb-8">
+                            <div className="my-4">
                                 <div className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
                                     $
                                     {(
@@ -156,7 +153,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                                 )}
                             </div>
 
-                            <div className="flex flex-col gap-3 py-2 lg:py-6 border-t border-gray-100 mb-6 font-medium">
+                            <div className="flex flex-col gap-2 py-4 lg:py-6 border-t border-border font-medium">
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500">Стан</span>
                                     <span className="text-gray-900 font-bold">
@@ -240,7 +237,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
 
                     {/* 3. Specifications - Full width on mobile, 2/3 on desktop */}
                     <div className="lg:col-span-2 w-full lg:mb-4 lg:mb-8">
-                        <div className="lg:bg-white lg:rounded-2xl py-6 lg:p-6 lg:shadow-sm border-b lg:border-none border-gray-100">
+                        <div className="lg:bg-white lg:rounded-2xl py-6 lg:p-6 lg:shadow-sm border-b lg:border-none border-border">
                             <h3 className="text-xl font-black text-gray-900 mb-8 uppercase tracking-wider">
                                 Характеристики
                             </h3>
