@@ -367,7 +367,13 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                         </VisuallyHidden>
 
                         {/* Close button */}
-                        <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-gray-100 hover:bg-gray-200 p-2 transition-colors">
+                        <DialogClose
+                            className={cn(
+                                "absolute right-4 top-4 z-50 rounded-full bg-gray-100 hover:bg-gray-200 p-2 transition-colors",
+                                lightboxIndex !== null &&
+                                    "hidden touch-none z-[9999]",
+                            )}
+                        >
                             <X className="h-5 w-5 text-gray-700" />
                             <span className="sr-only">Закрити</span>
                         </DialogClose>
@@ -535,8 +541,11 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
                 on={{
                     view: ({ index }) => setLightboxIndex(index),
                 }}
+                controller={{
+                    closeOnPullUp: true,
+                    closeOnPullDown: true,
+                }}
                 carousel={{ finite: false }}
-                controller={{ closeOnBackdropClick: true }}
                 styles={{
                     container: { backgroundColor: "rgba(0, 0, 0, 0.95)" },
                     root: { zIndex: 100 },

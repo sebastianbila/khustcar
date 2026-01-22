@@ -2,6 +2,9 @@
 
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ImageGallery } from "@/components/ImageGallery";
+import { ImageGallerySimple } from "@/components/ImageGallerySimple";
+
+// Toggle between gallery versions: true = new modal gallery, false = simple lightbox
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -35,6 +38,8 @@ import { toast } from "sonner";
 interface CarDetailPageProps {
     params: Promise<{ id: string }>;
 }
+
+const USE_NEW_GALLERY = true;
 
 export default function CarDetailPage({ params }: CarDetailPageProps) {
     const { id } = use(params);
@@ -100,18 +105,25 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
                 <div className="flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-8  items-start">
                     {/* 1. Image Gallery - Full width on mobile, 2/3 on desktop */}
                     <div className="lg:col-span-2 w-full lg:mb-6">
-                        <ImageGallery
-                            media={media}
-                            alt={`${car.brand} ${car.model}`}
-                            carInfo={{
-                                brand: car.brand,
-                                model: car.model,
-                                year: car.year,
-                                price: car.price,
-                                discountPrice: car.discountPrice,
-                                phone: SITE_CONFIG.contact.phone,
-                            }}
-                        />
+                        {USE_NEW_GALLERY ? (
+                            <ImageGallery
+                                media={media}
+                                alt={`${car.brand} ${car.model}`}
+                                carInfo={{
+                                    brand: car.brand,
+                                    model: car.model,
+                                    year: car.year,
+                                    price: car.price,
+                                    discountPrice: car.discountPrice,
+                                    phone: SITE_CONFIG.contact.phone,
+                                }}
+                            />
+                        ) : (
+                            <ImageGallerySimple
+                                media={media}
+                                alt={`${car.brand} ${car.model}`}
+                            />
+                        )}
                     </div>
 
                     {/* 2. Price Section (Sidebar Position on Desktop) - Full width on mobile */}
