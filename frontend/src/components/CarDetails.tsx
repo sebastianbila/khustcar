@@ -8,6 +8,7 @@ import { ImageGallerySimple } from "@/components/ImageGallerySimple";
 // Toggle between gallery versions: true = new modal gallery, false = simple lightbox
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PageHeader } from "@/components/PageHeader";
+import { SimilarCars } from "@/components/SimilarCars";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/lib/constants";
 import {
@@ -314,6 +315,8 @@ export function CarDetails({ params }: CarDetailsProps) {
                     )}
                 </div>
             </div>
+
+            <SimilarCars currentCarId={car._id} brand={car.brand} />
         </div>
     );
 }

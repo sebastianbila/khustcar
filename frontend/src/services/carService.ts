@@ -146,6 +146,18 @@ export async function getFeaturedCars(): Promise<Car[]> {
   return client.fetch(query) ?? []
 }
 
+export async function getSimilarCars(currentCarId: string, brand: string): Promise<Car[]> {
+  // Query to find cars of the same brand, excluding the current car
+  // Limit to 6 similar cars
+  const query = `*[_type == "car" && brand == $brand && _id != $currentCarId][0...6] {
+    ...,
+    "slug": slug.current,
+    "videoUrl": video.asset->url
+  }`
+
+  return client.fetch(query, { brand, currentCarId })
+}
+
 export async function getBrands(): Promise<string[]> {
   const query = '*[_type == "car"] | order(brand asc).brand'
   const brands = await client.fetch<string[]>(query)
