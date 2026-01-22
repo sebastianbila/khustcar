@@ -77,6 +77,23 @@ export function ImageGallery({ media, alt, carInfo }: ImageGalleryProps) {
         };
     }, [emblaApi, onSelect]);
 
+    // Pause all videos when window loses focus
+    useEffect(() => {
+        const handleBlur = () => {
+            const videos = document.querySelectorAll("video");
+            videos.forEach((video) => {
+                if (!video.paused) {
+                    video.pause();
+                }
+            });
+        };
+
+        window.addEventListener("blur", handleBlur);
+        return () => {
+            window.removeEventListener("blur", handleBlur);
+        };
+    }, []);
+
     // Scroll selected thumbnail into view (main gallery)
     useEffect(() => {
         if (thumbnailsRef.current) {
