@@ -12,9 +12,9 @@ import Link from "next/link";
 
 interface CarCardProps {
     car: Car;
+    isNew?: boolean;
 }
-
-export function CarCard({ car }: CarCardProps) {
+export function CarCard({ car, isNew }: CarCardProps) {
     const { toggleFavorite, isFavorite } = useFavoritesStore();
     const isCarFavorite = isFavorite(car._id);
 
@@ -52,7 +52,9 @@ export function CarCard({ car }: CarCardProps) {
                 <button
                     className={cn(
                         "absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md z-10 group/heart cursor-pointer transition-colors",
-                        isCarFavorite ? "text-rose-500" : "text-text-light hover:text-rose-500"
+                           isCarFavorite
+                            ? "text-rose-500"
+                            : "text-gray-400 hover:text-rose-500",
                     )}
                     onClick={(e) => {
                         e.preventDefault();
@@ -73,11 +75,18 @@ export function CarCard({ car }: CarCardProps) {
                     </div>
                 )}
 
-                {car.inStock && car.discountPrice && (
-                    <div className="absolute top-3 left-3 z-10">
-                        <Badge className="bg-emerald-600 text-white border-none font-bold px-2 py-1 rounded shadow-sm">
-                            -{Math.abs(Math.round(((car.price - car.discountPrice) / car.price) * 100))}%
-                        </Badge>
+                {car.inStock && (
+                    <div className="absolute top-3 left-3 z-10 flex flex-col gap-y-2 items-start">
+                        {isNew && (
+                            <Badge variant="dark">
+                                Новинка
+                            </Badge>
+                        )}
+                        {car.discountPrice && (
+                            <Badge className="bg-emerald-600 text-white border-none font-bold px-2 py-1 rounded shadow-sm">
+                                -{Math.abs(Math.round(((car.price - car.discountPrice) / car.price) * 100))}%
+                            </Badge>
+                        )}
                     </div>
                 )}
             </Link>
@@ -91,10 +100,7 @@ export function CarCard({ car }: CarCardProps) {
                             {car.brand} {car.model}
                         </Link>
                     </h3>
-                    <Badge
-                        variant="secondary"
-                        className="bg-gray-100 text-gray-500 font-medium px-2 py-0.5 rounded text-[10px] uppercase"
-                    >
+                    <Badge variant="secondary">
                         {String(car.year)}
                     </Badge>
                 </div>
@@ -105,8 +111,8 @@ export function CarCard({ car }: CarCardProps) {
                     • {formatMileage(car.mileage)} км
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
-                    <div>
+                <div className="flex items-center justify-between mt-auto">
+                    <div className="flex items-center gap-2">
                         {car.discountPrice && (
                             <div className="text-sm text-gray-400 font-medium line-through">
                                 ${car.price.toLocaleString()}
@@ -119,7 +125,7 @@ export function CarCard({ car }: CarCardProps) {
 
                     <Link
                         href={`/cars/${car._id}`}
-                        className="rounded-full flex items-center justify-center text-text-light"
+                        className="rounded-full flex items-center justify-center text-text mr-2"
                     >
                         <ArrowRight className="h-4 w-4" />
                     </Link>

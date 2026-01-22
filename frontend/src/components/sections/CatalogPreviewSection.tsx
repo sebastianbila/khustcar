@@ -1,6 +1,6 @@
 "use client";
 
-import { CarPreviewCard } from "@/components/CarPreviewCard";
+import { CarCard } from "@/components/CarCard";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Car } from "@/types/car";
@@ -43,7 +43,7 @@ export function CatalogPreviewSection({ cars, className, ...props }: CatalogPrev
                     <>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                             {previewCars.map((car) => (
-                                <CarPreviewCard key={car._id} car={car} />
+                                <CarCard key={car._id} car={car} />
                             ))}
                         </div>
 

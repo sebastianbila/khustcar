@@ -1,6 +1,6 @@
 "use client";
 
-import { CarPreviewCard } from "@/components/CarPreviewCard";
+import { CarCard } from "@/components/CarCard";
 import { cn } from "@/lib/utils";
 import type { Car } from "@/types/car";
 
@@ -47,7 +47,7 @@ export function NewCarsSlider({ cars, className, ...props }: Readonly<NewCarsSli
                     )}
                 >
                     {displayCars.map((car) => (
-                        <CarPreviewCard key={car._id} car={car} isNew={true} />
+                        <CarCard key={car._id} car={car} isNew={true} />
                     ))}
                 </div>
             </div>

@@ -47,12 +47,8 @@ function CatalogContent() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isFiltersSheetOpen, setIsFiltersSheetOpen] = useState(false);
 
-    const {
-        filters,
-        resetFilters,
-        initializeFromParams,
-        syncURL
-    } = useFiltersStore();
+    const { filters, resetFilters, initializeFromParams, syncURL } =
+        useFiltersStore();
 
     const { data: brands = [], isLoading: brandsLoading } = useQuery({
         queryKey: ["brands"],
@@ -154,21 +150,10 @@ function CatalogContent() {
                 hideTitle
             />
         ),
-        [
-            brands,
-            models,
-            colors,
-            handleResetFilters,
-            setIsFiltersSheetOpen,
-        ],
+        [brands, models, colors, handleResetFilters, setIsFiltersSheetOpen],
     );
 
-    const activeFiltersContent = useMemo(
-        () => (
-            <ActiveFilters />
-        ),
-        [],
-    );
+    const activeFiltersContent = useMemo(() => <ActiveFilters />, []);
 
     if (brandsLoading) {
         return (
@@ -185,13 +170,19 @@ function CatalogContent() {
                 {/* Mobile Filters Button */}
                 <div className="md:hidden py-4 border-b border-b-border">
                     <div className="container-custom">
-                        <Sheet open={isFiltersSheetOpen} onOpenChange={setIsFiltersSheetOpen}>
+                        <Sheet
+                            open={isFiltersSheetOpen}
+                            onOpenChange={setIsFiltersSheetOpen}
+                        >
                             <SheetTrigger asChild>
-                                <Button variant="outline" className="relative gap-2 duration-500 transition-all">
+                                <Button
+                                    variant="outline"
+                                    className="relative gap-2 duration-500 transition-all"
+                                >
                                     <SlidersHorizontal className="h-4 w-4" />
                                     Фільтри
                                     {activeFiltersCount > 0 && (
-                                        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-rose-700 text-xs font-medium text-white shadow-sm ring-2 ring-white">
+                                        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-sky-700 text-xs font-medium text-white shadow-sm ring-2 ring-white">
                                             {activeFiltersCount}
                                         </span>
                                     )}
@@ -209,9 +200,7 @@ function CatalogContent() {
                                 </div>
                             </SheetContent>
                         </Sheet>
-                        <div className="mt-4">
-                            {activeFiltersContent}
-                        </div>
+                        <div className="mt-4">{activeFiltersContent}</div>
                     </div>
                 </div>
 
