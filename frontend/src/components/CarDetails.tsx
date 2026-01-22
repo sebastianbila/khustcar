@@ -69,7 +69,7 @@ export function CarDetails({ params }: CarDetailsProps) {
         if (car?.videoUrl) {
             items.push({
                 type: "video",
-                src: `${car.videoUrl}#t=0.001`,
+                src: car.videoUrl,
                 poster: undefined,
             });
         }
