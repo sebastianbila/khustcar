@@ -1,11 +1,18 @@
 import { CarDetails } from "@/components/CarDetails";
 import { SITE_CONFIG } from "@/lib/constants";
 import { urlFor } from "@/lib/sanity";
-import { getCarById } from "@/services/carService";
+import { getAllCarIds, getCarById } from "@/services/carService";
 import type { Metadata } from "next";
 
 type Props = {
   params: Promise<{ id: string }>;
+}
+
+export async function generateStaticParams() {
+  const ids = await getAllCarIds();
+  return ids.map((id) => ({
+    id,
+  }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -85,6 +85,11 @@ export async function getCarById(id: string): Promise<Car> {
   return client.fetch(query, { id })
 }
 
+export async function getAllCarIds(): Promise<string[]> {
+  const query = '*[_type == "car"]._id'
+  return client.fetch(query)
+}
+
 export async function getFeaturedCars(): Promise<Car[]> {
   const query = '*[_id == "newCars"].cars[]->{ ..., "videoUrl": video.asset->url }'
   return client.fetch(query) ?? []

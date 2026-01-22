@@ -146,7 +146,7 @@ export function Header() {
                                                     setSheetOpen(false)
                                                 }
                                             >
-                                                <Heart className="h-5 w-5" />
+                                                <Heart className="size-6" />
                                                 Обране
                                                 {favoriteCount > 0 && (
                                                     <span className="bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full font-medium">
@@ -167,7 +167,7 @@ export function Header() {
                                             </a>
 
                                             {/* Social Icons */}
-                                            <div className="flex items-center gap-1 mt-8 pt-8 border-t border-border">
+                                            <div className="flex items-center gap-2 pt-4 border-t border-border">
                                                 <a
                                                     href={
                                                         SITE_CONFIG.social
@@ -177,7 +177,7 @@ export function Header() {
                                                     rel="noopener noreferrer"
                                                     className="flex items-center justify-center size-10 rounded-full bg-slate-50 text-slate-600 hover:text-[#E4405F] transition-colors"
                                                 >
-                                                    <FaInstagram className="size-5" />
+                                                    <FaInstagram className="size-7" />
                                                 </a>
                                                 <a
                                                     href={
@@ -188,7 +188,7 @@ export function Header() {
                                                     rel="noopener noreferrer"
                                                     className="flex items-center justify-center size-10 rounded-full bg-slate-50 text-slate-600 hover:text-[#0088cc] transition-colors"
                                                 >
-                                                    <FaTelegramPlane className="size-5" />
+                                                    <FaTelegramPlane className="size-7" />
                                                 </a>
                                             </div>
                                         </nav>
