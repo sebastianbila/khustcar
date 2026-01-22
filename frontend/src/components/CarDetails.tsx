@@ -316,7 +316,7 @@ export function CarDetails({ params }: CarDetailsProps) {
                 </div>
             </div>
 
-            <SimilarCars currentCarId={car._id} brand={car.brand} />
+            <SimilarCars car={car} />
         </div>
     );
 }

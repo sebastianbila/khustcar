@@ -143,19 +143,73 @@ export async function getAllCarIds(): Promise<string[]> {
 
 export async function getFeaturedCars(): Promise<Car[]> {
   const query = '*[_id == "newCars"].cars[]->{ ..., "slug": slug.current, "videoUrl": video.asset->url }'
-  return client.fetch(query) ?? []
+  const featuredCars = await client.fetch(query)
+
+  if (!featuredCars || featuredCars.length === 0) {
+    // Fallback: Fetch latest 6 cars using existing getCars function
+    const { cars } = await getCars({}, 1, 6, "date-desc");
+    return cars;
+  }
+
+  return featuredCars
 }
 
-export async function getSimilarCars(currentCarId: string, brand: string): Promise<Car[]> {
-  // Query to find cars of the same brand, excluding the current car
-  // Limit to 6 similar cars
-  const query = `*[_type == "car" && brand == $brand && _id != $currentCarId][0...6] {
-    ...,
-    "slug": slug.current,
-    "videoUrl": video.asset->url
-  }`
+export async function getSimilarCars(car: Car): Promise<Car[]> {
+  const { _id, brand, price, year, fuelType } = car
 
-  return client.fetch(query, { brand, currentCarId })
+  // Define similarity ranges
+  const minPrice = price ? price * 0.7 : 0
+  const maxPrice = price ? price * 1.3 : 1000000
+  const minYear = year ? year - 4 : 2000
+  const maxYear = year ? year + 4 : new Date().getFullYear()
+
+  // Score based query:
+  // - Matches brand (High priority)
+  // - Matches price range (Medium priority)
+  // - Matches year range (Medium priority)
+  // - Matches fuel type (Low priority)
+  // We filter to ensure we at least get cars that match ANY of slightly broader criteria to ensure results
+  const query = `
+    *[_type == "car" && _id != $_id && (
+      brand == $brand ||
+      (price >= $minPrice && price <= $maxPrice)
+    )]
+    | score(
+      brand == $brand,
+      brand == $brand,
+      brand == $brand,
+      price >= ${price * 0.85} && price <= ${price * 1.15},
+      year >= ${year - 2} && year <= ${year + 2},
+      fuelType == $fuelType
+    )
+    | order(_score desc)
+    [0...10] {
+      ...,
+      "slug": slug.current,
+      "videoUrl": video.asset->url
+    }
+  `
+
+  try {
+    const results = await client.fetch(query, {
+      _id,
+      brand,
+      minPrice,
+      maxPrice,
+      fuelType,
+      year
+    })
+
+    // Fallback: If strict smart query returns nothing, just get any recent cars to ensure we show something
+    if (!results || results.length === 0) {
+       return getFeaturedCars().then(cars => cars.slice(0, 6));
+    }
+
+    return results
+  } catch (error) {
+    console.error("Error fetching similar cars:", error)
+    return []
+  }
 }
 
 export async function getBrands(): Promise<string[]> {
