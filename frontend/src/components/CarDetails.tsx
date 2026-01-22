@@ -47,7 +47,6 @@ const USE_NEW_GALLERY = true;
 export function CarDetails({ params }: CarDetailsProps) {
     const { id } = use(params);
     const { toggleFavorite, isFavorite } = useFavoritesStore();
-    const isCarFavorite = isFavorite(id);
 
     const {
         data: car,
@@ -57,6 +56,9 @@ export function CarDetails({ params }: CarDetailsProps) {
         queryKey: ["car", id],
         queryFn: () => getCarById(id),
     });
+
+    // Use car._id for favorites if car is loaded, otherwise false (will update when car loads)
+    const isCarFavorite = car ? isFavorite(car._id) : false;
 
     // Unified media array
     const media = useMemo(() => {
@@ -182,7 +184,7 @@ export function CarDetails({ params }: CarDetailsProps) {
                                 <div className="grid grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-3 pt-2">
                                     <Button
                                         variant="outline"
-                                        onClick={() => toggleFavorite(id)}
+                                        onClick={() => toggleFavorite(car._id)}
                                         className={cn(
                                             "w-full h-12 border-zinc-200",
                                             isCarFavorite

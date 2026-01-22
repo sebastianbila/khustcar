@@ -11,6 +11,7 @@ export interface Car {
   color: string
   fuelType: 'diesel' | 'petrol' | 'electric'
   transmission: 'manual' | 'automatic'
+  slug?: string
   drivetrain?: 'fwd' | 'rwd' | 'awd'
   condition?: number
   inStock: boolean

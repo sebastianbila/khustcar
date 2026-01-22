@@ -14,7 +14,10 @@ export async function getCars(
   const end = start + limit
 
   const query = `{
-    "cars": *[_type == "car"${filterQuery}] ${orderClause} [${start}...${end}],
+    "cars": *[_type == "car"${filterQuery}] ${orderClause} [${start}...${end}] {
+      ...,
+      "slug": slug.current
+    },
     "total": count(*[_type == "car"${filterQuery}])
   }`
 
@@ -128,17 +131,18 @@ function getSortClause(sort: string): string {
 }
 
 export async function getCarById(id: string): Promise<Car> {
-  const query = '*[_type == "car" && _id == $id][0] { ..., "videoUrl": video.asset->url }'
+  const query = '*[_type == "car" && (slug.current == $id || _id == $id)][0] { ..., "slug": slug.current, "videoUrl": video.asset->url }'
   return client.fetch(query, { id })
 }
 
 export async function getAllCarIds(): Promise<string[]> {
-  const query = '*[_type == "car"]._id'
-  return client.fetch(query)
+  const query = '*[_type == "car"] { "slug": slug.current, _id }'
+  const cars = await client.fetch<{ slug?: string; _id: string }[]>(query)
+  return cars.map((car) => car.slug || car._id)
 }
 
 export async function getFeaturedCars(): Promise<Car[]> {
-  const query = '*[_id == "newCars"].cars[]->{ ..., "videoUrl": video.asset->url }'
+  const query = '*[_id == "newCars"].cars[]->{ ..., "slug": slug.current, "videoUrl": video.asset->url }'
   return client.fetch(query) ?? []
 }
 

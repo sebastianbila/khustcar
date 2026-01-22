@@ -38,7 +38,7 @@ export function CarCard({ car, isNew, showArrow }: CarCardProps) {
                 "cursor-pointer"
             )}
         >
-            <Link href={`/cars/${car._id}`} className="absolute inset-0 z-10"><span className="sr-only">View Details</span></Link>
+            <Link href={`/cars/${car.slug || car._id}`} className="absolute inset-0 z-10"><span className="sr-only">View Details</span></Link>
             <div
                 className="relative block aspect-3/2 overflow-hidden bg-gray-50 p-0"
             >
