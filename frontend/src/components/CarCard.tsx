@@ -110,11 +110,11 @@ export function CarCard({ car, isNew, showArrow }: CarCardProps) {
                     <div className="flex items-center gap-2">
                         {car.discountPrice && (
                             <div className="text-sm text-gray-400 font-medium line-through">
-                                ${car.price.toLocaleString()}
+                                ${car.price?.toLocaleString()}
                             </div>
                         )}
                         <div className="text-xl font-extrabold text-gray-900">
-                            ${(car.discountPrice || car.price).toLocaleString()}
+                            ${(car.discountPrice || car.price)?.toLocaleString()}
                         </div>
                     </div>
 
