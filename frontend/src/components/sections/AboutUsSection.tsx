@@ -18,7 +18,7 @@ export function AboutUsSection({ className, ...props }: Readonly<AboutUsSectionP
 
             <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
               <p>
-                Маючи понад 15 років досвіду в автомобільній індустрії, Khust Car
+                Маючи понад 7 років досвіду в автомобільній індустрії, Khust Car
                 стало довіреним ім&apos;ям завдяки якісним автомобілям та
                 винятковому обслуговуванню клієнтів. Ми пишаємося тим, що
                 пропонуємо ретельно підібраний вибір преміальних автомобілів,
@@ -44,7 +44,7 @@ export function AboutUsSection({ className, ...props }: Readonly<AboutUsSectionP
               </div>
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">
-                  15+
+                  7+
                 </div>
                 <div className="text-sm md:text-base text-slate-600 font-medium">
                   Років Досвіду
